@@ -398,7 +398,7 @@ class Register extends JFrame{
 		
 }}
 
-public class MainFrame extends Functions{
+public class ForRefMainFrame extends Functions{
 
 	//Establishing connection with SQL server
 	String sqlForName = "com.mysql.cj.jdbc.Driver";
@@ -437,7 +437,7 @@ public class MainFrame extends Functions{
 	
 	String CurrentDate, time, TimeInsFileName, TimeOutsFileName;
 
-	MainFrame(){
+	ForRefMainFrame(){
 		
 	Connect();
 		
