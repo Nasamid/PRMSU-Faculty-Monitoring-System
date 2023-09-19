@@ -1,33 +1,23 @@
-
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-
 
 
 public class LoginWindow {
@@ -49,61 +39,68 @@ public class LoginWindow {
     LoginWindow(){
 
         LoginWindow = new JFrame("Faculty Monitoring System");
+        LoginWindow.setSize(1380, 800);
+        LoginWindow.setLayout(new BorderLayout());
 
         PTextHolder = new JPanel();
         PButtonHolder = new JPanel();
+        //PTextHolder.setBackground(Color.red);
+        //PButtonHolder.setBackground(Color.blue);
+        PButtonHolder.setLayout(new GridBagLayout()); // Use GridBagLayout
+        PTextHolder.setLayout(new BorderLayout());
+
+        //PTextHolder.setPreferredSize(new Dimension(1360, 400));
+       // PButtonHolder.setPreferredSize(new Dimension(1360, 400));
 
         StaffID = new JTextField();
         StaffPass = new JPasswordField();
-
         LoginButton = new JButton();
 
-
-        //Para estetik yung JButton, temporary lang, pakigandahan pa ng design
         Border line = new LineBorder(Color.BLACK);
         Border margin = new EmptyBorder(5, 15, 5, 15);
         Border compound = new CompoundBorder(line, margin);
-  
 
-        //Need someone na magimplement ng system para palaging CENTERED yung texts, Tfields, buttons, etc    
-        COEText = new JLabel("College of Engineering", null, SwingConstants.CENTER);    
+        COEText = new JLabel("College of Engineering", null, SwingConstants.CENTER);
         ProgNameText = new JLabel("Faculty Monitoring System", null, SwingConstants.CENTER);
-        
-        COEText.setBounds(0, 100, 1360, 40);
+
+        COEText.setPreferredSize(new Dimension(1360, 40));
         COEText.setFont(new Font("Lucida Bright", Font.BOLD, 35));
 
-        ProgNameText.setBounds(0, 60, 1360, 40);
+        ProgNameText.setPreferredSize(new Dimension(1360, 40));
         ProgNameText.setFont(new Font("Lucida Bright", Font.BOLD, 35));
 
-        LoginButton.setBounds(600, 200, 150, 75);
-	    LoginButton.setText("Login");
-	    LoginButton.setFont(new Font("Lucida Bright", Font.BOLD, 12));
-	    LoginButton.setFocusable(false);
+        StaffID.setPreferredSize(new Dimension(300, 40));
+        StaffID.setFont(new Font("Lucida Bright", Font.BOLD, 28));
+
+        StaffPass.setPreferredSize(new Dimension(300, 40));
+        StaffPass.setFont(new Font("Lucida Bright", Font.BOLD, 28));
+
+        LoginButton.setPreferredSize(new Dimension(200, 40));
+        LoginButton.setText("Login");
+        LoginButton.setFont(new Font("Lucida Bright", Font.BOLD, 12));
+        LoginButton.setFocusable(false);
         LoginButton.setForeground(Color.BLACK);
         LoginButton.setBackground(Color.decode("#00b4d8"));
         LoginButton.setBorder(compound);
 
-        StaffID.setBounds(475, 50, 400, 50);
-        StaffID.setFont(new Font("Lucida Bright", Font.BOLD, 28));
+        PTextHolder.add(COEText, BorderLayout.CENTER);
+        PTextHolder.add(ProgNameText, BorderLayout.SOUTH);
 
-        StaffPass.setBounds(475, 125, 400, 50);
-        StaffPass.setFont(new Font("Lucida Bright", Font.BOLD, 28));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        PTextHolder.setBounds(6,0,1360, 200);
-        PTextHolder.setLayout(null);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        PButtonHolder.add(StaffID, gbc);
 
-        PButtonHolder.setBounds(6, 150, 1360, 500);
-        PButtonHolder.setLayout(null);
+        gbc.gridy = 1;
+        PButtonHolder.add(StaffPass, gbc);
 
-        PTextHolder.add(COEText);
-        PTextHolder.add(ProgNameText);
+        gbc.gridy = 2;
+        PButtonHolder.add(LoginButton, gbc);
 
-        PButtonHolder.add(StaffPass);
-        PButtonHolder.add(StaffID);
-        PButtonHolder.add(LoginButton);
-
-        LoginWindow.add(PTextHolder);
-        LoginWindow.add(PButtonHolder);
+        LoginWindow.add(PTextHolder, BorderLayout.NORTH);
+        LoginWindow.add(PButtonHolder, BorderLayout.CENTER);
 
 
         //Action Listener lang para sa button. Pag tama credentials magcloclose tong
@@ -132,9 +129,7 @@ public class LoginWindow {
 
         //Essentials lang ng JFrame
         LoginWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        LoginWindow.setExtendedState(JFrame.MAXIMIZED_BOTH); //Ito yung line of code na nagfufullscreen ng frame
-        LoginWindow.setResizable(false);
-        LoginWindow.setLayout(null);
+        LoginWindow.setResizable(true);
         //LoginWindow.setIconImage(ProgramIcon.getImage());
         LoginWindow.setVisible(true);
     }
