@@ -151,12 +151,12 @@ public class AddFaculty {
         addFacultyFrame.getContentPane().add(departmentCBox);
         
         acadYearCBox = new JComboBox();
-        acadYearCBox.setName("DEPARTMENT");
+        acadYearCBox.setName("ACADEMIC YEAR");
         acadYearCBox.setBounds(30, 350, 440, 40);
         addFacultyFrame.getContentPane().add(acadYearCBox);
         
         semesterCBox = new JComboBox();
-        semesterCBox.setName("DEPARTMENT");
+        semesterCBox.setName("SEMESTER");
         semesterCBox.setBounds(30, 400, 440, 40);
         addFacultyFrame.getContentPane().add(semesterCBox);
         
@@ -164,17 +164,12 @@ public class AddFaculty {
         //Combo Box Items
         
         departmentCBox.addItem("DEPARTMENT");
-        departmentCBox.addItem("GRADUATE SCHOOL");
-        departmentCBox.addItem("COLLEGE OF ACCOUNTANCY AND BUSINESS ADMINISTRATION");
-        departmentCBox.addItem("COLLEGE OF ARTS AND SCIENCES");
-        departmentCBox.addItem("COLLEGE OF COMMUNICATION AND INFORMATION TECHNOLOGY");
-        departmentCBox.addItem("COLLEGE OF TEACHER EDUCATION");
-        departmentCBox.addItem("COLLEGE OF ENGINEERING");
-        departmentCBox.addItem("COLLEGE OF INDUSTRIAL TECHNOLOGY");
-        departmentCBox.addItem("COLLEGE OF AGRICULTURE AND FORESTRY");
-        departmentCBox.addItem("COLLEGE OF NURSING");
-        departmentCBox.addItem("COLLEGE OF TOURISM AND HOSPITALITY MANAGEMENT");
-        departmentCBox.addItem("LABORATORY HIGH SCHOOL");
+        departmentCBox.addItem("MECHANICAL ENGINEERING");
+        departmentCBox.addItem("COMPUTER ENGINEERING");
+        departmentCBox.addItem("CIVIL ENGINEERING");
+	departmentCBox.addItem("ELECTRICAL ENGINEERING");
+	departmentCBox.addItem("ALLIED");
+       
         
         
         acadYearCBox.addItem("ACADEMIC YEAR");
