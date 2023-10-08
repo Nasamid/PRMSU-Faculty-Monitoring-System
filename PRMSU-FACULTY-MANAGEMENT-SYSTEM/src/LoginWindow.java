@@ -39,8 +39,6 @@ public class LoginWindow {
     JPanel PTextHolder, PButtonHolder,ImgHolder;
     JPanel PTextM,PTextV,PTextQP;
 
-
-    //JPasswordField StaffPass;
     JLabel UnivText, UnivLogo, TitleMission, TitleVision, TitleQP, TitleQP2;
     JLabel mtext1, mtext2, mtext3, mtext4, mtext5, mtext6, mtext7, mtext8, mtext9;
     JLabel vtext1, vtext2, vtext3, vtext4;
@@ -52,22 +50,19 @@ public class LoginWindow {
    LoginWindow(){  
     LoginWindow = new JFrame("Faculty Monitoring System");
     
+    //Variable Constants
     int textboxheight = 20;
     Color backgroundColor = new Color(0,0,122);
     Color TextHighlightColor = new Color(236,189,68);
     
+    //Instantiaions of Panels
     PTextHolder = new JPanel();
     PButtonHolder = new JPanel();
     PTextM = new JPanel();
     PTextV = new JPanel();
     PTextQP = new JPanel();
     
-            //Border line = new LineBorder(Color.BLACK);
-            //Border margin = new EmptyBorder(5, 15, 5, 15);
-            //Border compound = new CompoundBorder(line, margin);
-    
-
-
+    //Top Panel Graphics
     UnivText = new JLabel("President Ramon Magsaysay State University",null,SwingConstants.TRAILING);
     UnivText.setBounds(0, 17, 748,40);
     UnivText.setForeground(TextHighlightColor);
@@ -113,7 +108,7 @@ public class LoginWindow {
     OffButton.setBorder(null);
     
 
-
+                //This is the section for the Mission, Vision, and Quality Policy
     TitleMission = new JLabel("MISSION",null,SwingConstants.CENTER);
     TitleMission.setBounds(25, 25, 250,textboxheight);
     TitleMission.setFont(new Font("Arial", Font.BOLD, 25));
@@ -220,21 +215,8 @@ public class LoginWindow {
     qptext9.setBounds(25, 260, 250,textboxheight);
     qptext9.setFont(new Font("Arial", Font.BOLD, 11));
    
-    
 
-   // LoginButton.setBounds(600, 200, 150, 75);
-    //LoginButton.setText("Login");
-   // LoginButton.setFont(new Font("Lucida Bright", Font.BOLD, 12));
-   // LoginButton.setFocusable(false);
-    //LoginButton.setForeground(Color.BLACK);
-   // LoginButton.setBackground(Color.decode("#00b4d8"));
-    //LoginButton.setBorder(compound);
-
-    //StaffID.setBounds(475, 50, 400, 50);
-    //StaffID.setFont(new Font("Lucida Bright", Font.BOLD, 28));
-
-    //StaffPass.setBounds(475, 125, 400, 50);
-    //StaffPass.setFont(new Font("Lucida Bright", Font.BOLD, 28));
+    //Graphics for the Panels
     PTextHolder.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     PTextHolder.setBackground(backgroundColor);
     PTextHolder.setBounds(0,0,1365, 75);
@@ -253,22 +235,17 @@ public class LoginWindow {
     PTextQP.setLayout(null);
     
 
-
+                            //Action Listener for the Buttons
     LoginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) 
             {
                 String ID = Login.getText();
                 if(ID.equals("admin")){
 
-                    //Pag okay na yung Home page, tanggalin na natin tong message dialog
-                    JOptionPane.showMessageDialog(null, "WELCOME!");
-                    System.out.println("Welcome!");
                     HomeWindow homepage = new HomeWindow();
                     LoginWindow.dispose();
-                    //page.setIconImage(ProgramIcon.getImage());
                 }
                 else {
-                    //FailedLogin.setVisible(true);
                     JOptionPane.showMessageDialog(null, "Invalid Username.");
                     System.out.println(ID);
                     System.out.println("Invalid Credentials");
@@ -285,11 +262,8 @@ public class LoginWindow {
                 }
             }
         );
-    //PButtonHolder.setBounds(6, 150, 1360, 500);
-    //PButtonHolder.setLayout(null);
         
-
-
+    //This section is for adding of components to the Panels
     PTextHolder.add(UnivText);
     PTextHolder.add(UnivLogo);
     PTextHolder.add(LoginButton);
@@ -325,10 +299,8 @@ public class LoginWindow {
     PTextQP.add(qptext9);
 
 
-   // PButtonHolder.add(StaffPass);
-   // PButtonHolder.add(StaffID);
-   // PButtonHolder.add(LoginButton);
 
+    //This section is for adding of Panels etc. to the actual window
     LoginWindow.getContentPane().add(PTextHolder);
     LoginWindow.getContentPane().add(PTextM);
     LoginWindow.getContentPane().add(PTextV);
@@ -336,15 +308,12 @@ public class LoginWindow {
     LoginWindow.getContentPane().add(PButtonHolder);
     LoginWindow.getContentPane().add(OffButton);
 
-    //essential
+    //Window Essential
     LoginWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     LoginWindow.setUndecorated(true);
-    
     LoginWindow.setSize(1080, 720);
     LoginWindow.setResizable(false);
-    LoginWindow.getContentPane().setLayout(null);
-    //LoginWindow.setIconImage(ProgramIcon.getImage());
-    
+    LoginWindow.getContentPane().setLayout(null);    
 
     //This is the function that is responsible for making the window appear centered on startup
     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
