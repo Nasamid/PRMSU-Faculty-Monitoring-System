@@ -1,192 +1,209 @@
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Toolkit;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import java.awt.Color;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import javax.swing.border.TitledBorder;
-import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
-import java.awt.SystemColor;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.border.MatteBorder;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JList;
+
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.SystemColor;
+import java.awt.Toolkit;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 
-public class AddFaculty {
+public class addFaculty extends JDialog {
 
-	private JFrame addFacultyFrame;
-	private JTextField lastName_1;
-	private JLabel addFacultyLabel;
-	private JTextField firstName;
-	private JTextField middleInitial;
-	private JTextField extName;
-	private JComboBox acadYearCBox;
-	private JComboBox semesterCBox;
+	JPanel contentPanel = new JPanel();
+	addPreparation prep = new addPreparation();
+	JTextField firstNameTF, lastNameTF;
+	JButton addBtn;
+	JLabel headLbl;
+	private JPanel headerPanel;
+	private JTextField middleNameTF;
+	private JLabel extName;
+	private JTextField extNameTF;
+	private JLabel departmentLbl;
+	private JLabel acadYear;
+	private JLabel semesterLbl;
+	
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AddFaculty window = new AddFaculty();
-					window.addFacultyFrame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
-	public AddFaculty() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		addFacultyFrame = new JFrame("Add Faculty");
-		addFacultyFrame.setUndecorated(true);
-		addFacultyFrame.setResizable(false);
-		addFacultyFrame.setBounds(100, 100, 500, 650);
-		addFacultyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public addFaculty() {
 		
+		// Set the dimensions and location of the JFrame to center it
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
 
-        // Calculate the new X and Y positions to center the frame
-        int x = (screenSize.width - addFacultyFrame.getWidth()) / 2;
-        int y = (screenSize.height - addFacultyFrame.getHeight()) / 2;
-
-        // Set the frame's location to be centered on the screen
-        addFacultyFrame.setLocation(x, y);
-        addFacultyFrame.getContentPane().setLayout(null);
+        int frameWidth = 400;
+        int frameHeight = 420;
+        int x = (screenWidth - frameWidth) / 2;
+        int y = (screenHeight - frameHeight) / 2;
+        setBounds(x, y, 400, 420);
         
-        addFacultyLabel = new JLabel("Add Faculty");
-        addFacultyLabel.setBorder(new LineBorder(new Color(192, 192, 192), 3, true));
-        addFacultyLabel.setBackground(SystemColor.windowText);
-        addFacultyLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        addFacultyLabel.setFont(new Font("Elephant", Font.BOLD, 25));
-        addFacultyLabel.setBounds(150, 15, 200, 35);
-        addFacultyFrame.getContentPane().add(addFacultyLabel);
+		contentPanel.setBounds(0, 0, 400, 400);
+		setTitle("Add Subject");
+		getContentPane().setLayout(null);
+		contentPanel.setBackground(SystemColor.text);
+		contentPanel.setBorder(null);
+		getContentPane().add(contentPanel);
+		contentPanel.setLayout(null);
+		
+		headLbl = new JLabel("Add Faculty");
+			headLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		headLbl.setBackground(SystemColor.textHighlight);
+		headLbl.setFont(new Font("Arial", Font.BOLD, 17));
+		headLbl.setBounds(0, 10, 386, 20);
+		contentPanel.add(headLbl);
+		
+		
+		JLabel fistName = new JLabel("First Name :");
+		fistName.setFont(new Font("Arial", Font.BOLD, 12));
+		fistName.setBounds(15, 60, 120, 20);
+		contentPanel.add(fistName);
+		
+		JLabel lastName = new JLabel("Last Name :");
+		lastName.setFont(new Font("Arial", Font.BOLD, 12));
+		lastName.setBounds(15, 100, 120, 20);
+		contentPanel.add(lastName);
+		
+		JLabel middleName = new JLabel("Middle Name :");
+		middleName.setFont(new Font("Arial", Font.BOLD, 12));
+		middleName.setBounds(15, 140, 120, 20);
+		contentPanel.add(middleName);
+		
+		extName = new JLabel("Extension Name :");
+		extName.setFont(new Font("Arial", Font.BOLD, 12));
+		extName.setBounds(15, 180, 120, 20);
+		contentPanel.add(extName);
+		
+		departmentLbl = new JLabel("Department :");
+		departmentLbl.setFont(new Font("Arial", Font.BOLD, 12));
+		departmentLbl.setBounds(15, 220, 120, 20);
+		contentPanel.add(departmentLbl);
+		
+		acadYear = new JLabel("Academic Year :");
+		acadYear.setFont(new Font("Arial", Font.BOLD, 12));
+		acadYear.setBounds(15, 260, 100, 20);
+		contentPanel.add(acadYear);
+		
+		semesterLbl = new JLabel("Semester :");
+		semesterLbl.setFont(new Font("Arial", Font.BOLD, 12));
+		semesterLbl.setBounds(15, 300, 74, 20);
+		contentPanel.add(semesterLbl);
+		
+		firstNameTF = new JTextField();
+		firstNameTF.setFont(new Font("Arial", Font.PLAIN, 10));
+		firstNameTF.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		firstNameTF.setBounds(145, 60, 225, 20);
+		contentPanel.add(firstNameTF);
+		firstNameTF.setColumns(10);
+		
+		lastNameTF = new JTextField();
+		lastNameTF.setFont(new Font("Arial", Font.PLAIN, 10));
+		lastNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		lastNameTF.setColumns(10);
+		lastNameTF.setBounds(145, 100, 225, 20);
+		contentPanel.add(lastNameTF);
+		
+		middleNameTF = new JTextField();
+		middleNameTF.setFont(new Font("Arial", Font.PLAIN, 10));
+		middleNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		middleNameTF.setColumns(10);
+		middleNameTF.setBounds(145, 140, 225, 20);
+		contentPanel.add(middleNameTF);
+		
+		extNameTF = new JTextField();
+		extNameTF.setFont(new Font("Arial", Font.PLAIN, 10));
+		extNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		extNameTF.setColumns(10);
+		extNameTF.setBounds(145, 180, 225, 20);
+		contentPanel.add(extNameTF);
+		
+		JComboBox departmentCB = new JComboBox();
+		departmentCB.setModel(new DefaultComboBoxModel(new String[] {"DEPARTMENT", "MECHANICAL ENGINEERING", "COMPUTER ENGINEERING", "CIVIL ENGINEERING", "ELECTRICAL ENGINEERING", "ALLIED"}));
+		departmentCB.setFont(new Font("Arial", Font.PLAIN, 10));
+		departmentCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		departmentCB.setBackground(SystemColor.text);
+		departmentCB.setBounds(145, 220, 225, 20);
+		contentPanel.add(departmentCB);
+		
+		JComboBox acadYearCB = new JComboBox();
+		acadYearCB.setFont(new Font("Arial", Font.PLAIN, 10));
+		acadYearCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		acadYearCB.setBackground(SystemColor.text);
+		acadYearCB.setBounds(145, 260, 225, 20);
+		contentPanel.add(acadYearCB);
+		
+		JComboBox semesterCB = new JComboBox();
+		semesterCB.setModel(new DefaultComboBoxModel(new String[] {"SEMESTER", "First Semester", "Second Semester", "Midyear"}));
+		semesterCB.setFont(new Font("Arial", Font.PLAIN, 10));
+		semesterCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		semesterCB.setBackground(SystemColor.text);
+		semesterCB.setBounds(145, 300, 225, 20);
+		contentPanel.add(semesterCB);
+		
+		
+		{
+			JPanel footerPanel = new JPanel();
+			footerPanel.setBounds(0, 345, 400, 38);
+			contentPanel.add(footerPanel);
+			footerPanel.setBorder(null);
+			footerPanel.setBackground(SystemColor.textHighlight);
+			footerPanel.setLayout(null);
+			{
+				addBtn = new JButton("Add");
+				addBtn.setBackground(SystemColor.text);
+				addBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				addBtn.setFont(new Font("Arial", Font.BOLD, 12));
+				addBtn.setBounds(115, 10, 75, 20);
+				addBtn.setActionCommand("OK");
+				footerPanel.add(addBtn);
+				getRootPane().setDefaultButton(addBtn);
+			}
+			{
+				JButton cancelDialogBtn = new JButton("Cancel");
+				cancelDialogBtn.setBackground(SystemColor.text);
+				cancelDialogBtn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
+				cancelDialogBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				cancelDialogBtn.setFont(new Font("Arial", Font.BOLD, 12));
+				cancelDialogBtn.setBounds(215, 10, 75, 20);
+				cancelDialogBtn.setActionCommand("Cancel");
+				footerPanel.add(cancelDialogBtn);
+			}
+		}
+		
+		headerPanel = new JPanel();
+		headerPanel.setBackground(SystemColor.textHighlight);
+		headerPanel.setBounds(0, 0, 400, 40);
+		contentPanel.add(headerPanel);
         
-        lastName_1 = new JTextField();
-        lastName_1.setFont(new Font("Rockwell", Font.BOLD, 20));
-        lastName_1.setDisabledTextColor(Color.BLACK);
-        lastName_1.setBackground(SystemColor.menu);
-        lastName_1.setBorder(new TitledBorder(new LineBorder(new Color(192, 192, 192), 2, true), "LAST NAME", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-        lastName_1.setBounds(30, 60, 440, 50);
-        addFacultyFrame.getContentPane().add(lastName_1);
-        lastName_1.setColumns(10);
         
-        firstName = new JTextField();
-        firstName.setFont(new Font("Rockwell", Font.BOLD, 20));
-        firstName.setDisabledTextColor(Color.BLACK);
-        firstName.setColumns(10);
-        firstName.setBorder(new TitledBorder(new LineBorder(new Color(192, 192, 192), 2, true), "FIRST NAME", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-        firstName.setBackground(SystemColor.menu);
-        firstName.setBounds(30, 120, 440, 50);
-        addFacultyFrame.getContentPane().add(firstName);
-        
-        middleInitial = new JTextField();
-        middleInitial.setFont(new Font("Rockwell", Font.BOLD, 20));
-        middleInitial.setDisabledTextColor(Color.BLACK);
-        middleInitial.setColumns(10);
-        middleInitial.setBorder(new TitledBorder(new LineBorder(new Color(192, 192, 192), 2, true), "MIDDLE INITIAL", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-        middleInitial.setBackground(SystemColor.menu);
-        middleInitial.setBounds(30, 180, 440, 50);
-        addFacultyFrame.getContentPane().add(middleInitial);
-        
-        extName = new JTextField();
-        extName.setFont(new Font("Rockwell", Font.BOLD, 20));
-        extName.setDisabledTextColor(Color.BLACK);
-        extName.setColumns(10);
-        extName.setBorder(new TitledBorder(new LineBorder(new Color(192, 192, 192), 2, true), "EXTENSION NAME", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-        extName.setBackground(SystemColor.menu);
-        extName.setBounds(30, 240, 440, 50);
-        addFacultyFrame.getContentPane().add(extName);
-        
-        JButton addFacultyBtn = new JButton("Add");
-        // ** WAITING **
-//        addFacultyBtn.addActionListener(new ActionListener() {
-//        	public void actionPerformed(ActionEvent e) {
-//        	}
-//        });
-        addFacultyBtn.setBorder(new MatteBorder(5, 3, 5, 3, (Color) new Color(192, 192, 192)));
-        addFacultyBtn.setBackground(new Color(240, 240, 240));
-        addFacultyBtn.setFont(new Font("Elephant", Font.PLAIN, 20));
-        addFacultyBtn.setBounds(150, 475, 200, 50);
-        addFacultyFrame.getContentPane().add(addFacultyBtn);
-        
-        JButton cancelBtn = new JButton("Cancel");
-        cancelBtn.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		if (e.getSource() == cancelBtn) {
-        			addFacultyFrame.hide();
-        		}
-        		
-        	}
-        });
-        cancelBtn.setFont(new Font("Elephant", Font.PLAIN, 20));
-        cancelBtn.setBorder(new MatteBorder(5, 3, 5, 3, (Color) new Color(192, 192, 192)));
-        cancelBtn.setBackground(new Color(240, 240, 240));
-        cancelBtn.setBounds(150, 535, 200, 50);
-        addFacultyFrame.getContentPane().add(cancelBtn);
-        
-        JComboBox departmentCBox = new JComboBox();
-        departmentCBox.setBackground(new Color(240, 240, 240));
-        departmentCBox.setName("DEPARTMENT");
-        departmentCBox.setBounds(30, 300, 440, 40);
-        addFacultyFrame.getContentPane().add(departmentCBox);
-        
-        acadYearCBox = new JComboBox();
-        acadYearCBox.setName("ACADEMIC YEAR");
-        acadYearCBox.setBounds(30, 350, 440, 40);
-        addFacultyFrame.getContentPane().add(acadYearCBox);
-        
-        semesterCBox = new JComboBox();
-        semesterCBox.setName("SEMESTER");
-        semesterCBox.setBounds(30, 400, 440, 40);
-        addFacultyFrame.getContentPane().add(semesterCBox);
-        
-        
-        //Combo Box Items
-        
-        departmentCBox.addItem("DEPARTMENT");
-        departmentCBox.addItem("MECHANICAL ENGINEERING");
-        departmentCBox.addItem("COMPUTER ENGINEERING");
-        departmentCBox.addItem("CIVIL ENGINEERING");
-	departmentCBox.addItem("ELECTRICAL ENGINEERING");
-	departmentCBox.addItem("ALLIED");
-       
-        
-        
-        acadYearCBox.addItem("ACADEMIC YEAR");
-        acadYearCBox.addItem("A/Y  2023 - 2024");
-        acadYearCBox.addItem("A/Y  2024 - 2025");
-        acadYearCBox.addItem("A/Y  2025 - 2026");
-        acadYearCBox.addItem("A/Y  2026 - 2027");
-        acadYearCBox.addItem("A/Y  2027 - 2028");
-        acadYearCBox.addItem("A/Y  2028 - 2029");
-        acadYearCBox.addItem("A/Y  2029 - 2030");
-        acadYearCBox.addItem("A/Y  2030 - 2031");
-        acadYearCBox.addItem("A/Y  2031 - 2032");
-        
-        
-        semesterCBox.addItem("SEMESTER");
-        semesterCBox.addItem("First Semester");
-        semesterCBox.addItem("Second Semester");
-        semesterCBox.addItem("Midyear");
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
+			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
+        }
+		acadYearCB.setSelectedItem(String.valueOf(currentYear + " - " + (currentYear + 1)));
+		
+		
+		
 	}
 }
