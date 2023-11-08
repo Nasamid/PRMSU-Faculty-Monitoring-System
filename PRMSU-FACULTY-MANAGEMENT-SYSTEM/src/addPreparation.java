@@ -114,7 +114,6 @@ public class addPreparation extends JPanel {
 		addSubjectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				subject sub = new subject();
-				test t = new test();
 				addSubjectDialog add = new addSubjectDialog();
 				add.show();
 				
@@ -166,7 +165,7 @@ public class addPreparation extends JPanel {
 										String section = addSectionDialog.sectionTF.getText();
 										
 										if(section.isEmpty()) {
-											JOptionPane.showMessageDialog(t.frame, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE);
+											JOptionPane.showMessageDialog(frame, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
 										}else {
 											
 											addSection.Body.add(sec);
@@ -249,7 +248,7 @@ public class addPreparation extends JPanel {
 										});
 										
 										if(section.isEmpty()) {
-											JOptionPane.showMessageDialog(t.frame, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE);
+											JOptionPane.showMessageDialog(t.frame, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
 										}else {
 											
 											edit.sectionPanel.add(sec);
