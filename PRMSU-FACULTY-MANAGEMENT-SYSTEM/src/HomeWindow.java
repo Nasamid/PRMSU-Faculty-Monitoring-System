@@ -1,3 +1,5 @@
+import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -35,9 +37,11 @@ import javax.swing.table.DefaultTableModel;
 
 public class HomeWindow {
         JFrame HomeWindow;
-        JPanel NaviPanel, HomePanel, DashPanel, ReportPanel;
+        JPanel RootPanel, NaviPanel, HomePanel, DashPanel, ReportPanel;
         JButton HomeButton, ListFacButton, ReportButton, HelpButton, LogoutButton;
         JLabel UnivLogo;
+        JPanel VideoPanel;
+        Canvas canvas;
     
         HomeWindow(){
 
@@ -50,6 +54,7 @@ public class HomeWindow {
             //Instantiations
             HomeWindow = new JFrame();
 
+            RootPanel = new JPanel();
             NaviPanel = new JPanel();
             HomePanel = new JPanel();
             DashPanel = new JPanel();
@@ -62,6 +67,13 @@ public class HomeWindow {
             LogoutButton = new JButton();
 
             UnivLogo = new JLabel();
+
+            //Root Panel is the master of all sub panels
+            RootPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            //RootPanel.setBackground(bgColor);
+            RootPanel.setBounds(0,0,1080, 720);
+            RootPanel.setLayout(null);
+
             
             //The Navigation Panel is the Panel for the buttons such as "Home", "List", "Report", etc.
             NaviPanel.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
@@ -69,17 +81,23 @@ public class HomeWindow {
             NaviPanel.setBackground(backgroundColor);
             NaviPanel.setLayout(null);
 
+            VideoPanel = new JPanel(new BorderLayout());
+            canvas = new Canvas();
+
             //The Home Panel will host the video slideshow Marlou and Ralph proposed
             //The Color BG is a placeholder
             HomePanel.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            HomePanel.setBounds(180,0,1000, 720);
+            HomePanel.setBounds(180,0,900, 720);
             HomePanel.setBackground(Color.red);  //Remove this pag gagawin nyo na code nyo
             HomePanel.setLayout(null);
+            DashPanel.setVisible(true);
+
+            VideoPanel.setVisible(true);
 
             //The Dash Panel will host the List of Faculty and all of its components, tables, etc.
             //The Color BG is a placeholder
             DashPanel.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            DashPanel.setBounds(180,0,1000, 720);
+            DashPanel.setBounds(180,0,900, 720);
             DashPanel.setBackground(Color.green);   //Remove this pag gagawin nyo na code nyo
             DashPanel.setLayout(null);
             DashPanel.setVisible(false);
@@ -87,7 +105,7 @@ public class HomeWindow {
             //The Report Panel will host the Report page and all of its component, tables, etc.
             //The Color BG is a placeholder
             ReportPanel.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            ReportPanel.setBounds(180,0,1000, 720);
+            ReportPanel.setBounds(180,0,900 , 720);
             ReportPanel.setBackground(Color.yellow);    //Remove this pag gagawin nyo na code nyo
             ReportPanel.setLayout(null);
             ReportPanel.setVisible(false);
@@ -158,6 +176,9 @@ public class HomeWindow {
                         HomePanel.setVisible(true);
                         HomePanel.setEnabled(true);
 
+                        VideoPanel.setVisible(true);
+                        VideoPanel.setEnabled(true);
+
                         DashPanel.setVisible(false);
                         DashPanel.setEnabled(false);
 
@@ -172,6 +193,9 @@ public class HomeWindow {
                         HomePanel.setVisible(false);
                         HomePanel.setEnabled(false);
 
+                        VideoPanel.setVisible(false);
+                        VideoPanel.setEnabled(false);
+
                         DashPanel.setVisible(true);
                         DashPanel.setEnabled(true);
 
@@ -185,6 +209,9 @@ public class HomeWindow {
                 {
                         HomePanel.setVisible(false);
                         HomePanel.setEnabled(false);
+
+                        VideoPanel.setVisible(false);
+                        VideoPanel.setEnabled(false);
 
                         DashPanel.setVisible(false);
                         DashPanel.setEnabled(false);
@@ -212,20 +239,31 @@ public class HomeWindow {
                     }
             });
 
+            //VLC video player
+            VideoPanel.add(canvas);
+            VideoPanel.setPreferredSize(new Dimension(900, 720));
+
 
             //Adding of Components to the window
-            HomeWindow.getContentPane().add(NaviPanel);
-            HomeWindow.getContentPane().add(HomePanel);
-            HomeWindow.getContentPane().add(DashPanel);
-            HomeWindow.getContentPane().add(ReportPanel);
+            RootPanel.add(NaviPanel);
+            //RootPanel.add(HomePanel);
+            RootPanel.add(DashPanel);
+            RootPanel.add(ReportPanel);
+            RootPanel.add(VideoPanel);
 
             //Window Essentials
             HomeWindow.setTitle("COE Faculty Monitoring System");
+            HomeWindow.setLayout(null);
             HomeWindow.setSize(1080, 720);
             HomeWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            HomeWindow.setLayout(null);
+            HomeWindow.setContentPane(RootPanel);
+            
             HomeWindow.setUndecorated(true);
             HomeWindow.setResizable(false);
+            HomeWindow.getContentPane().setLayout(null);
+            HomeWindow.setVisible(true);
+
+            VideoPanel.setBounds(180, 0, VideoPanel.getPreferredSize().width, VideoPanel.getPreferredSize().height);
 
             //Responsible for making the window open on the center of the screen on start up
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -234,7 +272,7 @@ public class HomeWindow {
             int x = (dim.width-w)/2;
             int y = (dim.height-h)/2;
             HomeWindow.setLocation(x,y);
-            HomeWindow.setVisible(true);
+                
         
         }
 
