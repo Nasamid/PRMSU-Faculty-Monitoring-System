@@ -124,7 +124,7 @@ public class addPreparation extends JPanel {
 						String code = add.codeTF.getText();
 						String description = add.decriptionTF.getText();
 						if(code.isEmpty() || description.isEmpty()) {
-							JOptionPane.showMessageDialog(t.frame, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(frame, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit frame
 						}else {
 							sub.subjectLbl.setText(code + " - " + description);
 							Body.add(sub);
@@ -248,7 +248,7 @@ public class addPreparation extends JPanel {
 										});
 										
 										if(section.isEmpty()) {
-											JOptionPane.showMessageDialog(t.frame, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
+											JOptionPane.showMessageDialog(frame, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
 										}else {
 											
 											edit.sectionPanel.add(sec);
