@@ -26,7 +26,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 
-public class addFaculty extends JDialog {
+public class AddFaculty extends JDialog {
 
 	JPanel contentPanel = new JPanel();
 	addPreparation prep = new addPreparation();
@@ -42,7 +42,7 @@ public class addFaculty extends JDialog {
 	private JLabel semesterLbl;
 	
 
-	public addFaculty() {
+	public AddFaculty() {
 		
 		// Set the dimensions and location of the JFrame to center it
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
