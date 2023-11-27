@@ -7,7 +7,11 @@ import java.util.List;
 import UploadDocTreeNodes.*;
 
 import java.awt.*;
-import java.io.IOException;
+import java.io.File;
+import java.io.IOException; 
+
+import org.icepdf.ri.common.SwingController;
+import org.icepdf.ri.common.SwingViewBuilder;
 
 public class UploadDocWindow {
 
@@ -36,6 +40,25 @@ public class UploadDocWindow {
         CSchoolYear = new JComboBox<>();
         CSemester = new JComboBox<>();
 
+        SwingController controller = new SwingController();
+
+        SwingViewBuilder factory = new SwingViewBuilder(controller){
+            @Override
+            public JToolBar buildCompleteToolBar(boolean isEmbedded) {
+                return null;
+            }
+        };
+        
+        JPanel viewerComponentPanel = factory.buildViewerPanel();
+        viewerComponentPanel.setBounds(5,-100,440, 720);
+
+        JScrollPane scrollPane = new JScrollPane(viewerComponentPanel);
+        scrollPane.setPreferredSize(new Dimension(450, 575));
+        
+        controller.getDocumentViewController().setAnnotationCallback(
+                new org.icepdf.ri.common.MyAnnotationCallback(
+                        controller.getDocumentViewController()));
+
         TreeTablePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         TreeTablePanel.setBounds(5,100,540, 575);
         TreeTablePanel.setLayout(new BorderLayout());
@@ -54,6 +77,17 @@ public class UploadDocWindow {
         
         DocPreviewText.setBounds(25, 25, 250,15);
         DocPreviewText.setFont(new Font("Arial", Font.BOLD, 15));
+
+        File pdfFile = new File("PRMSU-FACULTY-MANAGEMENT-SYSTEM" + File.separator + "src" + File.separator + "Documents" + File.separator + "Testing.pdf");
+        String pdfFilePath = pdfFile.getAbsolutePath();
+
+        //This code snipet opens the pdf in the pdf viewer and sets the zoom level
+        controller.openDocument(pdfFilePath);
+        float zoomLevel = 0.6f;
+        controller.setZoom(zoomLevel);
+
+        JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
+        horizontalScrollBar.setValue((horizontalScrollBar.getMaximum() / 2) + 30 );
 
         AddFileButton = new JButton();
         Image AddFileIcon;
@@ -198,8 +232,9 @@ public class UploadDocWindow {
         TopPanel.add(CFacultyName);
         TopPanel.add(CSchoolYear);
         TopPanel.add(CSemester);
-        
-        PreviewPanel.add(DocPreviewText);
+
+        PreviewPanel.add(scrollPane, BorderLayout.CENTER);
+        //PreviewPanel.add(DocPreviewText);
 
         UploadDocFrame.add(AddFileButton);
         UploadDocFrame.add(AddFileText);
