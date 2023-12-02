@@ -1,44 +1,30 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-
 
 public class LoginWindow {
 
     JFrame LoginWindow;
-    JPanel PTextHolder, PButtonHolder,ImgHolder;
+    JPanel PTextHolder, PButtonHolder,BgPanel;
     JPanel PTextM,PTextV,PTextQP;
 
+    JLabel LBGimage;
     JLabel UnivText, UnivLogo, TitleMission, TitleVision, TitleQP, TitleQP2;
     JLabel mtext1, mtext2, mtext3, mtext4, mtext5, mtext6, mtext7, mtext8, mtext9;
     JLabel vtext1, vtext2, vtext3, vtext4;
@@ -49,11 +35,33 @@ public class LoginWindow {
     
    LoginWindow(){  
     LoginWindow = new JFrame("Faculty Monitoring System");
+
+    //Back panel and Background design
+    BgPanel = new JPanel();
+    
+    LBGimage = new JLabel();
+            Image bg;
+            try {
+                bg = ImageIO.read(LoginWindow.class.getResourceAsStream("/Images/loginimage1.png"));
+                 ImageIcon imageIcon = new ImageIcon(bg);
+                LBGimage.setIcon(imageIcon);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+    LBGimage.setBounds(0, 0, 1080, 645);
+    BgPanel.setBounds(0,75,1080, 645);
+
+    BgPanel.setLayout(null);
+    
     
     //Variable Constants
     int textboxheight = 20;
     Color backgroundColor = new Color(0,0,122);
     Color TextHighlightColor = new Color(236,189,68);
+    Color textpanel = new Color(0,0,0);
+    Color BGpanel = new Color(255,255,255,150);
+    Color HeadText = new Color(251,201,1);
     
     //Instantiaions of Panels
     PTextHolder = new JPanel();
@@ -65,10 +73,10 @@ public class LoginWindow {
     //Top Panel Graphics
     UnivText = new JLabel("President Ramon Magsaysay State University",null,SwingConstants.TRAILING);
     UnivText.setBounds(0, 17, 748,40);
-    UnivText.setForeground(TextHighlightColor);
+    UnivText.setForeground(HeadText);
     UnivText.setFont(new Font("Arial", Font.BOLD, 30));
 
-            //This is for adding the university logo
+    //This is for adding the university logo
     UnivLogo = new JLabel();
             Image image;
             try {
@@ -108,141 +116,172 @@ public class LoginWindow {
     OffButton.setBorder(null);
     
 
-                //This is the section for the Mission, Vision, and Quality Policy
+    //This is the section for the Mission, Vision, and Quality Policy
     TitleMission = new JLabel("MISSION",null,SwingConstants.CENTER);
     TitleMission.setBounds(25, 25, 250,textboxheight);
-    TitleMission.setFont(new Font("Arial", Font.BOLD, 25));
+    TitleMission.setForeground(textpanel);
+    TitleMission.setFont(new Font("Arial", Font.BOLD, 28));
     
     mtext1 = new JLabel("The PRMSU shall primarily",null,SwingConstants.CENTER);
     mtext1.setBounds(25, 100, 250,textboxheight);
-    mtext1.setFont(new Font("Arial", Font.BOLD, 11));
+    mtext1.setForeground(textpanel);
+    mtext1.setFont(new Font("Arial", Font.BOLD, 13));
     
     mtext2 = new JLabel("provide advance and higher",null,SwingConstants.CENTER);
     mtext2.setBounds(25, 120, 250,textboxheight);
-    mtext2.setFont(new Font("Arial", Font.BOLD, 11));
+    mtext2.setForeground(textpanel);
+    mtext2.setFont(new Font("Arial", Font.BOLD, 13));
     
     mtext3 = new JLabel("professional, technical, and",null,SwingConstants.CENTER);
     mtext3.setBounds(25, 140, 250,textboxheight);
-    mtext3.setFont(new Font("Arial", Font.BOLD, 11));
+    mtext3.setForeground(textpanel);
+    mtext3.setFont(new Font("Arial", Font.BOLD, 13));
     
     mtext4 = new JLabel("special instructions in various",null,SwingConstants.CENTER);
     mtext4.setBounds(25, 160, 250,textboxheight);
-    mtext4.setFont(new Font("Arial", Font.BOLD, 11));
+    mtext4.setForeground(textpanel);
+    mtext4.setFont(new Font("Arial", Font.BOLD, 13));
     
     mtext5 = new JLabel("disciplines; undertake research,",null,SwingConstants.CENTER);
     mtext5.setBounds(25, 180, 250,textboxheight);
-    mtext5.setFont(new Font("Arial", Font.BOLD, 11));
+    mtext5.setForeground(textpanel);
+    mtext5.setFont(new Font("Arial", Font.BOLD, 13));
     
     mtext6 = new JLabel("extension and income generation",null,SwingConstants.CENTER);
     mtext6.setBounds(25, 200, 250,textboxheight);
-    mtext6.setFont(new Font("Arial", Font.BOLD, 11));
+    mtext6.setForeground(textpanel);
+    mtext6.setFont(new Font("Arial", Font.BOLD, 13));
     
     mtext7 = new JLabel("programs for the sustainable",null,SwingConstants.CENTER);
     mtext7.setBounds(25, 220, 250,textboxheight);
-    mtext7.setFont(new Font("Arial", Font.BOLD, 11));
+    mtext7.setForeground(textpanel);
+    mtext7.setFont(new Font("Arial", Font.BOLD, 13));
 
     mtext8 = new JLabel("development of Zambales,",null,SwingConstants.CENTER);
     mtext8.setBounds(25, 240, 250,textboxheight);
-    mtext8.setFont(new Font("Arial", Font.BOLD, 11));
+    mtext8.setForeground(textpanel);
+    mtext8.setFont(new Font("Arial", Font.BOLD, 13));
 
     mtext9 = new JLabel(" the region and the country. ",null,SwingConstants.CENTER);
     mtext9.setBounds(25, 260, 250,textboxheight);
-    mtext9.setFont(new Font("Arial", Font.BOLD, 11));    
+    mtext9.setForeground(textpanel);
+    mtext9.setFont(new Font("Arial", Font.BOLD, 13));    
     
     TitleVision = new JLabel("VISION",null,SwingConstants.CENTER);
     TitleVision.setBounds(25, 25, 250,textboxheight);
-    TitleVision.setFont(new Font("Arial", Font.BOLD, 25));
+    TitleVision.setForeground(textpanel);
+    TitleVision.setFont(new Font("Arial", Font.BOLD, 28));
     
     
     vtext1 = new JLabel("PRMSU shall be a premier",null,SwingConstants.CENTER);
     vtext1.setBounds(25, 100, 250,textboxheight);
-    vtext1.setFont(new Font("Arial", Font.BOLD, 11));
+    vtext1.setForeground(textpanel);
+    vtext1.setFont(new Font("Arial", Font.BOLD, 13));
     
     vtext2 = new JLabel("learner-centered and proactive",null,SwingConstants.CENTER);
     vtext2.setBounds(25, 120, 250,textboxheight);
-    vtext2.setFont(new Font("Arial", Font.BOLD, 11));
+    vtext2.setForeground(textpanel);
+    vtext2.setFont(new Font("Arial", Font.BOLD, 13));
     
     vtext3 = new JLabel("university in a digital",null,SwingConstants.CENTER);
     vtext3.setBounds(25, 140, 250,textboxheight);
-    vtext3.setFont(new Font("Arial", Font.BOLD, 11));
+    vtext3.setForeground(textpanel);
+    vtext3.setFont(new Font("Arial", Font.BOLD, 13));
     
     vtext4 = new JLabel(" and global society. ",null,SwingConstants.CENTER);
     vtext4.setBounds(25, 160, 250,textboxheight);
-    vtext4.setFont(new Font("Arial", Font.BOLD, 11));
+    vtext4.setForeground(textpanel);
+    vtext4.setFont(new Font("Arial", Font.BOLD, 13));
     
     
     TitleQP = new JLabel("QUALITY",null,SwingConstants.CENTER);
     TitleQP.setBounds(25, 25, 250,textboxheight);
-    TitleQP.setFont(new Font("Arial", Font.BOLD, 25));
+    TitleQP.setForeground(textpanel);
+    TitleQP.setFont(new Font("Arial", Font.BOLD, 28));
     
     TitleQP2 = new JLabel("POLICY",null,SwingConstants.CENTER);
     TitleQP2.setBounds(25, 60, 250,textboxheight);
-    TitleQP2.setFont(new Font("Arial", Font.BOLD, 25));
+    TitleQP2.setForeground(textpanel);
+    TitleQP2.setFont(new Font("Arial", Font.BOLD, 28));
 
     qptext1 = new JLabel("The President Ramon Magsaysay",null,SwingConstants.CENTER);
     qptext1.setBounds(25, 100, 250,textboxheight);
-    qptext1.setFont(new Font("Arial", Font.BOLD, 11));
+    qptext1.setForeground(textpanel);
+    qptext1.setFont(new Font("Arial", Font.BOLD, 13));
     
     qptext2 = new JLabel("State University is committed to ",null,SwingConstants.CENTER);
     qptext2.setBounds(25, 120, 250,textboxheight);
-    qptext2.setFont(new Font("Arial", Font.BOLD, 11));
+    qptext2.setForeground(textpanel);
+    qptext2.setFont(new Font("Arial", Font.BOLD, 13));
     
     qptext3 = new JLabel("continually strive for excellence",null,SwingConstants.CENTER);
     qptext3.setBounds(25, 140, 250,textboxheight);
-    qptext3.setFont(new Font("Arial", Font.BOLD, 11));
+    qptext3.setForeground(textpanel);
+    qptext3.setFont(new Font("Arial", Font.BOLD, 13));
     
     qptext4 = new JLabel("in instruction, research,",null,SwingConstants.CENTER);
     qptext4.setBounds(25, 160, 250,textboxheight);
-    qptext4.setFont(new Font("Arial", Font.BOLD, 11));
+    qptext4.setForeground(textpanel);
+    qptext4.setFont(new Font("Arial", Font.BOLD, 13));
     
     qptext5 = new JLabel("extension and production to",null,SwingConstants.CENTER);
     qptext5.setBounds(25, 180, 250,textboxheight);
-    qptext5.setFont(new Font("Arial", Font.BOLD, 11));
+    qptext5.setForeground(textpanel);
+    qptext5.setFont(new Font("Arial", Font.BOLD, 13));
     
     qptext6 = new JLabel("strengthen global competitiveness",null,SwingConstants.CENTER);
     qptext6.setBounds(25, 200, 250,textboxheight);
-    qptext6.setFont(new Font("Arial", Font.BOLD, 11));
+    qptext6.setForeground(textpanel);
+    qptext6.setFont(new Font("Arial", Font.BOLD, 13));
     
     qptext7 = new JLabel("adhering to quality standards",null,SwingConstants.CENTER);
     qptext7.setBounds(25, 220, 250,textboxheight);
-    qptext7.setFont(new Font("Arial", Font.BOLD, 11));
+    qptext7.setForeground(textpanel);
+    qptext7.setFont(new Font("Arial", Font.BOLD, 13));
     
     qptext8 = new JLabel("for the utmost satisfaction",null,SwingConstants.CENTER);
     qptext8.setBounds(25, 240, 250,textboxheight);
-    qptext8.setFont(new Font("Arial", Font.BOLD, 11));
+    qptext8.setForeground(textpanel);
+    qptext8.setFont(new Font("Arial", Font.BOLD, 13));
     
     qptext9 = new JLabel("of its valued customers.",null,SwingConstants.CENTER);
     qptext9.setBounds(25, 260, 250,textboxheight);
-    qptext9.setFont(new Font("Arial", Font.BOLD, 11));
+    qptext9.setForeground(textpanel);
+    qptext9.setFont(new Font("Arial", Font.BOLD, 13));
    
 
     //Graphics for the Panels
     PTextHolder.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-    PTextHolder.setBackground(backgroundColor);
+    PTextHolder.setBackground(SystemColor.textHighlight);
     PTextHolder.setBounds(0,0,1365, 75);
     PTextHolder.setLayout(null);
     
     PTextM.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    PTextM.setBackground(BGpanel);
+    PTextM.setOpaque(true);
     PTextM.setBounds(45,200,300, 370);
     PTextM.setLayout(null);
 
     PTextV.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    PTextV.setBackground(BGpanel);
+    PTextV.setOpaque(true);
     PTextV.setBounds(395,200,300, 370);
     PTextV.setLayout(null);
 
     PTextQP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    PTextQP.setBackground(BGpanel);
+    PTextQP.setOpaque(true);
     PTextQP.setBounds(740,200,300, 370);
     PTextQP.setLayout(null);
     
 
-                            //Action Listener for the Buttons
+    //Action Listener for the Buttons
     LoginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) 
             {
                 String ID = Login.getText();
                 if(ID.equals("admin")){
-
-                    HomeWindow homepage = new HomeWindow();
+                    new HomeWindow();
                     LoginWindow.dispose();
                 }
                 else {
@@ -268,6 +307,8 @@ public class LoginWindow {
     PTextHolder.add(UnivLogo);
     PTextHolder.add(LoginButton);
     PTextHolder.add(Login);
+
+    BgPanel.add(LBGimage);
     
     PTextM.add(TitleMission);
     PTextM.add(mtext1);
@@ -298,8 +339,6 @@ public class LoginWindow {
     PTextQP.add(qptext8);
     PTextQP.add(qptext9);
 
-
-
     //This section is for adding of Panels etc. to the actual window
     LoginWindow.getContentPane().add(PTextHolder);
     LoginWindow.getContentPane().add(PTextM);
@@ -307,6 +346,7 @@ public class LoginWindow {
     LoginWindow.getContentPane().add(PTextQP);
     LoginWindow.getContentPane().add(PButtonHolder);
     LoginWindow.getContentPane().add(OffButton);
+    LoginWindow.getContentPane().add(BgPanel);
 
     //Window Essential
     LoginWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

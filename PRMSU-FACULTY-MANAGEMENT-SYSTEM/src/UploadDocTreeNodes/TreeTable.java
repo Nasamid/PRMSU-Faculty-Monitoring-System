@@ -1,20 +1,10 @@
 package UploadDocTreeNodes;
-
-
-import java.awt.Color;
-import java.awt.Component;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
-
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
-
-import org.jdesktop.swingx.decorator.ColorHighlighter;
-import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 
 //This Class Contains the Model of the table in the Upload Docs
 public class TreeTable {
