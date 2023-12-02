@@ -1,21 +1,12 @@
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JList;
-
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextField;
@@ -24,7 +15,6 @@ import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
 
 public class AddFaculty extends JDialog {
 
@@ -156,8 +146,7 @@ public class AddFaculty extends JDialog {
 		semesterCB.setBackground(SystemColor.text);
 		semesterCB.setBounds(145, 300, 225, 20);
 		contentPanel.add(semesterCB);
-		
-		
+	
 		{
 			JPanel footerPanel = new JPanel();
 			footerPanel.setBounds(0, 345, 400, 38);
@@ -196,14 +185,12 @@ public class AddFaculty extends JDialog {
 		headerPanel.setBounds(0, 0, 400, 40);
 		contentPanel.add(headerPanel);
         
-        
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
 			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
         }
 		acadYearCB.setSelectedItem(String.valueOf(currentYear + " - " + (currentYear + 1)));
 		
-		
-		
 	}
 }
+
