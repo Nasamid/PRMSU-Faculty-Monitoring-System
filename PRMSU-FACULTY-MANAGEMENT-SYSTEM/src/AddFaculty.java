@@ -23,14 +23,14 @@ public class AddFaculty extends JDialog {
 	JTextField firstNameTF, lastNameTF;
 	JButton addBtn;
 	JLabel headLbl;
-	private JPanel headerPanel;
-	private JTextField middleNameTF;
-	private JLabel extName;
-	private JTextField extNameTF;
-	private JLabel departmentLbl;
-	private JLabel acadYear;
-	private JLabel semesterLbl;
-	
+	JPanel headerPanel;
+	JTextField middleNameTF;
+	JLabel extName;
+	JTextField extNameTF;
+	JLabel departmentLbl;
+	JLabel acadYear;
+	JLabel semesterLbl;
+	JComboBox departmentCB, acadYearCB, semesterCB;
 
 	public AddFaculty() {
 		
@@ -54,7 +54,7 @@ public class AddFaculty extends JDialog {
 		contentPanel.setLayout(null);
 		
 		headLbl = new JLabel("Add Faculty");
-			headLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		headLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		headLbl.setBackground(SystemColor.textHighlight);
 		headLbl.setFont(new Font("Arial", Font.BOLD, 17));
 		headLbl.setBounds(0, 10, 386, 20);
@@ -124,7 +124,7 @@ public class AddFaculty extends JDialog {
 		extNameTF.setBounds(145, 180, 225, 20);
 		contentPanel.add(extNameTF);
 		
-		JComboBox departmentCB = new JComboBox();
+		departmentCB = new JComboBox();
 		departmentCB.setModel(new DefaultComboBoxModel(new String[] {"DEPARTMENT", "MECHANICAL ENGINEERING", "COMPUTER ENGINEERING", "CIVIL ENGINEERING", "ELECTRICAL ENGINEERING", "ALLIED"}));
 		departmentCB.setFont(new Font("Arial", Font.PLAIN, 10));
 		departmentCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
@@ -132,14 +132,14 @@ public class AddFaculty extends JDialog {
 		departmentCB.setBounds(145, 220, 225, 20);
 		contentPanel.add(departmentCB);
 		
-		JComboBox acadYearCB = new JComboBox();
+		acadYearCB = new JComboBox();
 		acadYearCB.setFont(new Font("Arial", Font.PLAIN, 10));
 		acadYearCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		acadYearCB.setBackground(SystemColor.text);
 		acadYearCB.setBounds(145, 260, 225, 20);
 		contentPanel.add(acadYearCB);
 		
-		JComboBox semesterCB = new JComboBox();
+		semesterCB = new JComboBox();
 		semesterCB.setModel(new DefaultComboBoxModel(new String[] {"SEMESTER", "First Semester", "Second Semester", "Midyear"}));
 		semesterCB.setFont(new Font("Arial", Font.PLAIN, 10));
 		semesterCB.setBorder(new LineBorder(SystemColor.textText, 1, true));

@@ -51,7 +51,10 @@ public class HomeWindow {
         JLabel report;
         JButton button2;
         JTextField Search2;
-
+        
+        listFaculty faculty;
+        
+        
         private ActionListener exportToExcel = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -101,6 +104,7 @@ public class HomeWindow {
             HomePanel = new JPanel();
             DashPanel = new JPanel();
             ReportPanel = new JPanel();
+            faculty = new listFaculty();
 
             HomeButton = new JButton();
             ListFacButton = new JButton();
@@ -109,6 +113,8 @@ public class HomeWindow {
             LogoutButton = new JButton();
 
             UnivLogo = new JLabel();
+            
+            
 
     
         //For reporting
@@ -186,7 +192,7 @@ public class HomeWindow {
 
             
         //The Navigation Panel is the Panel for the buttons such as "Home", "List", "Report", etc.
-        NaviPanel.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
+        NaviPanel.setBorder(null);
         NaviPanel.setBounds(0,0,180, 720);
         NaviPanel.setBackground(SystemColor.textHighlight);
         NaviPanel.setLayout(null);
@@ -213,7 +219,7 @@ public class HomeWindow {
             //The Report Panel will host the Report page and all of its component, tables, etc.
             //The Color BG is a placeholder
             ReportPanel.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            ReportPanel.setBounds(180,0,900 , 750);
+            ReportPanel.setBounds(180,0,1000 , 750);
             ReportPanel.setLayout(null);
             ReportPanel.setVisible(false);
 
@@ -304,8 +310,7 @@ public class HomeWindow {
                         VideoPanel.setVisible(false);
                         VideoPanel.setEnabled(false);
 
-                        DashPanel.setVisible(true);
-                        DashPanel.setEnabled(true);
+                        faculty.show();
 
                         ReportPanel.setVisible(false);
                         ReportPanel.setEnabled(false);
@@ -357,11 +362,12 @@ public class HomeWindow {
             RootPanel.add(DashPanel);
             RootPanel.add(ReportPanel);
             RootPanel.add(VideoPanel);
+            RootPanel.add(faculty);
 
             //Window Essentials
             HomeWindow.setTitle("COE Faculty Monitoring System");
-            HomeWindow.setLayout(null);
-            HomeWindow.setSize(1080, 720);
+            HomeWindow.getContentPane().setLayout(null);
+            HomeWindow.setSize(1180, 720);
             HomeWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             HomeWindow.setContentPane(RootPanel);
             
@@ -370,7 +376,7 @@ public class HomeWindow {
             HomeWindow.getContentPane().setLayout(null);
             HomeWindow.setVisible(true);
 
-            VideoPanel.setBounds(180, 0, VideoPanel.getPreferredSize().width, VideoPanel.getPreferredSize().height);
+            VideoPanel.setBounds(180, 0, 1000, 720);
 
             //Responsible for making the window open on the center of the screen on start up
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -384,6 +390,15 @@ public class HomeWindow {
         }
 
         public static void main(String[] args) {
-            new HomeWindow();
+        	EventQueue.invokeLater(new Runnable() {
+    			public void run() {
+    				try {
+    					HomeWindow window = new HomeWindow();
+    					window.HomeWindow.setVisible(true);
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    				}
+    			}
+    		});
         }
 }

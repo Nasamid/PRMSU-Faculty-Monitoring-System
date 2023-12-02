@@ -1,7 +1,9 @@
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -10,6 +12,7 @@ import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -20,17 +23,24 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 public class addPreparation extends JPanel {
-	private JTextField facultyName;
-	private JButton addSubjectBtn;
+	JTextField facultyName;
+	JButton addSubjectBtn;
 	JPanel Body;
 	int currentRow = 0;
+	JFrame frame;
+	JComboBox<String> semesterCB;
 	
 	public addPreparation() {
+		listFaculty faculty = new listFaculty();
 		
 		setBackground(SystemColor.text);
 		setFont(new Font("Arial", Font.BOLD, 15));
-		setBounds(180,0,1000, 720);
+		setBounds(0,0,1000, 720);
 		setLayout(null);
+		
+		frame = new JFrame();
+		frame.setSize(1000, 720);
+		frame.getContentPane().add(this);
 		
 		JPanel Header = new JPanel();
 		Header.setBackground(SystemColor.textHighlight);
@@ -281,15 +291,20 @@ public class addPreparation extends JPanel {
 		Footer.add(addSubjectBtn);
 		
 		JButton backBtn = new JButton("Back");
+		backBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+			}
+		});
 		backBtn.setBackground(SystemColor.text);
 		backBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		backBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		backBtn.setBounds(775, 20, 125, 35);
 		Footer.add(backBtn);
 		
-		JComboBox<String> semesterCB = new JComboBox<>();
+		semesterCB = new JComboBox<>();
 		String[] semester = {
-	            "First Semester", "Second Semester", "Mid Year"
+	            "First Semester", "Second Semester", "Midyear"
 	        };
 		for (String sem : semester) {
 		semesterCB.addItem(sem);
@@ -313,6 +328,31 @@ public class addPreparation extends JPanel {
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
 		
+		//Responsible for making the window open on the center of the screen on start up
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        int w = frame.getSize().width;
+        int h = frame.getSize().height;
+        int x = (dim.width-w)/2;
+        int y = (dim.height-h)/2;
+        frame.setLocation(x,y);
+		
 	}
+	
+	public static void main(String[] args) {
+    	EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					addPreparation window = new addPreparation();
+					JFrame frame = new JFrame();
+					frame.setSize(1000, 720);
+					frame.getContentPane().add(window);
+					frame.show();
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+    }
 }
 
