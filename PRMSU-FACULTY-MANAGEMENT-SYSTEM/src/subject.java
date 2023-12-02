@@ -1,22 +1,12 @@
 import java.awt.Color;
 import java.awt.Dimension;
-
+import java.awt.Font;
+import java.awt.SystemColor;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-import java.awt.SystemColor;
-import java.time.LocalDate;
-
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Insets;
-
-import javax.swing.JButton;
-import java.awt.Point;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.ImageIcon;
 
 public class subject extends JPanel {
 	JLabel subjectLbl;
@@ -67,8 +57,6 @@ public class subject extends JPanel {
 		deleteBtn.setFont(new Font("Arial", Font.BOLD, 10));
 		deleteBtn.setBounds(830, 3, 35, 30);
 		panel.add(deleteBtn);
-		
-		
 	}
 	
 }

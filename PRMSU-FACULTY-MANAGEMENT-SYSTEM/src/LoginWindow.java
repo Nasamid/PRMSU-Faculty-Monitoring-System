@@ -1,38 +1,22 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-
 
 public class LoginWindow {
 
@@ -291,14 +275,13 @@ public class LoginWindow {
     PTextQP.setLayout(null);
     
 
-                            //Action Listener for the Buttons
+    //Action Listener for the Buttons
     LoginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) 
             {
                 String ID = Login.getText();
                 if(ID.equals("admin")){
-
-                    HomeWindow homepage = new HomeWindow();
+                    new HomeWindow();
                     LoginWindow.dispose();
                 }
                 else {
@@ -355,8 +338,6 @@ public class LoginWindow {
     PTextQP.add(qptext7);
     PTextQP.add(qptext8);
     PTextQP.add(qptext9);
-
-
 
     //This section is for adding of Panels etc. to the actual window
     LoginWindow.getContentPane().add(PTextHolder);
