@@ -158,7 +158,7 @@ public class listFaculty extends JPanel {
 		add(addFacultyBtn);
 		
 		JButton searchBtn = new JButton("");
-		searchBtn.setIcon(new ImageIcon(listFaculty.class.getResource("/Images/icons8-search-25.png")));
+		searchBtn.setIcon(new ImageIcon(listFaculty.class.getResource("/Images/search25x.png")));
 		searchBtn.setBackground(Color.WHITE);
 		searchBtn.setBorder(null);
 		searchBtn.setBounds(932, 62, 25, 25);

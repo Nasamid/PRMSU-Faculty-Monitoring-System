@@ -337,22 +337,5 @@ public class addPreparation extends JPanel {
         frame.setLocation(x,y);
 		
 	}
-	
-	public static void main(String[] args) {
-    	EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					addPreparation window = new addPreparation();
-					JFrame frame = new JFrame();
-					frame.setSize(1000, 720);
-					frame.getContentPane().add(window);
-					frame.show();
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-    }
 }
 
