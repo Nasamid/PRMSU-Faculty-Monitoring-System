@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="PRMSU-FACULTY-MANAGEMENT-SYSTEM/src"/>
+	<classpathentry kind="lib" path="PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/jna-jpms-5.12.1.jar"/>
+	<classpathentry kind="lib" path="PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/jna-platform-jpms-5.12.1.jar"/>
+	<classpathentry kind="lib" path="PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/jtreetable-4.0.0.jar"/>
+	<classpathentry kind="lib" path="PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/sqlite-jdbc-3.7.2.jar"/>
+	<classpathentry kind="lib" path="PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/swingx-all-1.6.4.jar"/>
+	<classpathentry kind="lib" path="PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/vlcj-4.8.2.jar"/>
+	<classpathentry kind="lib" path="PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/vlcj-natives-4.8.1.jar"/>
+	<classpathentry kind="output" path="PRMSU-FACULTY-MANAGEMENT-SYSTEM/bin"/>
+</classpath>
