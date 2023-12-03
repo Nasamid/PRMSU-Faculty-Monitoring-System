@@ -5,5 +5,14 @@
         "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/swingx-all-1.6.5-1.jar",
         "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/swingx-all-1.6.4.jar",
         "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/sqlite-jdbc-3.7.2.jar"
-    ]
+    ],
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:PRMSU-Faculty-Monitoring-System}/main.db",
+            "name": "Database"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
 }
