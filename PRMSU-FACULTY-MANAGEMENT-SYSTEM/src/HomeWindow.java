@@ -37,7 +37,7 @@ import java.io.IOException;
 
 public class HomeWindow {
         JFrame HomeWindow;
-        JPanel RootPanel, NaviPanel, HomePanel, DashPanel, ReportPanel;
+        JPanel RootPanel, NaviPanel, HomePanel, ReportPanel;
         JButton HomeButton, ListFacButton, ReportButton, HelpButton, LogoutButton;
         JLabel UnivLogo, HPimage;
         JPanel VideoPanel;
@@ -52,7 +52,7 @@ public class HomeWindow {
         JButton button2;
         JTextField Search2;
         
-        listFaculty faculty;
+        listFaculty faculty;    // List of Faculty Panel
         
         
         private ActionListener exportToExcel = new ActionListener() {
@@ -102,7 +102,6 @@ public class HomeWindow {
             RootPanel = new JPanel();
             NaviPanel = new JPanel();
             HomePanel = new JPanel();
-            DashPanel = new JPanel();
             ReportPanel = new JPanel();
             faculty = new listFaculty();
 
@@ -114,7 +113,7 @@ public class HomeWindow {
 
             UnivLogo = new JLabel();
             
-            
+            faculty.setVisible(false);  // sets List of Faculty Panel not visible
 
     
         //For reporting
@@ -205,16 +204,8 @@ public class HomeWindow {
         HomePanel.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
         HomePanel.setBounds(180,0,900, 720);
         HomePanel.setLayout(null);
-        DashPanel.setVisible(true);
 
             VideoPanel.setVisible(true);
-
-            //The Dash Panel will host the List of Faculty and all of its components, tables, etc.
-            //The Color BG is a placeholder
-            DashPanel.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            DashPanel.setBounds(180,0,900, 720);
-            DashPanel.setLayout(null);
-            DashPanel.setVisible(false);
 
             //The Report Panel will host the Report page and all of its component, tables, etc.
             //The Color BG is a placeholder
@@ -293,8 +284,7 @@ public class HomeWindow {
                         VideoPanel.setVisible(true);
                         VideoPanel.setEnabled(true);
 
-                        DashPanel.setVisible(false);
-                        DashPanel.setEnabled(false);
+                        faculty.show(false);
 
                         ReportPanel.setVisible(false);
                         ReportPanel.setEnabled(false);
@@ -326,8 +316,7 @@ public class HomeWindow {
                         VideoPanel.setVisible(false);
                         VideoPanel.setEnabled(false);
 
-                        DashPanel.setVisible(false);
-                        DashPanel.setEnabled(false);
+                        faculty.show(false);
                         
                         ReportPanel.setVisible(true);
                         ReportPanel.setEnabled(true);
@@ -359,7 +348,6 @@ public class HomeWindow {
             //Adding of Components to the window
             RootPanel.add(NaviPanel);
             //RootPanel.add(HomePanel);
-            RootPanel.add(DashPanel);
             RootPanel.add(ReportPanel);
             RootPanel.add(VideoPanel);
             RootPanel.add(faculty);
