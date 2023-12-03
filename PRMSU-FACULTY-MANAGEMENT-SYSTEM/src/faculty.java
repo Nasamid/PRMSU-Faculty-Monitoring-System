@@ -33,6 +33,10 @@ public class faculty extends JPanel {
 		setBackground(SystemColor.text);
 		setLayout(null);
 		
+		JSeparator separator4 = new JSeparator();
+		separator4.setBounds(10, 45, 980, 2);
+		add(separator4);
+		
 		panel = new JPanel();
 		panel.setBorder(null);
 		panel.setBackground(Color.WHITE);
@@ -115,10 +119,6 @@ public class faculty extends JPanel {
 		separator3.setForeground(Color.BLACK);
 		separator3.setBounds(285, 2, 2, 31);
 		panel.add(separator3);
-		
-		JSeparator separator4 = new JSeparator();
-		separator4.setBounds(10, 45, 980, 2);
-		add(separator4);
 		
 		
 	}

@@ -91,12 +91,11 @@ public class addPreparation extends JPanel {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(SystemColor.text);
-		scrollPane.setBounds(0, 125, 1000, 450);
+		scrollPane.setBounds(0, 125, 1010, 450);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		add(scrollPane);
 		
 		Body = new JPanel();
-		Body.setBorder(null);
 		Body.setBackground(SystemColor.text);
 		Body.setLayout(new GridLayout(10,1));
 		scrollPane.setViewportView(Body);
@@ -110,26 +109,34 @@ public class addPreparation extends JPanel {
 		addSubjectBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		addSubjectBtn.addActionListener(new ActionListener() {
 			
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) 
+		{
 			subject sub = new subject();
 			addSubjectDialog add = new addSubjectDialog();
 			add.show();
-			add.addBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			
+			add.addBtn.addActionListener(new ActionListener() 
+			{
+				public void actionPerformed(ActionEvent e) 
+				{
 					
 					String code = add.codeTF.getText();
 					String description = add.decriptionTF.getText();
-					if(code.isEmpty() || description.isEmpty()) {
+					if(code.isEmpty() || description.isEmpty()) 
+					{
 						JOptionPane.showMessageDialog(Body, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit frame
-					}else {
+					}else 
+					{
 						sub.subjectLbl.setText(code + " - " + description);
 						Body.add(sub);
 						currentRow++;
-						if (Body.getComponentCount() > 10) { 
+						
+						if (Body.getComponentCount() > 10) 
+						{ 
 							// Increase the preferred height of the rowPanel
 							Dimension preferredSize = Body.getPreferredSize();
 							preferredSize.height += 50;
-							Body.setLayout(new GridLayout(currentRow, 1));
+							Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
 							Body.setPreferredSize(preferredSize);
 							Body.revalidate();
 						}
@@ -141,37 +148,50 @@ public class addPreparation extends JPanel {
 				
 		//new add section button on Subjects
 		JButton addSection = sub.addBtn;
-		addSection.addMouseListener(new MouseAdapter() {
+		addSection.addMouseListener(new MouseAdapter() 
+		{
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(MouseEvent e) 
+			{
 				
 				addSection addSection = new addSection();
 				addSection.show();
 				
-				addSection.addBtn.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
+				addSection.addBtn.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
 						
 						
 						addSectionDialog addSectionDialog = new addSectionDialog();
 						addSectionDialog.show();
 						
-						addSectionDialog.addDialogBtn.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
+						addSectionDialog.addDialogBtn.addActionListener(new ActionListener() 
+						{
+							public void actionPerformed(ActionEvent e) 
+							{
 								sections sec = new sections();
 								String section = addSectionDialog.sectionTF.getText();
+								String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
+								String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
 								
-								if(section.isEmpty()) {
+								if(section.isEmpty()) 
+								{
 									JOptionPane.showMessageDialog(Body, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
-								}else {
+								}
+								else 
+								{
 									
 									addSection.Body.add(sec);
 									sec.sectionLbl.setText(section);
-									currentRow++;
+									sec.semesterLbl.setText(semester);
+									sec.academicYearLbl.setText(academicYear);
+									
 									if (addSection.Body.getComponentCount() > 10) { 
 										// Increase the preferred height of the rowPanel
 										Dimension preferredSize = addSection.Body.getPreferredSize();
-										preferredSize.height += 30;
-										addSection.Body.setLayout(new GridLayout(currentRow, 1));
+										preferredSize.height += 40;
+										addSection.Body.setLayout(new GridLayout(addSection.Body.getComponentCount(), 1));
 										addSection.Body.setPreferredSize(preferredSize);
 										addSection.Body.revalidate();
 									}
@@ -232,6 +252,8 @@ public class addPreparation extends JPanel {
 							public void actionPerformed(ActionEvent e) {
 								sections sec = new sections();
 								String section = addSectionDialog.sectionTF.getText();
+								String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
+								String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
 								
 								sec.deleteBtn.addMouseListener(new MouseAdapter() {
 									public void mousePressed(MouseEvent e) {
@@ -246,12 +268,14 @@ public class addPreparation extends JPanel {
 									
 									edit.sectionPanel.add(sec);
 									sec.sectionLbl.setText(section);
+									sec.semesterLbl.setText(semester);
+									sec.academicYearLbl.setText(academicYear);
 									currentRow++;
-									if (edit.sectionPanel.getComponentCount() > 8) { 
+									if (edit.sectionPanel.getComponentCount() > 10) { 
 										// Increase the preferred height of the rowPanel
 										Dimension preferredSize = edit.sectionPanel.getPreferredSize();
 										preferredSize.height += 35;
-										edit.sectionPanel.setLayout(new GridLayout(currentRow, 1));
+										edit.sectionPanel.setLayout(new GridLayout(edit.sectionPanel.getComponentCount(), 1));
 										edit.sectionPanel.setPreferredSize(preferredSize);
 										edit.sectionPanel.revalidate();
 									}

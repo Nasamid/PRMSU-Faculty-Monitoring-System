@@ -52,21 +52,21 @@ public class listFaculty extends JPanel {
 		setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(SystemColor.text);
-		scrollPane.setBounds(0, 150, 1000, 550);
+		scrollPane.setBounds(0, 165, 1000, 510);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		
 		JPanel Header = new JPanel();
 		Header.setLayout(null);
 		Header.setBackground(SystemColor.textHighlight);
-		Header.setBounds(0, 0, 1000, 50);
+		Header.setBounds(0, 0, 1000, 70);
 		add(Header);
 		
 		Body = new JPanel();
 		Body.setBackground(SystemColor.text);
-		Body.setLayout(new GridLayout(10,1));
+		Body.setLayout(new GridLayout(11,1));
 		scrollPane.setViewportView(Body);
 		
 		addFacultyBtn = new JButton("Add Faculty");
@@ -97,20 +97,20 @@ public class listFaculty extends JPanel {
 							faculty.semesterLbl.setText(semester);
 							faculty.academicYearLbl.setText(academicYear);
 							
-							addFaculty.dispose();
+							Body.add(faculty);
 							currentRow++;
 							
-							if (Body.getComponentCount() > 10) 
+							if (Body.getComponentCount() >= 11) 
 							{ 
 			                    // Increase the preferred height of the rowPanel
 			                    Dimension preferredSize = Body.getPreferredSize();
-			                    preferredSize.height += 50;
+			                    preferredSize.height += 45;
 			                    Body.setLayout(new GridLayout(currentRow, 1));
 			                    Body.setPreferredSize(preferredSize);
 			                    Body.revalidate();
-			                }
-
-							Body.add(faculty);
+							}
+							
+							addFaculty.dispose();
 							Body.revalidate();
 						}
 					}
@@ -154,14 +154,14 @@ public class listFaculty extends JPanel {
 		addFacultyBtn.setFont(new Font("Arial", Font.BOLD, 15));
 		addFacultyBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		addFacultyBtn.setBackground(SystemColor.text);
-		addFacultyBtn.setBounds(20, 60, 150, 30);
+		addFacultyBtn.setBounds(20, 80, 150, 30);
 		add(addFacultyBtn);
 		
 		JButton searchBtn = new JButton("");
 		searchBtn.setIcon(new ImageIcon(listFaculty.class.getResource("/Images/search25x.png")));
 		searchBtn.setBackground(Color.WHITE);
 		searchBtn.setBorder(null);
-		searchBtn.setBounds(932, 62, 25, 25);
+		searchBtn.setBounds(932, 82, 25, 25);
 		add(searchBtn);
 		
 		searchEngine = new JTextField();
@@ -170,13 +170,13 @@ public class listFaculty extends JPanel {
 		searchEngine.setBackground(new Color(255, 255, 255));
 		searchEngine.setColumns(10);
 		searchEngine.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		searchEngine.setBounds(730, 60, 200, 30);
+		searchEngine.setBounds(730, 80, 200, 30);
 		add(searchEngine);
 		
 		JPanel Header1 = new JPanel();
 		Header1.setLayout(null);
 		Header1.setBackground(SystemColor.textHighlight);
-		Header1.setBounds(0, 100, 1000, 40);
+		Header1.setBounds(0, 120, 1000, 40);
 		add(Header1);
 		
 		JLabel facultyLbl = new JLabel("FACULTY");
