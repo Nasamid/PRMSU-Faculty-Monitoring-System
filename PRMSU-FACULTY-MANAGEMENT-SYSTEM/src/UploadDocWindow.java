@@ -247,8 +247,6 @@ public class UploadDocWindow {
                 e.printStackTrace();
             }
 
-        //Window Essential
-        UploadDocFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //UploadDocFrame.setUndecorated(true);
         UploadDocFrame.setSize(1080, 720);
         UploadDocFrame.setResizable(false);
