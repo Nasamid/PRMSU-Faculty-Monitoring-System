@@ -45,6 +45,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JSeparator;
 import javax.swing.ImageIcon;
+import java.awt.FlowLayout;
 
 
 public class listFaculty extends JPanel 
@@ -72,10 +73,22 @@ public class listFaculty extends JPanel
 		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		
 		JPanel Header = new JPanel();
-		Header.setLayout(null);
-		Header.setBackground(SystemColor.textHighlight);
+		Header.setBackground(SystemColor.text);
 		Header.setBounds(0, 0, 1000, 70);
 		add(Header);
+		Header.setLayout(null);
+		
+		JLabel headerTitle = new JLabel("List of Faculty");
+		headerTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		headerTitle.setBounds(0, 0, 1000, 70);
+		headerTitle.setFont(new Font("Arial", Font.BOLD, 25));
+		Header.add(headerTitle);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBackground(SystemColor.textHighlight);
+		separator_1.setForeground(SystemColor.textHighlight);
+		separator_1.setBounds(25, 65, 950, 3);
+		Header.add(separator_1);
 		
 		Body = new JPanel();
 		Body.setBackground(SystemColor.text);
@@ -103,13 +116,10 @@ public class listFaculty extends JPanel
 						
 						if(		addFaculty.firstNameTF.getText().isEmpty() 
 							|| 	addFaculty.lastNameTF.getText().isEmpty()
-							|| 	department.isEmpty() 
-							|| 	academicYear.isEmpty() 
-							|| 	semester.isEmpty() 
 							||  addFaculty.semesterCB.getSelectedIndex() == 0
 							||  addFaculty.departmentCB.getSelectedIndex() == 0) 
 						{
-							JOptionPane.showMessageDialog(frame, "invalid Input", "Error", JOptionPane.INFORMATION_MESSAGE); 
+							JOptionPane.showMessageDialog(frame, "Enter First Name.", "Error", JOptionPane.INFORMATION_MESSAGE);	
 						}
 						else 
 						{
@@ -322,37 +332,6 @@ public class listFaculty extends JPanel
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
 	}
-	
-	/* 
-	 * This method performs search or operations on the component 
-	 * For example, you can check the component's properties or type
-	 * and perform specific actions based on your requirements 
-	 * 
-	 *  Note: For search engine and comboboxes.
-	 *  	  > takes the data from database.
-	 *  	  > Doesnt have function yet.
-	 */
-	
-//	public void search(int index) 
-//	{
-//		int componentIndex = Body.getComponentCount();
-//		
-//		for (int i = 0; componentIndex < facultyNames.size(); i++) 
-//		{
-//			if(i == index) 
-//			{
-//				Container container = Body.getComponent(1).getParent();
-//				Body.getComponent(i).getParent().setComponentZOrder(Body.getComponent(i), 0);
-//				container.revalidate();
-//				container.repaint();
-//			}
-//			
-//			if(i != index)
-//			{
-//				Body.getComponent(i).setVisible(false);
-//			}
-//		}
-//	}
 }
 
 

@@ -243,6 +243,8 @@ public class addPreparation extends JPanel
 						
 						editSubject.addLbl.setText("Edit Subject");
 						editSubject.addBtn.setText("Done");
+						editSubject.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
+						editSubject.semesterCB.setSelectedItem(sub.semesterLbl.getText());
 						editSubject.show();
 						
 						editSubject.addBtn.addMouseListener(new MouseAdapter() 
