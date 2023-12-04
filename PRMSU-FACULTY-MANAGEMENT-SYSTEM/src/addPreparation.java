@@ -24,15 +24,17 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JSeparator;
 
-public class addPreparation extends JPanel {
+public class addPreparation extends JPanel 
+{
 	JTextField facultyName;
 	JButton addSubjectBtn;
 	JPanel Body;
-	int currentRow = 0;
 	JFrame frame;
 	JComboBox<String> semesterCB, acadYearCB;
+	int currentRow = 0;
 	
-	public addPreparation() {
+	public addPreparation() 
+	{
 		listFaculty faculty = new listFaculty();
 		
 		setBackground(SystemColor.text);
@@ -121,13 +123,14 @@ public class addPreparation extends JPanel {
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					
 					String code = add.codeTF.getText();
 					String description = add.decriptionTF.getText();
+					
 					if(code.isEmpty() || description.isEmpty() || add.semesterCB.getSelectedIndex()==0) 
 					{
-						JOptionPane.showMessageDialog(Body, "invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE); //edit frame
-					}else 
+						JOptionPane.showMessageDialog(Body, "invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else 
 					{
 						sub.subjectLbl.setText(code + " - " + description);
 						sub.semesterLbl.setText((String) add.semesterCB.getSelectedItem());
@@ -157,7 +160,6 @@ public class addPreparation extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) 
 			{
-				
 				addSection addSection = new addSection();
 				addSection.show();
 				
@@ -165,8 +167,6 @@ public class addPreparation extends JPanel {
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
-						
-						
 						addSectionDialog addSectionDialog = new addSectionDialog();
 						addSectionDialog.show();
 						
@@ -191,7 +191,8 @@ public class addPreparation extends JPanel {
 									sec.semesterLbl.setText(semester);
 									sec.academicYearLbl.setText(academicYear);
 									
-									if (addSection.Body.getComponentCount() > 10) { 
+									if (addSection.Body.getComponentCount() > 10) 
+									{ 
 										// Increase the preferred height of the rowPanel
 										Dimension preferredSize = addSection.Body.getPreferredSize();
 										preferredSize.height += 40;
@@ -200,8 +201,10 @@ public class addPreparation extends JPanel {
 										addSection.Body.revalidate();
 									}
 									
-									sec.deleteBtn.addMouseListener(new MouseAdapter() {
-										public void mousePressed(MouseEvent e) {
+									sec.deleteBtn.addMouseListener(new MouseAdapter() 
+									{
+										public void mousePressed(MouseEvent e) 
+										{
 											addSection.Body.remove(sec);
 											addSection.revalidate();
 											addSection.repaint();
@@ -220,26 +223,32 @@ public class addPreparation extends JPanel {
 				
 		//new edit button on Subjects
 		JButton editSection = sub.editBtn;
-		editSection.addMouseListener(new MouseAdapter() {
+		editSection.addMouseListener(new MouseAdapter() 
+		{
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(MouseEvent e) 
+			{
 				editDialog edit = new editDialog();
 				addSubjectDialog editSubject = new addSubjectDialog();
 				edit.SubjectLbl.setText(sub.subjectLbl.getText());
-				edit.acadYearCB.setSelectedItem(sub.academicYearLbl);
-				edit.semesterCB.setSelectedItem(sub.semesterLbl);
+				edit.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
+				edit.semesterCB.setSelectedItem(sub.semesterLbl.getText());
 				edit.show();
 				
-				edit.editSubject.addMouseListener(new MouseAdapter() {
+				edit.editSubject.addMouseListener(new MouseAdapter() 
+				{
 					@Override
-					public void mousePressed(MouseEvent e) {
+					public void mousePressed(MouseEvent e) 
+					{
 						
 						editSubject.addLbl.setText("Edit Subject");
 						editSubject.addBtn.setText("Done");
 						editSubject.show();
 						
-						editSubject.addBtn.addMouseListener(new MouseAdapter() {
-							public void mousePressed(MouseEvent e) {
+						editSubject.addBtn.addMouseListener(new MouseAdapter() 
+						{
+							public void mousePressed(MouseEvent e) 
+							{
 								sub.subjectLbl.setText(editSubject.codeTF.getText() + " - " + editSubject.decriptionTF.getText());
 								edit.SubjectLbl.setText(editSubject.codeTF.getText() + " - " + editSubject.decriptionTF.getText());
 								editSubject.dispose();
@@ -249,35 +258,46 @@ public class addPreparation extends JPanel {
 					}
 				});
 						
-				edit.addSection.addMouseListener(new MouseAdapter() {
-					public void mousePressed(MouseEvent e) {
+				edit.addSection.addMouseListener(new MouseAdapter() 
+				{
+					public void mousePressed(MouseEvent e) 
+					{
 						addSectionDialog addSectionDialog = new addSectionDialog();
 						addSectionDialog.show();
 						
-						addSectionDialog.addDialogBtn.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
+						addSectionDialog.addDialogBtn.addActionListener(new ActionListener() 
+						{
+							public void actionPerformed(ActionEvent e) 
+							{
 								sections sec = new sections();
 								String section = addSectionDialog.sectionTF.getText();
 								String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
 								String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
 								
-								sec.deleteBtn.addMouseListener(new MouseAdapter() {
-									public void mousePressed(MouseEvent e) {
+								sec.deleteBtn.addMouseListener(new MouseAdapter() 
+								{
+									public void mousePressed(MouseEvent e) 
+									{
 										edit.sectionPanel.remove(sec);
 										edit.revalidate();
 									}
 								});
 								
-								if(section.isEmpty()) {
-									JOptionPane.showMessageDialog(Body, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
-								}else {
+								if(section.isEmpty()) 
+								{
+									JOptionPane.showMessageDialog(Body, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE);
+								}
+								else 
+								{
 									
 									edit.sectionPanel.add(sec);
 									sec.sectionLbl.setText(section);
 									sec.semesterLbl.setText(semester);
 									sec.academicYearLbl.setText(academicYear);
 									currentRow++;
-									if (edit.sectionPanel.getComponentCount() > 10) { 
+									
+									if (edit.sectionPanel.getComponentCount() > 10) 
+									{ 
 										// Increase the preferred height of the rowPanel
 										Dimension preferredSize = edit.sectionPanel.getPreferredSize();
 										preferredSize.height += 35;
@@ -286,8 +306,10 @@ public class addPreparation extends JPanel {
 										edit.sectionPanel.revalidate();
 									}
 									
-									sec.deleteBtn.addMouseListener(new MouseAdapter() {
-										public void mousePressed(MouseEvent e) {
+									sec.deleteBtn.addMouseListener(new MouseAdapter() 
+									{
+										public void mousePressed(MouseEvent e) 
+										{
 											edit.sectionPanel.remove(sec);
 											edit.revalidate();
 											edit.repaint();
@@ -301,19 +323,22 @@ public class addPreparation extends JPanel {
 						});
 					}
 				});
+				
 				sub.revalidate();
 				edit.show();
 			}
 		});
 				//new delete button on Subjects										
 				JButton deleteSection = sub.deleteBtn;
-				deleteSection.addMouseListener(new MouseAdapter() {
+				deleteSection.addMouseListener(new MouseAdapter() 
+				{
 					@Override
-						public void mousePressed(MouseEvent e) {
+					public void mousePressed(MouseEvent e) 
+					{
 						Body.remove(sub);
 						revalidate();
 						repaint();
-						}
+					}
 				});
 			}
 		});
@@ -321,8 +346,10 @@ public class addPreparation extends JPanel {
 		Footer.add(addSubjectBtn);
 		
 		JButton backBtn = new JButton("Back");
-		backBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		backBtn.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
 				frame.setVisible(false);
 			}
 		});
@@ -393,7 +420,8 @@ public class addPreparation extends JPanel {
 		
 		//sets the ComboBox to current School Year
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
+		for (int year = currentYear - 3; year <= currentYear + 3; year++) 
+		{
 			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year+1));
 		}
 		

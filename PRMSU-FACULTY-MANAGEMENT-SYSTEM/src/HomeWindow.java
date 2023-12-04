@@ -35,7 +35,8 @@ import UploadDocTreeNodes.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class HomeWindow {
+public class HomeWindow 
+{
         JFrame HomeWindow;
         JPanel RootPanel, NaviPanel, HomePanel, ReportPanel;
         JButton HomeButton, ListFacButton, ReportButton, HelpButton, LogoutButton;
@@ -55,23 +56,28 @@ public class HomeWindow {
         listFaculty faculty;    // List of Faculty Panel
         
         
-        private ActionListener exportToExcel = new ActionListener() {
+        private ActionListener exportToExcel = new ActionListener() 
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) 
+            {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Specify a file to save");
                 int userSelection = fileChooser.showSaveDialog(null);
     
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
                     File fileToSave = fileChooser.getSelectedFile();
-                    try (FileWriter writer = new FileWriter(fileToSave + ".csv")) {
+                    try (FileWriter writer = new FileWriter(fileToSave + ".csv")) 
+                    {
                         for (int i = 0; i < model2.getColumnCount(); i++) {
                             writer.write(model2.getColumnName(i) + ",");
                         }
                         writer.write("\n");
     
-                        for (int row = 0; row < model2.getRowCount(); row++) {
-                            for (int col = 0; col < model2.getColumnCount(); col++) {
+                        for (int row = 0; row < model2.getRowCount(); row++) 
+                        {
+                            for (int col = 0; col < model2.getColumnCount(); col++) 
+                            {
                                 writer.write(model2.getValueAt(row, col) + ",");
                             }
                             writer.write("\n");
@@ -80,7 +86,9 @@ public class HomeWindow {
                         writer.close();
                         JOptionPane.showMessageDialog(null,
                                 "Data exported to " + fileToSave.getAbsolutePath() + ".csv");
-                    } catch (IOException ex) {
+                    } 
+                    catch (IOException ex) 
+                    {
                         ex.printStackTrace();
                         JOptionPane.showMessageDialog(null, "Error exporting to CSV: " + ex.getMessage());
                     }
@@ -88,8 +96,8 @@ public class HomeWindow {
             }
         };
     
-        HomeWindow(){
-
+        HomeWindow()
+        {
             //Constant Variables
             int textboxheight = 20;
             Color backgroundColor = new Color(0,0,122);
@@ -114,7 +122,6 @@ public class HomeWindow {
             UnivLogo = new JLabel();
             
             faculty.setVisible(false);  // sets List of Faculty Panel not visible
-
     
         //For reporting
 
@@ -131,11 +138,13 @@ public class HomeWindow {
         //table model
         model2 = new DefaultTableModel(data2, columnNames2);
         
-        class CenterRenderer2 extends DefaultTableCellRenderer {
-             public CenterRenderer2() {
-        setHorizontalAlignment(JLabel.CENTER);
+        class CenterRenderer2 extends DefaultTableCellRenderer 
+        {
+             public CenterRenderer2() 
+             {
+            	 setHorizontalAlignment(JLabel.CENTER);
+             }
         }
-    }
          
         //table with the model
         table2 = new JTable(model2);
@@ -180,8 +189,6 @@ public class HomeWindow {
         jt2.add(button2);
 
         ReportPanel.add(jt2);
-
-
 
         //Root Panel is the master of all sub panels
         RootPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));

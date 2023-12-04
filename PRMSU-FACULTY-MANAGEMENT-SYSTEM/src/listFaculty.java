@@ -47,7 +47,8 @@ import javax.swing.JSeparator;
 import javax.swing.ImageIcon;
 
 
-public class listFaculty extends JPanel {
+public class listFaculty extends JPanel 
+{
 	JPanel Body;
 	JFrame frame = new JFrame();
 	int currentRow = 0;
@@ -56,8 +57,8 @@ public class listFaculty extends JPanel {
 	List<String> facultyNames = new ArrayList<>();
 	List<Integer> facultyIndex = new ArrayList<>();
 	
-	public listFaculty() {
-		
+	public listFaculty() 
+	{
 		setBackground(SystemColor.text);
 		setFont(new Font("Arial", Font.BOLD, 15));
 		setBounds(180,0,1000, 720);
@@ -84,7 +85,8 @@ public class listFaculty extends JPanel {
 		addFacultyBtn = new JButton("Add Faculty");
 		addFacultyBtn.addActionListener(new ActionListener() 
 		{
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+			{
 				faculty faculty = new faculty();
 				AddFaculty addFaculty = new AddFaculty();
 				addFaculty.show();
@@ -92,7 +94,8 @@ public class listFaculty extends JPanel {
 				
 				addFaculty.addBtn.addActionListener(new ActionListener() 
 				{
-					public void actionPerformed(ActionEvent e) {
+					public void actionPerformed(ActionEvent e) 
+					{
 						String facultyName = addFaculty.firstNameTF.getText() + " " + addFaculty.middleNameTF.getText() + " " + addFaculty.lastNameTF.getText() + " " + addFaculty.extNameTF.getText();
 						String department = (String) addFaculty.departmentCB.getSelectedItem();
 						String academicYear = (String) addFaculty.acadYearCB.getSelectedItem();
@@ -104,8 +107,7 @@ public class listFaculty extends JPanel {
 							|| 	academicYear.isEmpty() 
 							|| 	semester.isEmpty() 
 							||  addFaculty.semesterCB.getSelectedIndex() == 0
-							||  addFaculty.departmentCB.getSelectedIndex() == 0
-								) 
+							||  addFaculty.departmentCB.getSelectedIndex() == 0) 
 						{
 							JOptionPane.showMessageDialog(frame, "invalid Input", "Error", JOptionPane.INFORMATION_MESSAGE); 
 						}
@@ -307,7 +309,6 @@ public class listFaculty extends JPanel {
 		sortLbl.setBounds(240, 85, 40, 20);
 		add(sortLbl);
 		
-		
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
 			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
@@ -320,9 +321,7 @@ public class listFaculty extends JPanel {
 		JPanel addPanel = new JPanel();
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
-		
-		
-		}
+	}
 	
 	/* 
 	 * This method performs search or operations on the component 

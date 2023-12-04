@@ -11,11 +11,13 @@ import javax.swing.JSlider;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
-public class sections extends JPanel {
+public class sections extends JPanel 
+{
 	JLabel sectionLbl, semesterLbl, academicYearLbl;
 	JButton deleteBtn;
 	
-	public sections() {
+	public sections() 
+	{
 		setBorder(null);
 		setPreferredSize(new Dimension(600, 35));
 		setBackground(Color.BLACK);

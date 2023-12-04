@@ -15,7 +15,8 @@ import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 
-public class addSubjectDialog extends JDialog {
+public class addSubjectDialog extends JDialog 
+{
 
 	JPanel contentPanel = new JPanel();
 	addPreparation prep = new addPreparation();
@@ -26,8 +27,8 @@ public class addSubjectDialog extends JDialog {
 	JComboBox acadYearCB, semesterCB;
 	JLabel semesterLbl, academicYearLbl;
 
-	public addSubjectDialog() {
-		
+	public addSubjectDialog() 
+	{
 		// Set the dimensions and location of the JFrame to center it
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
@@ -46,7 +47,6 @@ public class addSubjectDialog extends JDialog {
 		contentPanel.setBorder(null);
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
-		
 		
 		JLabel codeLbl = new JLabel("Course Code :");
 		codeLbl.setFont(new Font("Arial", Font.BOLD, 12));
@@ -110,7 +110,6 @@ public class addSubjectDialog extends JDialog {
 		academicYearLbl.setBounds(15, 180, 120, 20);
 		contentPanel.add(academicYearLbl);
 		
-		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(null);
@@ -145,7 +144,8 @@ public class addSubjectDialog extends JDialog {
 		}
 		
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
+		for (int year = currentYear - 3; year <= currentYear + 3; year++) 
+		{
 			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
         }
 		acadYearCB.setSelectedItem(String.valueOf(currentYear + " - " + (currentYear + 1)));

@@ -38,18 +38,22 @@ public class editDialog extends JDialog {
 	JComboBox semesterCB, acadYearCB;
 	
 	
-	public static void main(String[] args) {
-		try {
+	public static void main(String[] args) 
+	{
+		try 
+		{
 			editDialog dialog = new editDialog();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
 	}
 
-	public editDialog() {
-		
+	public editDialog() 
+	{
 		// Set the dimensions and location of the JFrame to center it
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
@@ -103,7 +107,6 @@ public class editDialog extends JDialog {
 		addSection.setBackground(SystemColor.text);
 		addSection.setBounds(545, 47, 30, 30);
 		contentPanel.add(addSection);
-		
 		
 		{
 			JPanel buttonPane = new JPanel();
@@ -219,7 +222,8 @@ public class editDialog extends JDialog {
 		contentPanel.add(acadYearCB);
 		
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
+		for (int year = currentYear - 3; year <= currentYear + 3; year++) 
+		{
 			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
         }
 		acadYearCB.setSelectedItem(String.valueOf(currentYear + " - " + (currentYear + 1)));

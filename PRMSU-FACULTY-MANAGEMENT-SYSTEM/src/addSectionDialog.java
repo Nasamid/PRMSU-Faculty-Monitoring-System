@@ -15,7 +15,8 @@ import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 
-public class addSectionDialog extends JDialog {
+public class addSectionDialog extends JDialog 
+{
 
 	JPanel contentPanel = new JPanel();
 	addPreparation prep = new addPreparation();
@@ -23,24 +24,25 @@ public class addSectionDialog extends JDialog {
 	JButton addDialogBtn;
 	JLabel addLbl;
 	private JPanel panel;
-	private JLabel semesterLbl;
-	private JLabel academicYearLbl;
+	private JLabel semesterLbl, academicYearLbl;
 	JComboBox semesterCB, acadYearCB;
-	
-	
 
-	public static void main(String[] args) {
-		try {
+	public static void main(String[] args) 
+	{
+		try 
+		{
 			addSectionDialog dialog = new addSectionDialog();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
 	}
 
-	public addSectionDialog() {
-
+	public addSectionDialog() 
+	{
         // Set the dimensions and location of the JFrame to center it
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
@@ -60,7 +62,6 @@ public class addSectionDialog extends JDialog {
 		contentPanel.setBorder(null);
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
-		
 		
 		JLabel sectionLbl = new JLabel("Section :");
 		sectionLbl.setFont(new Font("Arial", Font.BOLD, 12));
@@ -110,7 +111,6 @@ public class addSectionDialog extends JDialog {
 		semesterCB.setBounds(125, 80, 225, 20);
 		contentPanel.add(semesterCB);
 		
-		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(null);
@@ -145,7 +145,8 @@ public class addSectionDialog extends JDialog {
 		}
 		
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
+		for (int year = currentYear - 3; year <= currentYear + 3; year++) 
+		{
 			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
         }
 		acadYearCB.setSelectedItem(String.valueOf(currentYear + " - " + (currentYear + 1)));

@@ -16,14 +16,16 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.Color;
 import javax.swing.JSeparator;
 
-public class addSection extends JDialog {
+public class addSection extends JDialog 
+{
 	
 	JButton addBtn;
 	JPanel Body;
 	addPreparation prep = new addPreparation();
 	int currentRow;
 
-	public addSection() {
+	public addSection() 
+	{
 		getContentPane().setBackground(SystemColor.text);
 		
 		// Set the dimensions and location of the JFrame to center it
@@ -38,7 +40,6 @@ public class addSection extends JDialog {
         setBounds(x, y, frameWidth, frameHeight);
 		setTitle("Add Subject");
 		getContentPane().setLayout(null);
-		
 		
 		{
 			JPanel buttonPane = new JPanel();

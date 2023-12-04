@@ -22,12 +22,14 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 
-public class faculty extends JPanel {
+public class faculty extends JPanel 
+{
 	JLabel facultyNameLbl, departmentLbl, semesterLbl, academicYearLbl;
 	JPanel panel;
 	JButton deleteBtn, uploadBtn, addBtn;
 	
-	public faculty() {
+	public faculty() 
+	{
 		setPreferredSize(new Dimension(1000, 45));
 		setBackground(Color.BLACK);
 		setBackground(SystemColor.text);
@@ -119,7 +121,5 @@ public class faculty extends JPanel {
 		separator3.setForeground(Color.BLACK);
 		separator3.setBounds(285, 2, 2, 31);
 		panel.add(separator3);
-		
-		
 	}
 }
