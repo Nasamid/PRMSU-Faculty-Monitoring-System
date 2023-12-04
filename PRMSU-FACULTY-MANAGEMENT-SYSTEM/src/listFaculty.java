@@ -8,25 +8,35 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Comparator;
 
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Component;
 
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
-
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.border.EtchedBorder;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -43,6 +53,8 @@ public class listFaculty extends JPanel {
 	int currentRow = 0;
 	private JTextField searchEngine;
 	JButton addFacultyBtn;
+	List<String> facultyNames = new ArrayList<>();
+	List<Integer> facultyIndex = new ArrayList<>();
 	
 	public listFaculty() {
 		
@@ -55,7 +67,7 @@ public class listFaculty extends JPanel {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(SystemColor.text);
-		scrollPane.setBounds(0, 165, 1000, 510);
+		scrollPane.setBounds(0, 165, 1000, 540);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		
 		JPanel Header = new JPanel();
@@ -86,7 +98,14 @@ public class listFaculty extends JPanel {
 						String academicYear = (String) addFaculty.acadYearCB.getSelectedItem();
 						String semester = (String) addFaculty.semesterCB.getSelectedItem();
 						
-						if(addFaculty.firstNameTF.getText().isEmpty() || addFaculty.lastNameTF.getText().isEmpty()|| department.isEmpty() || academicYear.isEmpty() || semester.isEmpty()) 
+						if(		addFaculty.firstNameTF.getText().isEmpty() 
+							|| 	addFaculty.lastNameTF.getText().isEmpty()
+							|| 	department.isEmpty() 
+							|| 	academicYear.isEmpty() 
+							|| 	semester.isEmpty() 
+							||  addFaculty.semesterCB.getSelectedIndex() == 0
+							||  addFaculty.departmentCB.getSelectedIndex() == 0
+								) 
 						{
 							JOptionPane.showMessageDialog(frame, "invalid Input", "Error", JOptionPane.INFORMATION_MESSAGE); 
 						}
@@ -97,15 +116,16 @@ public class listFaculty extends JPanel {
 							faculty.semesterLbl.setText(semester);
 							faculty.academicYearLbl.setText(academicYear);
 							
+							facultyNames.add(facultyName);
 							Body.add(faculty);
 							currentRow++;
 							
-							if (Body.getComponentCount() >= 11) 
+							if (Body.getComponentCount() >= 12) 
 							{ 
 			                    // Increase the preferred height of the rowPanel
 			                    Dimension preferredSize = Body.getPreferredSize();
-			                    preferredSize.height += 45;
-			                    Body.setLayout(new GridLayout(currentRow, 1));
+			                    preferredSize.height += 50;
+			                    Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
 			                    Body.setPreferredSize(preferredSize);
 			                    Body.revalidate();
 							}
@@ -123,6 +143,8 @@ public class listFaculty extends JPanel {
 					{
 						addPreparation preparation = new addPreparation();
 						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
 						preparation.frame.show();
 					}
 				});
@@ -165,6 +187,15 @@ public class listFaculty extends JPanel {
 		add(searchBtn);
 		
 		searchEngine = new JTextField();
+		
+		searchEngine.addMouseListener(new MouseAdapter() 
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				searchEngine.setText("");
+			}
+		});
 		searchEngine.setFont(new Font("Arial", Font.PLAIN, 13));
 		searchEngine.setText("Search Faculty...");
 		searchEngine.setBackground(new Color(255, 255, 255));
@@ -248,25 +279,40 @@ public class listFaculty extends JPanel {
 		Header1.add(separator5);
 		add(scrollPane);
 		
+		JComboBox semesterCB = new JComboBox();
+		semesterCB.setModel(new DefaultComboBoxModel(new String[] {"SEMESTER", "First Semester", "Second Semester", "Midyear"}));
+		semesterCB.setFont(new Font("Arial", Font.PLAIN, 10));
+		semesterCB.setBorder(null);
+		semesterCB.setBackground(SystemColor.text);
+		semesterCB.setBounds(405, 85, 110, 20);
+		add(semesterCB);
+		
+		JComboBox acadYearCB = new JComboBox();
+		acadYearCB.setFont(new Font("Arial", Font.PLAIN, 10));
+		acadYearCB.setBorder(null);
+		acadYearCB.setBackground(SystemColor.text);
+		acadYearCB.setBounds(525, 85, 110, 20);
+		add(acadYearCB);
+		
+		JComboBox departmentCB = new JComboBox();
+		departmentCB.setModel(new DefaultComboBoxModel(new String[] {"DEPARTMENT", "MECHANICAL ENGINEERING", "COMPUTER ENGINEERING", "CIVIL ENGINEERING", "ELECTRICAL ENGINEERING", "ALLIED"}));
+		departmentCB.setFont(new Font("Arial", Font.PLAIN, 10));
+		departmentCB.setBorder(null);
+		departmentCB.setBackground(SystemColor.text);
+		departmentCB.setBounds(285, 85, 110, 20);
+		add(departmentCB);
+		
+		JLabel sortLbl = new JLabel("Sort :");
+		sortLbl.setFont(new Font("Arial", Font.BOLD, 13));
+		sortLbl.setBounds(240, 85, 40, 20);
+		add(sortLbl);
 		
 		
-		
-		/* 
-		 * Adding functions to the buttons using concatination
-		*/
-		JButton addSubject;
-		
-//		JComboBox<String> semesterCB = new JComboBox<>();
-//		String[] semester = {
-//	            "First Semester", "Second Semester", "Mid Year"
-//	        };
-//		for (String sem : semester) {
-//		semesterCB.addItem(sem);
-//		semesterCB.setFont(new Font("Arial", Font.BOLD, 13));
-//		semesterCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
-//		semesterCB.setBounds(825, 55, 140, 25);
-//		Header.add(semesterCB);
-//		}
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
+			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
+        }
+		acadYearCB.setSelectedItem(String.valueOf(currentYear + " - " + (currentYear + 1)));
 		
 		JDialog addDial0g = new JDialog();
 		addDial0g.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -276,8 +322,38 @@ public class listFaculty extends JPanel {
 		addPanel.setLayout(null);
 		
 		
-		
 		}
+	
+	/* 
+	 * This method performs search or operations on the component 
+	 * For example, you can check the component's properties or type
+	 * and perform specific actions based on your requirements 
+	 * 
+	 *  Note: For search engine and comboboxes.
+	 *  	  > takes the data from database.
+	 *  	  > Doesnt have function yet.
+	 */
+	
+//	public void search(int index) 
+//	{
+//		int componentIndex = Body.getComponentCount();
+//		
+//		for (int i = 0; componentIndex < facultyNames.size(); i++) 
+//		{
+//			if(i == index) 
+//			{
+//				Container container = Body.getComponent(1).getParent();
+//				Body.getComponent(i).getParent().setComponentZOrder(Body.getComponent(i), 0);
+//				container.revalidate();
+//				container.repaint();
+//			}
+//			
+//			if(i != index)
+//			{
+//				Body.getComponent(i).setVisible(false);
+//			}
+//		}
+//	}
 }
 
 

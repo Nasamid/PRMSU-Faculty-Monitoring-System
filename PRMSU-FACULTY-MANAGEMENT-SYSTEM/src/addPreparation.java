@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.JSeparator;
 
 public class addPreparation extends JPanel {
 	JTextField facultyName;
@@ -28,7 +30,7 @@ public class addPreparation extends JPanel {
 	JPanel Body;
 	int currentRow = 0;
 	JFrame frame;
-	JComboBox<String> semesterCB;
+	JComboBox<String> semesterCB, acadYearCB;
 	
 	public addPreparation() {
 		listFaculty faculty = new listFaculty();
@@ -74,7 +76,7 @@ public class addPreparation extends JPanel {
 		semLbl.setBounds(735, 50, 90, 35);
 		Header.add(semLbl);
 		
-		JComboBox acadYearCB = new JComboBox();
+		acadYearCB = new JComboBox();
 		acadYearCB.setFont(new Font("Arial", Font.BOLD, 13));
 		acadYearCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		acadYearCB.setBackground(SystemColor.text);
@@ -91,7 +93,7 @@ public class addPreparation extends JPanel {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(SystemColor.text);
-		scrollPane.setBounds(0, 125, 1010, 450);
+		scrollPane.setBounds(0, 150, 1010, 450);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		add(scrollPane);
 		
@@ -122,12 +124,14 @@ public class addPreparation extends JPanel {
 					
 					String code = add.codeTF.getText();
 					String description = add.decriptionTF.getText();
-					if(code.isEmpty() || description.isEmpty()) 
+					if(code.isEmpty() || description.isEmpty() || add.semesterCB.getSelectedIndex()==0) 
 					{
-						JOptionPane.showMessageDialog(Body, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit frame
+						JOptionPane.showMessageDialog(Body, "invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE); //edit frame
 					}else 
 					{
 						sub.subjectLbl.setText(code + " - " + description);
+						sub.semesterLbl.setText((String) add.semesterCB.getSelectedItem());
+						sub.academicYearLbl.setText((String) add.acadYearCB.getSelectedItem());
 						Body.add(sub);
 						currentRow++;
 						
@@ -175,9 +179,9 @@ public class addPreparation extends JPanel {
 								String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
 								String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
 								
-								if(section.isEmpty()) 
+								if(section.isEmpty() || addSectionDialog.semesterCB.getSelectedIndex() == 0) 
 								{
-									JOptionPane.showMessageDialog(Body, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
+									JOptionPane.showMessageDialog(Body, "invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
 								}
 								else 
 								{
@@ -222,6 +226,8 @@ public class addPreparation extends JPanel {
 				editDialog edit = new editDialog();
 				addSubjectDialog editSubject = new addSubjectDialog();
 				edit.SubjectLbl.setText(sub.subjectLbl.getText());
+				edit.acadYearCB.setSelectedItem(sub.academicYearLbl);
+				edit.semesterCB.setSelectedItem(sub.semesterLbl);
 				edit.show();
 				
 				edit.editSubject.addMouseListener(new MouseAdapter() {
@@ -326,6 +332,53 @@ public class addPreparation extends JPanel {
 		backBtn.setBounds(775, 20, 125, 35);
 		Footer.add(backBtn);
 		
+		JPanel Panel = new JPanel();
+		Panel.setLayout(null);
+		Panel.setBorder(null);
+		Panel.setBackground(Color.WHITE);
+		Panel.setBounds(20, 120, 980, 25);
+		add(Panel);
+		
+		JLabel lblSubject = new JLabel("Subject");
+		lblSubject.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSubject.setFont(new Font("Arial", Font.BOLD, 17));
+		lblSubject.setBorder(null);
+		lblSubject.setBounds(10, 0, 380, 25);
+		Panel.add(lblSubject);
+		
+		JSeparator separator1 = new JSeparator();
+		separator1.setOrientation(SwingConstants.VERTICAL);
+		separator1.setBounds(400, 2, 1, 20);
+		Panel.add(separator1);
+		
+		JLabel semesterLbl = new JLabel("Semester");
+		semesterLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		semesterLbl.setFont(new Font("Arial", Font.BOLD, 17));
+		semesterLbl.setBorder(null);
+		semesterLbl.setBounds(410, 0, 180, 25);
+		Panel.add(semesterLbl);
+		
+		JSeparator separator2 = new JSeparator();
+		separator2.setOrientation(SwingConstants.VERTICAL);
+		separator2.setBounds(600, 2, 1, 20);
+		Panel.add(separator2);
+		
+		JLabel academicYearLbl = new JLabel("Academic Year");
+		academicYearLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		academicYearLbl.setFont(new Font("Arial", Font.BOLD, 17));
+		academicYearLbl.setBorder(null);
+		academicYearLbl.setBounds(610, 0, 150, 25);
+		Panel.add(academicYearLbl);
+		
+		JSeparator separator4 = new JSeparator();
+		separator4.setOrientation(SwingConstants.VERTICAL);
+		separator4.setBounds(770, 2, 1, 20);
+		Panel.add(separator4);
+		
+		JSeparator separator3 = new JSeparator();
+		separator3.setBounds(20, 145, 920, 1);
+		add(separator3);
+		
 		semesterCB = new JComboBox<>();
 		String[] semester = {
 	            "First Semester", "Second Semester", "Midyear"
@@ -343,7 +396,7 @@ public class addPreparation extends JPanel {
 		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
 			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year+1));
 		}
-		acadYearCB.setSelectedItem(String.valueOf(currentYear) + " - " + (currentYear + 1));
+		
 	
 		JDialog addDial0g = new JDialog();
 		addDial0g.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

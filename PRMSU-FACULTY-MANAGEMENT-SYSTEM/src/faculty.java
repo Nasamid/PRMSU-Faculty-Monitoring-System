@@ -34,7 +34,7 @@ public class faculty extends JPanel {
 		setLayout(null);
 		
 		JSeparator separator4 = new JSeparator();
-		separator4.setBounds(10, 45, 980, 2);
+		separator4.setBounds(10, 44, 980, 1);
 		add(separator4);
 		
 		panel = new JPanel();
@@ -77,7 +77,7 @@ public class faculty extends JPanel {
 		deleteBtn.setBorder(null);
 		deleteBtn.setFont(new Font("Arial", Font.BOLD, 10));
 		deleteBtn.setBackground(Color.WHITE);
-		deleteBtn.setBounds(935, 1, 35, 35);
+		deleteBtn.setBounds(925, 1, 35, 35);
 		panel.add(deleteBtn);
 		
 		uploadBtn = new JButton("");
@@ -93,7 +93,7 @@ public class faculty extends JPanel {
 		addBtn.setFont(new Font("Arial", Font.BOLD, 10));
 		addBtn.setBorder(null);
 		addBtn.setBackground(Color.WHITE);
-		addBtn.setBounds(835, 1, 35, 35);
+		addBtn.setBounds(840, 1, 35, 35);
 		panel.add(addBtn);
 		
 		JSeparator separator = new JSeparator();

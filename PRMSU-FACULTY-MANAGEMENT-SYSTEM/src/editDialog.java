@@ -33,14 +33,9 @@ public class editDialog extends JDialog {
 	JPanel headerPanel, sectionPanel;
 	private JScrollPane scrollPane;
 	private JPanel Panel;
-	private JLabel sectionLbl;
-	private JSeparator separator_1;
-	private JLabel semesterLbl;
-	private JSeparator separator2;
-	private JLabel academicYearLbl;
-	private JSeparator separator3;
-	private JComboBox semesterCB;
-	private JComboBox acadYearCB;
+	private JLabel sectionLbl, semesterLbl, academicYearLbl;
+	private JSeparator separator1, separator2, separator3;
+	JComboBox semesterCB, acadYearCB;
 	
 	
 	public static void main(String[] args) {
@@ -180,10 +175,10 @@ public class editDialog extends JDialog {
 		sectionLbl.setBounds(15, 0, 230, 25);
 		Panel.add(sectionLbl);
 		
-		separator_1 = new JSeparator();
-		separator_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1.setBounds(250, 2, 1, 20);
-		Panel.add(separator_1);
+		separator1 = new JSeparator();
+		separator1.setOrientation(SwingConstants.VERTICAL);
+		separator1.setBounds(250, 2, 1, 20);
+		Panel.add(separator1);
 		
 		semesterLbl = new JLabel("Semester");
 		semesterLbl.setHorizontalAlignment(SwingConstants.CENTER);
