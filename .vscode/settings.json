@@ -4,7 +4,7 @@
         "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/jtreetable-4.0.0.jar",
         "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/swingx-all-1.6.5-1.jar",
         "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/swingx-all-1.6.4.jar",
-        "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/sqlite-jdbc-3.7.2.jar"
+        "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/sqlite-jdbc-3.7.2.jar",
         "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/icePDF libs/bcpkix-jdk18on-1.76.jar",
         "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/icePDF libs/bcprov-ext-jdk18on-1.76.jar",
         "PRMSU-FACULTY-MANAGEMENT-SYSTEM/lib/icePDF libs/bcprov-jdk18on-1.76.jar",
