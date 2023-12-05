@@ -73,7 +73,7 @@ public class listFaculty extends JPanel
 		Body.setLayout(new GridLayout(11,1));
 		scrollPane.setViewportView(Body);
 
-		
+		loadFacultyData();
 		
 		addFacultyBtn = new JButton("Add Faculty");
 		addFacultyBtn.addActionListener(new ActionListener() 
@@ -94,7 +94,7 @@ public class listFaculty extends JPanel
 						if (addFaculty.firstNameTF.getText().isEmpty() || addFaculty.lastNameTF.getText().isEmpty()
 								|| addFaculty.semesterCB.getSelectedIndex() == 0
 								|| addFaculty.departmentCB.getSelectedIndex() == 0) {
-							JOptionPane.showMessageDialog(frame, "Select Department/Semester", "Insufficient Data", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(frame, "Please insert complete information.", "Insufficient Data", JOptionPane.INFORMATION_MESSAGE);
 						} else {
 							// Get the corresponding IDs
 							int departmentID = DatabaseHandler.getDepartmentID(department);
@@ -120,7 +120,7 @@ public class listFaculty extends JPanel
 							if (Body.getComponentCount() >= 12) {
 								// Increase the preferred height of the rowPanel
 								Dimension preferredSize = Body.getPreferredSize();
-								preferredSize.height += 50;
+								preferredSize.height += 80;
 								Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
 								Body.setPreferredSize(preferredSize);
 								Body.revalidate();
@@ -193,7 +193,6 @@ public class listFaculty extends JPanel
 		add(searchBtn);
 		
 		searchEngine = new JTextField();
-		
 		searchEngine.addMouseListener(new MouseAdapter() 
 		{
 			@Override
@@ -202,8 +201,9 @@ public class listFaculty extends JPanel
 				searchEngine.setText("");
 			}
 		});
+
 		searchEngine.setFont(new Font("Arial", Font.PLAIN, 13));
-		searchEngine.setText("Search Faculty...");
+		searchEngine.setText("Search Faculty....");
 		searchEngine.setBackground(new Color(255, 255, 255));
 		searchEngine.setColumns(10);
 		//searchEngine.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
@@ -326,42 +326,95 @@ public class listFaculty extends JPanel
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
 
-		loadFacultyData();
+		
 	}
+	
+	// Method to load faculty data from the database and populate the UI
+	private void loadFacultyData() {
+		List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
+		System.out.println(facultyDataList);
+		for (FacultyData facultyData : facultyDataList) {
+			faculty faculty = new faculty();
 
-	    // Method to load faculty data from the database and populate the UI
-		private void loadFacultyData() {
-			List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
-			
-			for (FacultyData facultyData : facultyDataList) {
-				faculty faculty = new faculty();
-				
-				// Set faculty details
-				faculty.facultyNameLbl.setText(facultyData.getFacultyName());
-			
-				// Retrieve department details
-				int departmentID = facultyData.getDepartmentID();
-				String departmentName = DatabaseHandler.getDepartmentName(departmentID);
-				faculty.departmentLbl.setText(departmentName);
-			
-				// Retrieve academic year details
-				int yearID = facultyData.getYearID();
-				String academicYear = DatabaseHandler.getAcademicYear(yearID);
-				faculty.academicYearLbl.setText(academicYear);
-			
-				// Retrieve semester details
-				int semesterID = facultyData.getSemesterID();
-				String semesterName = DatabaseHandler.getSemesterName(semesterID);
-				faculty.semesterLbl.setText(semesterName);
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
 		
-				// Add action listeners for buttons in faculty instance (addPreparation, uploadDocument, deleteFaculty)
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+					}
+				});
 				
-				Body.add(faculty);
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
 			}
-		
 			Body.revalidate();
-			Body.repaint();
 		}
+		Body.revalidate();
+		Body.repaint();
+	}
 		
 }
 

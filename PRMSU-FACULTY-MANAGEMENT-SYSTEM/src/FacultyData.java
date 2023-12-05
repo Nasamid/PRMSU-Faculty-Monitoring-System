@@ -4,14 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class FacultyData {
-    private int facultyID;
     private String facultyName;
     private String departmentName;
     private String academicYear;
     private String semesterName;
 
     public FacultyData(int facultyID, String facultyName, String departmentName, String academicYear, String semesterName) {
-        this.facultyID = facultyID;
         this.facultyName = facultyName;
         this.departmentName = departmentName;
         this.academicYear = academicYear;
