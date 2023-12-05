@@ -16,6 +16,9 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.Color;
 import javax.swing.JSeparator;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class addSection extends JDialog 
 {
 	
@@ -51,7 +54,8 @@ public class addSection extends JDialog
 			{
 				addBtn = new JButton("Add");
 				addBtn.setBackground(SystemColor.text);
-				addBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				addBtn.setForeground(Color.BLACK);
+				//addBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 				addBtn.setFont(new Font("Arial", Font.BOLD, 12));
 				addBtn.setBounds(215, 10, 75, 20);
 				addBtn.setActionCommand("OK");
@@ -66,7 +70,7 @@ public class addSection extends JDialog
 						dispose();
 					}
 				});
-				cancelButton.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				//cancelButton.setBorder(new LineBorder(SystemColor.textText, 1, true));
 				cancelButton.setFont(new Font("Arial", Font.BOLD, 12));
 				cancelButton.setBounds(315, 10, 75, 20);
 				cancelButton.setActionCommand("Cancel");

@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
@@ -14,6 +15,9 @@ import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 public class addSectionDialog extends JDialog 
 {
@@ -29,6 +33,7 @@ public class addSectionDialog extends JDialog
 
 	public static void main(String[] args) 
 	{
+		FlatMacLightLaf.setup();
 		try 
 		{
 			addSectionDialog dialog = new addSectionDialog();
@@ -59,7 +64,7 @@ public class addSectionDialog extends JDialog
 		setTitle("Add Section");
 		getContentPane().setLayout(null);
 		contentPanel.setBackground(SystemColor.text);
-		contentPanel.setBorder(null);
+		//contentPanel.setBorder(null);
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
 		
@@ -69,7 +74,7 @@ public class addSectionDialog extends JDialog
 		contentPanel.add(sectionLbl);
 		
 		sectionTF = new JTextField();
-		sectionTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//sectionTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		sectionTF.setFont(new Font("Arial", Font.PLAIN, 10));
 		sectionTF.setBounds(125, 50, 225, 20);
 		contentPanel.add(sectionTF);
@@ -91,14 +96,15 @@ public class addSectionDialog extends JDialog
 		semesterLbl.setBounds(15, 80, 102, 20);
 		contentPanel.add(semesterLbl);
 		
-		academicYearLbl = new JLabel("Academic Year");
+		academicYearLbl = new JLabel("Academic Year : ");
+
 		academicYearLbl.setFont(new Font("Arial", Font.BOLD, 12));
 		academicYearLbl.setBounds(15, 110, 102, 20);
 		contentPanel.add(academicYearLbl);
 		
 		acadYearCB = new JComboBox();
 		acadYearCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		acadYearCB.setBorder(null);
+		//acadYearCB.setBorder(null);
 		acadYearCB.setBackground(SystemColor.text);
 		acadYearCB.setBounds(125, 110, 225, 20);
 		contentPanel.add(acadYearCB);
@@ -106,14 +112,14 @@ public class addSectionDialog extends JDialog
 		semesterCB = new JComboBox();
 		semesterCB.setModel(new DefaultComboBoxModel(new String[] {"SEMESTER", "First Semester", "Second Semester", "Midyear"}));
 		semesterCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		semesterCB.setBorder(null);
+		//semesterCB.setBorder(null);
 		semesterCB.setBackground(SystemColor.text);
 		semesterCB.setBounds(125, 80, 225, 20);
 		contentPanel.add(semesterCB);
 		
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBorder(null);
+			//buttonPane.setBorder(null);
 			buttonPane.setBounds(0, 150, 386, 50);
 			buttonPane.setBackground(SystemColor.textHighlight);
 			getContentPane().add(buttonPane);
@@ -121,7 +127,8 @@ public class addSectionDialog extends JDialog
 			{
 				addDialogBtn = new JButton("Add");
 				addDialogBtn.setBackground(SystemColor.text);
-				addDialogBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				addDialogBtn.setForeground(Color.black);
+				//addDialogBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 				addDialogBtn.setFont(new Font("Arial", Font.BOLD, 12));
 				addDialogBtn.setBounds(115, 10, 75, 20);
 				addDialogBtn.setActionCommand("OK");
@@ -136,7 +143,7 @@ public class addSectionDialog extends JDialog
 						dispose();
 					}
 				});
-				cancelDialogBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				//cancelDialogBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 				cancelDialogBtn.setFont(new Font("Arial", Font.BOLD, 12));
 				cancelDialogBtn.setBounds(215, 10, 75, 20);
 				cancelDialogBtn.setActionCommand("Cancel");

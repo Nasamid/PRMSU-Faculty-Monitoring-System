@@ -22,6 +22,9 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class faculty extends JPanel 
 {
 	JLabel facultyNameLbl, departmentLbl, semesterLbl, academicYearLbl;

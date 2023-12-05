@@ -10,6 +10,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class subject extends JPanel 
 {
 	JLabel subjectLbl, academicYearLbl, semesterLbl;

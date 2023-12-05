@@ -18,6 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class LoginWindow {
 
     JFrame LoginWindow;
@@ -94,8 +97,8 @@ public class LoginWindow {
     
 
     LoginButton = new JButton("Login");
-    LoginButton.setBackground(Color.GRAY);
-    LoginButton.setForeground(Color.WHITE);
+    //LoginButton.setBackground(Color.GRAY);
+    //LoginButton.setForeground(Color.WHITE);
     LoginButton.setBounds(938,24,100,30);
     LoginButton.setFocusable(false);
 
@@ -366,6 +369,7 @@ public class LoginWindow {
 }
 
     public static void main(String[] args) {
+        FlatMacLightLaf.setup();
         new LoginWindow();
     }
     

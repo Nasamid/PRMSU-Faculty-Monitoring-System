@@ -24,6 +24,9 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JSeparator;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class addPreparation extends JPanel 
 {
 	JTextField facultyName;
@@ -62,7 +65,7 @@ public class addPreparation extends JPanel
 		facultyName.setBackground(SystemColor.text);
 		facultyName.setHorizontalAlignment(SwingConstants.CENTER);
 		facultyName.setEditable(false);
-		facultyName.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//facultyName.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		facultyName.setFont(new Font("Arial", Font.BOLD, 15));
 		facultyName.setBounds(45, 50, 350, 35);
 		Header.add(facultyName);
@@ -80,7 +83,7 @@ public class addPreparation extends JPanel
 		
 		acadYearCB = new JComboBox();
 		acadYearCB.setFont(new Font("Arial", Font.BOLD, 13));
-		acadYearCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//acadYearCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		acadYearCB.setBackground(SystemColor.text);
 		acadYearCB.setBounds(540, 55, 150, 25);
 		Header.add(acadYearCB);
@@ -109,8 +112,9 @@ public class addPreparation extends JPanel
 		*/
 		addSubjectBtn = new JButton("Add Subject");
 		addSubjectBtn.setBackground(SystemColor.text);
-		addSubjectBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//addSubjectBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		addSubjectBtn.setFont(new Font("Arial", Font.BOLD, 20));
+		addSubjectBtn.setFocusable(false);
 		addSubjectBtn.addActionListener(new ActionListener() {
 			
 		public void actionPerformed(ActionEvent e) 
@@ -356,7 +360,7 @@ public class addPreparation extends JPanel
 			}
 		});
 		backBtn.setBackground(SystemColor.text);
-		backBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//backBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		backBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		backBtn.setBounds(775, 20, 125, 35);
 		Footer.add(backBtn);
@@ -415,8 +419,8 @@ public class addPreparation extends JPanel
 		for (String sem : semester) {
 		semesterCB.addItem(sem);
 		semesterCB.setFont(new Font("Arial", Font.BOLD, 13));
-		semesterCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
-		semesterCB.setBounds(825, 55, 140, 25);
+		//semesterCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		semesterCB.setBounds(820, 55, 150, 25);
 		Header.add(semesterCB);
 		}
 		

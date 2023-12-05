@@ -41,6 +41,9 @@ import javax.swing.JPanel;
 import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class PDFviewertest {
  
     public PDFviewertest() {
@@ -76,9 +79,9 @@ public class PDFviewertest {
         applicationFrame.setSize(1080, 720);
         applicationFrame.setVisible(true);
     }
-    public static void main(String args[])
-    {
-     new PDFviewertest();
+    public static void main(String args[]){
+    FlatMacLightLaf.setup();   
+    new PDFviewertest();
     }
     
 }

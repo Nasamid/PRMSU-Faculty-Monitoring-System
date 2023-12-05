@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class DatabaseSetup {
 
     // Define the path to the SQLite database file
@@ -12,8 +15,9 @@ public class DatabaseSetup {
 
     // SQLite JDBC driver class name
     private static final String JDBC_DRIVER = "org.sqlite.JDBC";
-
+    
     public static void main(String[] args) {
+        FlatMacLightLaf.setup();
         // Load the SQLite JDBC driver
         loadDriver();
 

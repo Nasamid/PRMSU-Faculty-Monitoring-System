@@ -16,6 +16,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class AddFaculty extends JDialog 
 {
 
@@ -99,28 +102,28 @@ public class AddFaculty extends JDialog
 		
 		firstNameTF = new JTextField();
 		firstNameTF.setFont(new Font("Arial", Font.PLAIN, 10));
-		firstNameTF.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		//firstNameTF.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		firstNameTF.setBounds(145, 60, 225, 20);
 		contentPanel.add(firstNameTF);
 		firstNameTF.setColumns(10);
 		
 		lastNameTF = new JTextField();
 		lastNameTF.setFont(new Font("Arial", Font.PLAIN, 10));
-		lastNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//lastNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		lastNameTF.setColumns(10);
 		lastNameTF.setBounds(145, 100, 225, 20);
 		contentPanel.add(lastNameTF);
 		
 		middleNameTF = new JTextField();
 		middleNameTF.setFont(new Font("Arial", Font.PLAIN, 10));
-		middleNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//middleNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		middleNameTF.setColumns(10);
 		middleNameTF.setBounds(145, 140, 225, 20);
 		contentPanel.add(middleNameTF);
 		
 		extNameTF = new JTextField();
 		extNameTF.setFont(new Font("Arial", Font.PLAIN, 10));
-		extNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//extNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		extNameTF.setColumns(10);
 		extNameTF.setBounds(145, 180, 225, 20);
 		contentPanel.add(extNameTF);
@@ -128,14 +131,14 @@ public class AddFaculty extends JDialog
 		departmentCB = new JComboBox();
 		departmentCB.setModel(new DefaultComboBoxModel(new String[] {"DEPARTMENT", "MECHANICAL ENGINEERING", "COMPUTER ENGINEERING", "CIVIL ENGINEERING", "ELECTRICAL ENGINEERING", "ALLIED"}));
 		departmentCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		departmentCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//departmentCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		departmentCB.setBackground(SystemColor.text);
 		departmentCB.setBounds(145, 220, 225, 20);
 		contentPanel.add(departmentCB);
 		
 		acadYearCB = new JComboBox();
 		acadYearCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		acadYearCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//acadYearCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		acadYearCB.setBackground(SystemColor.text);
 		acadYearCB.setBounds(145, 260, 225, 20);
 		contentPanel.add(acadYearCB);
@@ -143,7 +146,7 @@ public class AddFaculty extends JDialog
 		semesterCB = new JComboBox();
 		semesterCB.setModel(new DefaultComboBoxModel(new String[] {"SEMESTER", "First Semester", "Second Semester", "Midyear"}));
 		semesterCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		semesterCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//semesterCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		semesterCB.setBackground(SystemColor.text);
 		semesterCB.setBounds(145, 300, 225, 20);
 		contentPanel.add(semesterCB);
@@ -158,7 +161,8 @@ public class AddFaculty extends JDialog
 			{
 				addBtn = new JButton("Add");
 				addBtn.setBackground(SystemColor.text);
-				addBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				addBtn.setForeground(Color.BLACK);
+				//addBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 				addBtn.setFont(new Font("Arial", Font.BOLD, 12));
 				addBtn.setBounds(115, 10, 75, 20);
 				addBtn.setActionCommand("OK");
@@ -175,7 +179,7 @@ public class AddFaculty extends JDialog
 						dispose();
 					}
 				});
-				cancelDialogBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				//cancelDialogBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 				cancelDialogBtn.setFont(new Font("Arial", Font.BOLD, 12));
 				cancelDialogBtn.setBounds(215, 10, 75, 20);
 				cancelDialogBtn.setActionCommand("Cancel");

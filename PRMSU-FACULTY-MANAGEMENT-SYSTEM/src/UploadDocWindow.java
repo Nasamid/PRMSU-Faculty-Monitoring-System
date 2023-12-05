@@ -10,6 +10,8 @@ import java.io.IOException;
 import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
 
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class UploadDocWindow {
 
     JPanel TreeTablePanel, PreviewPanel, TopPanel;
@@ -264,6 +266,7 @@ public class UploadDocWindow {
 
     }
     public static void main(String[] args) {
+        FlatMacLightLaf.setup();
         new UploadDocWindow();
     }
 }

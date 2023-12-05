@@ -23,6 +23,9 @@ import javax.swing.JSeparator;
 import java.awt.Color;
 import javax.swing.JComboBox;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class editDialog extends JDialog {
 
 	JPanel contentPanel = new JPanel();
@@ -40,6 +43,7 @@ public class editDialog extends JDialog {
 	
 	public static void main(String[] args) 
 	{
+		FlatMacLightLaf.setup();
 		try 
 		{
 			editDialog dialog = new editDialog();
@@ -123,9 +127,10 @@ public class editDialog extends JDialog {
 					}
 				});
 				doneBtn.setBackground(SystemColor.text);
-				doneBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				doneBtn.setForeground(Color.BLACK);
+				//doneBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 				doneBtn.setFont(new Font("Arial", Font.BOLD, 12));
-				doneBtn.setBounds(200, 10, 75, 20);
+				doneBtn.setBounds(200, 5, 75, 30);
 				doneBtn.setActionCommand("OK");
 				buttonPane.add(doneBtn);
 				getRootPane().setDefaultButton(doneBtn);
@@ -138,9 +143,9 @@ public class editDialog extends JDialog {
 						dispose();
 					}
 				});
-				cancelEdit.setBorder(new LineBorder(SystemColor.textText, 1, true));
+				//cancelEdit.setBorder(new LineBorder(SystemColor.textText, 1, true));
 				cancelEdit.setFont(new Font("Arial", Font.BOLD, 12));
-				cancelEdit.setBounds(300, 10, 75, 20);
+				cancelEdit.setBounds(300, 5, 75, 30);
 				cancelEdit.setActionCommand("Cancel");
 				buttonPane.add(cancelEdit);
 			}
@@ -209,14 +214,14 @@ public class editDialog extends JDialog {
 		semesterCB = new JComboBox();
 		semesterCB.setModel(new DefaultComboBoxModel(new String[] {"SEMESTER", "First Semester", "Second Semester", "Midyear"}));
 		semesterCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		semesterCB.setBorder(null);
+		//semesterCB.setBorder(null);
 		semesterCB.setBackground(SystemColor.text);
 		semesterCB.setBounds(290, 54, 110, 20);
 		contentPanel.add(semesterCB);
 		
 		acadYearCB = new JComboBox();
 		acadYearCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		acadYearCB.setBorder(null);
+		//acadYearCB.setBorder(null);
 		acadYearCB.setBackground(SystemColor.text);
 		acadYearCB.setBounds(410, 54, 90, 20);
 		contentPanel.add(acadYearCB);

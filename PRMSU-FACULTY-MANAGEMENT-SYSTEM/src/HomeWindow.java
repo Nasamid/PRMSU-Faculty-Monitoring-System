@@ -35,6 +35,9 @@ import UploadDocTreeNodes.*;
 import java.awt.*;
 import java.io.IOException;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class HomeWindow 
 {
         JFrame HomeWindow;
@@ -124,7 +127,6 @@ public class HomeWindow
             faculty.setVisible(false);  // sets List of Faculty Panel not visible
     
         //For reporting
-
         String[] columnNames2 = {"Name","Department","File","Semester","Status"};
 
         // Data
@@ -176,7 +178,6 @@ public class HomeWindow
         //button
         button2 = new JButton("Export");
         button2.setBounds(750, 460, 100, 30);
-
         button2.addActionListener(exportToExcel);
         
         //table panel
@@ -238,39 +239,39 @@ public class HomeWindow
             UnivLogo.setBounds(40, 20, 100, 100);    
 
             HomeButton.setText("Home");
-            HomeButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
+            //HomeButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
             HomeButton.setBackground(complimentColor);
             HomeButton.setForeground(Color.WHITE);
-            HomeButton.setBounds(40,150,100,30);
+            HomeButton.setBounds(30,150,120,30);
             HomeButton.setFocusable(false);
 
             ListFacButton.setText("List of Faculty");
-            ListFacButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
+            //ListFacButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
             ListFacButton.setBackground(complimentColor);
             ListFacButton.setForeground(Color.WHITE);
-            ListFacButton.setBounds(40,200,100,30);
+            ListFacButton.setBounds(30,200,120,30);
             ListFacButton.setFocusable(false);
 
             ReportButton.setText("Report");
-            ReportButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
+            //ReportButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
             ReportButton.setBackground(complimentColor);
             ReportButton.setForeground(Color.WHITE);
-            ReportButton.setBounds(40,250,100,30);
+            ReportButton.setBounds(30,250,120,30);
             ReportButton.setFocusable(false);
 
             HelpButton.setText("Help");
-            HelpButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
+            //HelpButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
             HelpButton.setBackground(complimentColor);
             HelpButton.setForeground(Color.WHITE);
-            HelpButton.setBounds(40,300,100,30);
+            HelpButton.setBounds(30,300,120,30);
             HelpButton.setFocusable(false);
 
             LogoutButton.setText("Logout");
-            LogoutButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
+            //LogoutButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
             LogoutButton.setBackground(complimentColor);
             LogoutButton.setForeground(Color.WHITE);
-            LogoutButton.setBounds(40,350,100,30);
-            LogoutButton.setFocusable(false);
+            LogoutButton.setBounds(30,350,120,30);
+            LogoutButton.setFocusable(true);
 
             NaviPanel.add(UnivLogo);
             NaviPanel.add(HomeButton);
@@ -385,6 +386,7 @@ public class HomeWindow
         }
 
         public static void main(String[] args) {
+            FlatMacLightLaf.setup();
         	EventQueue.invokeLater(new Runnable() {
     			public void run() {
     				try {

@@ -47,6 +47,8 @@ import javax.swing.JSeparator;
 import javax.swing.ImageIcon;
 import java.awt.FlowLayout;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 public class listFaculty extends JPanel 
 {
@@ -186,7 +188,7 @@ public class listFaculty extends JPanel
 			}
 		});
 		addFacultyBtn.setFont(new Font("Arial", Font.BOLD, 15));
-		addFacultyBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		//addFacultyBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		addFacultyBtn.setBackground(SystemColor.text);
 		addFacultyBtn.setBounds(20, 80, 150, 30);
 		add(addFacultyBtn);
@@ -212,7 +214,7 @@ public class listFaculty extends JPanel
 		searchEngine.setText("Search Faculty...");
 		searchEngine.setBackground(new Color(255, 255, 255));
 		searchEngine.setColumns(10);
-		searchEngine.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		//searchEngine.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		searchEngine.setBounds(730, 80, 200, 30);
 		add(searchEngine);
 		
@@ -294,14 +296,14 @@ public class listFaculty extends JPanel
 		JComboBox semesterCB = new JComboBox();
 		semesterCB.setModel(new DefaultComboBoxModel(new String[] {"SEMESTER", "First Semester", "Second Semester", "Midyear"}));
 		semesterCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		semesterCB.setBorder(null);
+		//semesterCB.setBorder(null);
 		semesterCB.setBackground(SystemColor.text);
 		semesterCB.setBounds(405, 85, 110, 20);
 		add(semesterCB);
 		
 		JComboBox acadYearCB = new JComboBox();
 		acadYearCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		acadYearCB.setBorder(null);
+		//acadYearCB.setBorder(null);
 		acadYearCB.setBackground(SystemColor.text);
 		acadYearCB.setBounds(525, 85, 110, 20);
 		add(acadYearCB);
@@ -309,7 +311,7 @@ public class listFaculty extends JPanel
 		JComboBox departmentCB = new JComboBox();
 		departmentCB.setModel(new DefaultComboBoxModel(new String[] {"DEPARTMENT", "MECHANICAL ENGINEERING", "COMPUTER ENGINEERING", "CIVIL ENGINEERING", "ELECTRICAL ENGINEERING", "ALLIED"}));
 		departmentCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		departmentCB.setBorder(null);
+		//departmentCB.setBorder(null);
 		departmentCB.setBackground(SystemColor.text);
 		departmentCB.setBounds(285, 85, 110, 20);
 		add(departmentCB);

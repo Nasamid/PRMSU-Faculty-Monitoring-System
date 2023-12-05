@@ -11,6 +11,9 @@ import javax.swing.JSlider;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 public class sections extends JPanel 
 {
 	JLabel sectionLbl, semesterLbl, academicYearLbl;
@@ -26,7 +29,7 @@ public class sections extends JPanel
 		setLayout(null);
 		
 		JPanel Panel = new JPanel();
-		Panel.setBorder(null);
+		//Panel.setBorder(null);
 		Panel.setBackground(Color.WHITE);
 		Panel.setBounds(10, 5, 600, 25);
 		add(Panel);
@@ -36,20 +39,20 @@ public class sections extends JPanel
 		sectionLbl.setBounds(15, 0, 230, 25);
 		Panel.add(sectionLbl);
 		sectionLbl.setLabelFor(sectionLbl);
-		sectionLbl.setBorder(null);
+		//sectionLbl.setBorder(null);
 		sectionLbl.setFont(new Font("Arial", Font.BOLD, 10));
 		
 		semesterLbl = new JLabel("");
 		semesterLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		semesterLbl.setFont(new Font("Arial", Font.BOLD, 10));
-		semesterLbl.setBorder(null);
+		//semesterLbl.setBorder(null);
 		semesterLbl.setBounds(255, 0, 135, 25);
 		Panel.add(semesterLbl);
 		
 		academicYearLbl = new JLabel("");
 		academicYearLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		academicYearLbl.setFont(new Font("Arial", Font.BOLD, 10));
-		academicYearLbl.setBorder(null);
+		//academicYearLbl.setBorder(null);
 		academicYearLbl.setBounds(400, 0, 135, 25);
 		Panel.add(academicYearLbl);
 		
