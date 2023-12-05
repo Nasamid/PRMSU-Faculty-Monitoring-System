@@ -1,54 +1,30 @@
-
-
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Comparator;
 
-import javax.swing.JTextField;
-import javax.swing.RowFilter;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Component;
-
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import javax.swing.border.EtchedBorder;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.JSeparator;
-import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
-
-import com.formdev.flatlaf.*;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
 public class listFaculty extends JPanel 
 {
@@ -60,8 +36,8 @@ public class listFaculty extends JPanel
 	List<String> facultyNames = new ArrayList<>();
 	List<Integer> facultyIndex = new ArrayList<>();
 	
-	public listFaculty() 
-	{
+	public listFaculty() {
+		
 		setBackground(SystemColor.text);
 		setFont(new Font("Arial", Font.BOLD, 15));
 		setBounds(180,0,1000, 720);
@@ -96,6 +72,8 @@ public class listFaculty extends JPanel
 		Body.setBackground(SystemColor.text);
 		Body.setLayout(new GridLayout(11,1));
 		scrollPane.setViewportView(Body);
+
+		loadFacultyData();
 		
 		addFacultyBtn = new JButton("Add Faculty");
 		addFacultyBtn.addActionListener(new ActionListener() 
@@ -104,51 +82,56 @@ public class listFaculty extends JPanel
 			{
 				faculty faculty = new faculty();
 				AddFaculty addFaculty = new AddFaculty();
-				addFaculty.show();
+				addFaculty.setVisible(true);
 
-				
-				addFaculty.addBtn.addActionListener(new ActionListener() 
-				{
-					public void actionPerformed(ActionEvent e) 
-					{
+				addFaculty.addBtn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						String facultyName = addFaculty.firstNameTF.getText() + " " + addFaculty.middleNameTF.getText() + " " + addFaculty.lastNameTF.getText() + " " + addFaculty.extNameTF.getText();
 						String department = (String) addFaculty.departmentCB.getSelectedItem();
 						String academicYear = (String) addFaculty.acadYearCB.getSelectedItem();
 						String semester = (String) addFaculty.semesterCB.getSelectedItem();
-						
-						if(		addFaculty.firstNameTF.getText().isEmpty() 
-							|| 	addFaculty.lastNameTF.getText().isEmpty()
-							||  addFaculty.semesterCB.getSelectedIndex() == 0
-							||  addFaculty.departmentCB.getSelectedIndex() == 0) 
-						{
-							JOptionPane.showMessageDialog(frame, "Enter First Name.", "Error", JOptionPane.INFORMATION_MESSAGE);	
-						}
-						else 
-						{
+				
+						if (addFaculty.firstNameTF.getText().isEmpty() || addFaculty.lastNameTF.getText().isEmpty()
+								|| addFaculty.semesterCB.getSelectedIndex() == 0
+								|| addFaculty.departmentCB.getSelectedIndex() == 0) {
+							JOptionPane.showMessageDialog(frame, "Please insert complete information.", "Insufficient Data", JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							// Get the corresponding IDs
+							int departmentID = DatabaseHandler.getDepartmentID(department);
+							int yearID = DatabaseHandler.getYearID(academicYear);
+				
+							// Dynamically get semesterID based on the selected semester
+							int semesterID = DatabaseHandler.getSemesterID(semester);
+				
+							// Insert data into the SQLite database and get the generated facultyID
+							int facultyID = DatabaseHandler.insertFaculty(facultyName, departmentID, yearID, semesterID);
+				
+							// Do something with the generated facultyID if needed
+				
 							faculty.facultyNameLbl.setText(facultyName);
 							faculty.departmentLbl.setText(department);
 							faculty.semesterLbl.setText(semester);
 							faculty.academicYearLbl.setText(academicYear);
-							
+				
 							facultyNames.add(facultyName);
 							Body.add(faculty);
 							currentRow++;
-							
-							if (Body.getComponentCount() >= 12) 
-							{ 
-			                    // Increase the preferred height of the rowPanel
-			                    Dimension preferredSize = Body.getPreferredSize();
-			                    preferredSize.height += 50;
-			                    Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
-			                    Body.setPreferredSize(preferredSize);
-			                    Body.revalidate();
+				
+							if (Body.getComponentCount() >= 12) {
+								// Increase the preferred height of the rowPanel
+								Dimension preferredSize = Body.getPreferredSize();
+								preferredSize.height += 80;
+								Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+								Body.setPreferredSize(preferredSize);
+								Body.revalidate();
 							}
-							
+				
 							addFaculty.dispose();
 							Body.revalidate();
 						}
 					}
 				});
+				
 				
 				JButton addPreparation = faculty.addBtn;
 				addPreparation.addActionListener(new ActionListener() 
@@ -159,7 +142,7 @@ public class listFaculty extends JPanel
 						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
 						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
 						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
-						preparation.frame.show();
+						preparation.frame.setVisible(true);
 					}
 				});
 				
@@ -169,20 +152,29 @@ public class listFaculty extends JPanel
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
-						UploadDocWindow upload = new UploadDocWindow();
-						
+						new UploadDocWindow();
 					}
 				});
 				
 				JButton deleteFaculty = faculty.deleteBtn;
-				deleteFaculty.addActionListener(new ActionListener() 
-				{
-					public void actionPerformed(ActionEvent e) 
-					{
-						Body.remove(faculty);
-						revalidate();
-						repaint();
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
 						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
 					}
 				});
 			}
@@ -201,17 +193,17 @@ public class listFaculty extends JPanel
 		add(searchBtn);
 		
 		searchEngine = new JTextField();
-		
 		searchEngine.addMouseListener(new MouseAdapter() 
 		{
 			@Override
-			public void mouseReleased(MouseEvent e)
+			public void mousePressed (MouseEvent e)
 			{
 				searchEngine.setText("");
 			}
 		});
+
 		searchEngine.setFont(new Font("Arial", Font.PLAIN, 13));
-		searchEngine.setText("Search Faculty...");
+		searchEngine.setText("Search Faculty....");
 		searchEngine.setBackground(new Color(255, 255, 255));
 		searchEngine.setColumns(10);
 		//searchEngine.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
@@ -333,7 +325,97 @@ public class listFaculty extends JPanel
 		JPanel addPanel = new JPanel();
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
+
+		
 	}
+	
+	// Method to load faculty data from the database and populate the UI
+	private void loadFacultyData() {
+		List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
+		System.out.println(facultyDataList);
+		for (FacultyData facultyData : facultyDataList) {
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+		}
+		Body.revalidate();
+		Body.repaint();
+	}
+		
 }
 
 

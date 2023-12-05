@@ -1,5 +1,5 @@
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Calendar;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -17,15 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.JSeparator;
-
-import com.formdev.flatlaf.*;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 public class addPreparation extends JPanel 
 {
@@ -38,7 +34,7 @@ public class addPreparation extends JPanel
 	
 	public addPreparation() 
 	{
-		listFaculty faculty = new listFaculty();
+		new listFaculty();
 		
 		setBackground(SystemColor.text);
 		setFont(new Font("Arial", Font.BOLD, 15));
@@ -107,11 +103,9 @@ public class addPreparation extends JPanel
 		Body.setLayout(new GridLayout(10,1));
 		scrollPane.setViewportView(Body);
 		
-		/* 
-		 * Adding functions to the buttons using concatination
-		*/
 		addSubjectBtn = new JButton("Add Subject");
 		addSubjectBtn.setBackground(SystemColor.text);
+		
 		//addSubjectBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		addSubjectBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		addSubjectBtn.setFocusable(false);
