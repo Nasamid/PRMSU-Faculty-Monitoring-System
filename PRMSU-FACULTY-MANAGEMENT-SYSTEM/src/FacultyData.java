@@ -9,9 +9,6 @@ public class FacultyData {
     private String departmentName;
     private String academicYear;
     private String semesterName;
-    private int departmentID;
-    private int yearID;
-    private int semesterID;
 
     public FacultyData(int facultyID, String facultyName, String departmentName, String academicYear, String semesterName) {
         this.facultyID = facultyID;
@@ -19,10 +16,6 @@ public class FacultyData {
         this.departmentName = departmentName;
         this.academicYear = academicYear;
         this.semesterName = semesterName;
-    }
-
-    public int getFacultyID() {
-        return facultyID;
     }
 
     public String getFacultyName() {
@@ -105,5 +98,24 @@ public class FacultyData {
         }
 
         return semesterID;
+    }
+
+    public static int getFacultyID() {
+       int facultyID = -1;
+
+        String query = "SELECT facultyID FROM faculty";
+        
+        try (Connection connection = DatabaseHandler.connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                facultyID = resultSet.getInt("facultyID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return facultyID;
     }
 }

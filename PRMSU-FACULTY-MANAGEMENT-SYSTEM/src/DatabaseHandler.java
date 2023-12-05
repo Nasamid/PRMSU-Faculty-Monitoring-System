@@ -247,4 +247,22 @@ public class DatabaseHandler {
         return facultyList;
     }
 
+    // Add this method to your DatabaseHandler class
+    public static boolean deleteFacultyByID(int facultyID) {
+        String query = "DELETE FROM faculty WHERE facultyID = ?";
+        
+        try (Connection connection = connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, facultyID);
+            
+            int rowsDeleted = preparedStatement.executeUpdate();
+            
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately
+            return false;
+        }
+    }
+
+
 }

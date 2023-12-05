@@ -73,7 +73,7 @@ public class listFaculty extends JPanel
 		Body.setLayout(new GridLayout(11,1));
 		scrollPane.setViewportView(Body);
 
-		loadFacultyData();
+		
 		
 		addFacultyBtn = new JButton("Add Faculty");
 		addFacultyBtn.addActionListener(new ActionListener() 
@@ -157,14 +157,24 @@ public class listFaculty extends JPanel
 				});
 				
 				JButton deleteFaculty = faculty.deleteBtn;
-				deleteFaculty.addActionListener(new ActionListener() 
-				{
-					public void actionPerformed(ActionEvent e) 
-					{
-						Body.remove(faculty);
-						revalidate();
-						repaint();
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
 						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
 					}
 				});
 			}
@@ -315,6 +325,8 @@ public class listFaculty extends JPanel
 		JPanel addPanel = new JPanel();
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
+
+		loadFacultyData();
 	}
 
 	    // Method to load faculty data from the database and populate the UI
