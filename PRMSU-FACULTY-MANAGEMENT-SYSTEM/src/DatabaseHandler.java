@@ -248,6 +248,39 @@ public class DatabaseHandler {
         return facultyList;
     }
 
+    // Get a list of FacultyData objects along with related information
+    public static List<FacultyData> getSearchedFacultyDataList() {
+        List<FacultyData> searchedfacultyList = new ArrayList<>();
+
+        String query = "SELECT facultyID, name, deptID, yearID, semesterID FROM faculty";
+        try (Connection connection = connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int facultyID = resultSet.getInt("facultyID");
+                String facultyName = resultSet.getString("name");
+                int departmentID = resultSet.getInt("deptID");
+                int yearID = resultSet.getInt("yearID");
+                int semesterID = resultSet.getInt("semesterID");
+
+                // Fetch department name, academic year, and semester name using existing methods
+                String departmentName = getDepartmentName(departmentID);
+                String academicYear = getYearName(yearID);
+                String semesterName = getSemesterName(semesterID);
+
+                // Create FacultyData object with complete information
+                FacultyData facultyData = new FacultyData(facultyID, facultyName, departmentName, academicYear, semesterName);
+                searchedfacultyList.add(facultyData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return searchedfacultyList;
+    }
+
     // Add this method to your DatabaseHandler class
     public static boolean deleteFacultyByID(int facultyID) {
         String query = "DELETE FROM faculty WHERE facultyID = ?";
