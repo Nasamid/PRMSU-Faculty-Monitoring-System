@@ -319,10 +319,10 @@ public class listFaculty extends JPanel
 		add(sortLbl);
 		
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		acadYearCB.addItem("YEAR");
 		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
 			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
         }
-		acadYearCB.setSelectedItem(String.valueOf(currentYear + " - " + (currentYear + 1)));
 		
 		JDialog addDial0g = new JDialog();
 		addDial0g.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -336,71 +336,20 @@ public class listFaculty extends JPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				Integer searchdeptID = null, searchsemesterID = null, searchyearID = null;
 				String CB_DEP = departmentCB.getSelectedItem().toString();
 				String CB_SEM = semesterCB.getSelectedItem().toString();
 				String CB_AY = acadYearCB.getSelectedItem().toString();
+
+				String searchname = searchEngine.getText();
+
+				Body.removeAll();
+				Body.revalidate();
+				Body.repaint();
+
 				
-					if(CB_DEP.equals("MECHANICAL ENGINEERING")){
-						searchdeptID = 602;
-					}
-					else if(CB_DEP.equals("COMPUTER ENGINEERING")){
-						searchdeptID = 601;
-					}
-					else if(CB_DEP.equals("CIVIL ENGINEERING")){
-						searchdeptID = 604;
-					}
-					else if(CB_DEP.equals("ELECTRICAL ENGINEERING")){
-						searchdeptID = 603;
-					}
-					else if(CB_DEP.equals("ALLIED")){
-						searchdeptID = 605;
-					} 
-					else if (CB_DEP.equals("DEPARTMENT")){
-						searchdeptID = null;
-					}
-
-					if(CB_SEM.equals("First Semester")){
-						searchsemesterID = 501;
-					}
-					else if(CB_SEM.equals("Second Semester")){
-						searchsemesterID = 502;
-					}
-					else if(CB_SEM.equals("Midyear")){
-						searchsemesterID = 503;
-					}
-					else if(CB_SEM.equals("SEMESTER")){
-						searchsemesterID = null;
-					}
-
-					if(CB_AY.equals("2020 - 2021")){
-						searchyearID = 2020;
-					}
-					else if(CB_AY.equals("2021 - 2022")){
-						searchyearID = 2021;
-					}
-					else if(CB_AY.equals("2022 - 2023")){
-						searchyearID = 2022;
-					}
-					else if(CB_AY.equals("2023 - 2024")){
-						searchyearID = 2023;
-					}
-					else if(CB_AY.equals("2024 - 2025")){
-						searchyearID = 2024;
-					}
-					else if(CB_AY.equals("2025 - 2026")){
-						searchyearID = 2025;
-					}
-					else if(CB_AY.equals("2026 - 2027")){
-						searchyearID = 2026;
-					}
-					else if(CB_AY.equals("2026 - 2027")){
-						searchyearID = 2026;
-					}
-
-					String searchname = searchEngine.getText();
-					loadSearchFacultyData(searchname, CB_AY, CB_DEP, CB_SEM);
-					//System.out.println("Search button PRESSED! Department ID: " + searchdeptID + " Selected dept: " + CB_DEP);
+				loadSearchFacultyData(searchname, CB_AY, CB_DEP, CB_SEM);
+				scrollPane.revalidate();
+				scrollPane.repaint();					
 
 			}
 		});
@@ -499,6 +448,7 @@ public class listFaculty extends JPanel
 		List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
 		//System.out.println(facultyDataList);
 		for (FacultyData facultyData : facultyDataList) {
+
 			if((facultyData.getAcademicYear().equals(CB_AY) && (facultyData.getDepartmentName().equals(CB_DEP)) && (facultyData.getSemesterName().equals(CB_SEM)))){
 			faculty faculty = new faculty();
 
