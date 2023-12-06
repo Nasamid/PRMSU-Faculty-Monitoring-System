@@ -2,23 +2,21 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-
-import com.formdev.flatlaf.*;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 public class subject extends JPanel 
 {
 	JLabel subjectLbl, academicYearLbl, semesterLbl;
 	JButton addBtn, editBtn, deleteBtn;
 	private JSeparator separator;
-	
+
 	public subject() 
 	{
 		setBorder(null);

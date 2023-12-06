@@ -1,23 +1,20 @@
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
-import java.awt.Color;
-import java.awt.Dimension;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-import javax.swing.JTextField;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
 
-import com.formdev.flatlaf.*;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 public class addSubjectDialog extends JDialog 
 {
 
@@ -153,6 +150,8 @@ public class addSubjectDialog extends JDialog
 			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
         }
 		acadYearCB.setSelectedItem(String.valueOf(currentYear + " - " + (currentYear + 1)));
+
+		prep.fetchAndDisplaySubjects();
 	}
 	
 }

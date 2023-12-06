@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -37,7 +38,7 @@ public class listFaculty extends JPanel
 	List<Integer> facultyIndex = new ArrayList<>();
 	
 	public listFaculty() {
-		
+	
 		setBackground(SystemColor.text);
 		setFont(new Font("Arial", Font.BOLD, 15));
 		setBounds(180,0,1000, 720);
@@ -134,15 +135,17 @@ public class listFaculty extends JPanel
 				
 				
 				JButton addPreparation = faculty.addBtn;
+				addPreparation preparations = new addPreparation();
 				addPreparation.addActionListener(new ActionListener() 
-				{
+				{   
+
 					public void actionPerformed(ActionEvent e) 
 					{
-						addPreparation preparation = new addPreparation();
-						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
-						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
-						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
-						preparation.frame.setVisible(true);
+						preparations.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparations.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparations.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparations.frame.setVisible(true);
+						System.out.println("ADD SUBJECT BUTTON PRESSED");
 					}
 				});
 				
@@ -152,6 +155,7 @@ public class listFaculty extends JPanel
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
+						System.out.println("ADD SUBJECT BUTTON PRESSED");
 						new UploadDocWindow();
 					}
 				});
@@ -330,9 +334,9 @@ public class listFaculty extends JPanel
 	}
 	
 	// Method to load faculty data from the database and populate the UI
-	private void loadFacultyData() {
+	public void loadFacultyData() {
 		List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
-		System.out.println(facultyDataList);
+		//System.out.println(facultyDataList);
 		for (FacultyData facultyData : facultyDataList) {
 			faculty faculty = new faculty();
 
@@ -358,6 +362,7 @@ public class listFaculty extends JPanel
 						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
 						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
 						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
 					}
 				});
 				

@@ -12,7 +12,10 @@ import javax.swing.SwingConstants;
 
 public class faculty extends JPanel 
 {
-	JLabel facultyNameLbl, departmentLbl, semesterLbl, academicYearLbl;
+	JLabel facultyNameLbl;
+	JLabel departmentLbl;
+	JLabel semesterLbl;
+	JLabel academicYearLbl;
 	JPanel panel;
 	JButton deleteBtn, uploadBtn, addBtn;
 	

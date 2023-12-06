@@ -6,6 +6,8 @@ import java.awt.Toolkit;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -95,6 +97,26 @@ public class LoginWindow {
 
     Login = new JTextField("");
     Login.setBounds(778,24,150,30);
+    Login.addKeyListener(new KeyListener() {
+        public void keyPressed(java.awt.event.KeyEvent e) {
+            if(e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER){
+                String ID = Login.getText();
+                if(ID.equals("admin")){
+                    new HomeWindow();
+                    LoginWindow.dispose();
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Invalid Username.");
+                    System.out.println(ID);
+                    System.out.println("Invalid Credentials");
+                }
+            }
+        }
+        public void keyReleased(java.awt.event.KeyEvent e) {
+        }
+        public void keyTyped(java.awt.event.KeyEvent e) {
+        }
+    });
     
 
     LoginButton = new JButton("Login");

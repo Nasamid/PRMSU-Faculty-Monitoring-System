@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -173,8 +174,8 @@ public class DatabaseHandler {
 
         return academicYear;
     }
-    
-    
+
+    // Get semester name from the database based on semester ID
     public static String getYearName(int yearID) {
         String query = "SELECT academicYear FROM year WHERE yearID = ?";
         String yearName = "";
@@ -264,5 +265,287 @@ public class DatabaseHandler {
         }
     }
 
+    // Update semester in the database based on facultyID
+    public static boolean updateSemester(String semester, int facultyID) {
+        String query = "UPDATE faculty SET semesterID = (SELECT semesterID FROM semester WHERE semesterName = ?) WHERE facultyID = ?";
+        
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, semester);
+            preparedStatement.setInt(2, facultyID);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately
+            return false;
+        }
+    }
+
+    // Update academic year in the database based on facultyID
+    public static boolean updateAcademicYear(String academicYear, int facultyID) {
+        String query = "UPDATE faculty SET yearID = (SELECT yearID FROM year WHERE academicYear = ?) WHERE facultyID = ?";
+        
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, academicYear);
+            preparedStatement.setInt(2, facultyID);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately
+            return false;
+        }
+    }
+
+    public static int getFacultyID(String facultyName) {
+        String query = "SELECT facultyID FROM faculty WHERE name = ?";
+        int facultyID = -1;
+
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, facultyName);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                facultyID = resultSet.getInt("facultyID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return facultyID;
+    }
+
+    public static FacultyData getFacultyData(int facultyID) {
+        FacultyData facultyData = null;
+
+        String query = "SELECT name, deptID, yearID, semesterID FROM faculty WHERE facultyID = ?";
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, facultyID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String facultyName = resultSet.getString("name");
+                int departmentID = resultSet.getInt("deptID");
+                int yearID = resultSet.getInt("yearID");
+                int semesterID = resultSet.getInt("semesterID");
+
+                // Fetch department name, academic year, and semester name using existing methods
+                String departmentName = getDepartmentName(departmentID);
+                String academicYear = getAcademicYear(yearID);
+                String semesterName = getSemesterName(semesterID);
+
+                // Create FacultyData object with complete information
+                facultyData = new FacultyData(facultyID, facultyName, departmentName, academicYear, semesterName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return facultyData;
+    }
+
+    public static int insertSubject(String subjectName) {
+        String query = "INSERT INTO subjects (subject) VALUES (?)";
+
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, subjectName);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows > 0) {
+                // Retrieve the generated subjectID
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int subjectID = generatedKeys.getInt(1);
+
+                    return subjectID;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return -1; // Return -1 if the insertion fails
+    }
+
+    // Get the latest subject data from the database
+    public static SubjectData getLatestSubject() {
+        String query = "SELECT * FROM subjects ORDER BY subjectID DESC LIMIT 1";
+
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int subjectID = resultSet.getInt("subjectID");
+                String subjectName = resultSet.getString("subject");
+                String syllabus = resultSet.getString("syllabus");
+
+                return new SubjectData(subjectID, subjectName, syllabus);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static String getSubjectName(int subjectID) {
+        String query = "SELECT subject FROM subjects WHERE subjectID = ?";
+        String subjectName = "";
+
+        try (Connection connection = connect();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, subjectID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                subjectName = resultSet.getString("subject");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return subjectName;
+    }
+
+    public static List<SubjectData> getAllSubjects() {
+        List<SubjectData> subjects = new ArrayList<>();
+        String query = "SELECT * FROM subjects";
+    
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+    
+            ResultSet resultSet = preparedStatement.executeQuery();
+    
+            while (resultSet.next()) {
+                int subjectID = resultSet.getInt("subjectID");
+                String subjectName = resultSet.getString("subject");
+                String syllabus = resultSet.getString("syllabus");
+    
+                // Create a SubjectData object with the retrieved data
+                SubjectData subjectData = new SubjectData(subjectID, subjectName, syllabus);
+                subjects.add(subjectData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately
+        }
+    
+        return subjects;
+    }
+
+     // Associate a faculty with a subject
+     public static void associateFacultyWithSubject(int facultyID, int subjectID) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = connect();
+            // Check if the association already exists
+            String checkSql = "SELECT * FROM faculty_subject WHERE facultyID = ? AND subjectID = ?";
+            preparedStatement = connection.prepareStatement(checkSql);
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setInt(2, subjectID);
+            resultSet = preparedStatement.executeQuery();
+
+            // If the association doesn't exist, insert it
+            if (!resultSet.next()) {
+                // SQL statement to insert a record into faculty_subject table
+                String insertSql = "INSERT INTO faculty_subject (facultyID, subjectID) VALUES (?, ?)";
+                preparedStatement = connection.prepareStatement(insertSql);
+                preparedStatement.setInt(1, facultyID);
+                preparedStatement.setInt(2, subjectID);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately
+        } finally {
+            // Close resources in the reverse order of their creation
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace(); // Handle the exception appropriately
+            }
+        }
+    }
+
+    public static int getSubjectID(String subjectDisplay) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = connect();
+            String query = "SELECT subjectID FROM subjects WHERE subject = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, subjectDisplay);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                // Subject exists, return the subjectID
+                return resultSet.getInt("subjectID");
+            } else {
+                // Subject doesn't exist
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception according to your application's requirements
+            return -1;
+        } finally {
+            // Close the resources (result set, statement, connection) in the reverse order of their creation
+            closeResultSet(resultSet);
+            closeStatement(preparedStatement);
+            closeConnection(connection);
+        }
+    }
+
+        // Helper methods for closing resources
+        private static void closeConnection(Connection connection) {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    
+        private static void closeStatement(Statement statement) {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    
+        private static void closeResultSet(ResultSet resultSet) {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
 }
