@@ -248,14 +248,31 @@ public class DatabaseHandler {
         return facultyList;
     }
 
-    // Get a list of FacultyData objects along with related information
-    public static List<FacultyData> getSearchedFacultyDataList() {
+    // Get a list of FacultyData objects depending on the search values on the combobox
+    public static List<FacultyData> getSearchedFacultyDataList(String searchname, Integer searchdeptID, Integer searchyearID, Integer searchsemesterID ) {
         List<FacultyData> searchedfacultyList = new ArrayList<>();
 
-        String query = "SELECT facultyID, name, deptID, yearID, semesterID FROM faculty";
+        String query = "SELECT facultyID, name, deptID, yearID, semesterID FROM faculty WHERE 1=1 "
+        + (searchname != null ? "AND name = ? " : "")
+        + (searchdeptID != null ? "AND deptID = ? " : "")
+        + (searchyearID != null ? "AND yearID = ? " : "")
+        + (searchsemesterID != null ? "AND semesterID = ? " : "");
+
         try (Connection connection = connect();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                    int parameterIndex = 1;
+                    if (searchname != null) {
+                        preparedStatement.setString(parameterIndex++, searchname);
+                    }
+                    if (searchdeptID != null) {
+                        preparedStatement.setInt(parameterIndex++, searchdeptID);
+                    }
+                    if (searchyearID != null) {
+                        preparedStatement.setInt(parameterIndex++, searchyearID);
+                    }
+                    if (searchsemesterID != null) {
+                        preparedStatement.setInt(parameterIndex++, searchsemesterID);
+                    }
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -265,11 +282,13 @@ public class DatabaseHandler {
                 int yearID = resultSet.getInt("yearID");
                 int semesterID = resultSet.getInt("semesterID");
 
+                
+
                 // Fetch department name, academic year, and semester name using existing methods
                 String departmentName = getDepartmentName(departmentID);
                 String academicYear = getYearName(yearID);
                 String semesterName = getSemesterName(semesterID);
-
+                System.out.println(departmentName);
                 // Create FacultyData object with complete information
                 FacultyData facultyData = new FacultyData(facultyID, facultyName, departmentName, academicYear, semesterName);
                 searchedfacultyList.add(facultyData);

@@ -36,6 +36,7 @@ public class listFaculty extends JPanel
 	JButton addFacultyBtn;
 	List<String> facultyNames = new ArrayList<>();
 	List<Integer> facultyIndex = new ArrayList<>();
+	String CB_SEM,CB_AY,CB_DEP,SRCH_NAME;
 	
 	public listFaculty() {
 	
@@ -330,7 +331,79 @@ public class listFaculty extends JPanel
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
 
-		
+	
+		searchBtn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				Integer searchdeptID = null, searchsemesterID = null, searchyearID = null;
+				String CB_DEP = departmentCB.getSelectedItem().toString();
+				String CB_SEM = semesterCB.getSelectedItem().toString();
+				String CB_AY = acadYearCB.getSelectedItem().toString();
+				
+					if(CB_DEP.equals("MECHANICAL ENGINEERING")){
+						searchdeptID = 602;
+					}
+					else if(CB_DEP.equals("COMPUTER ENGINEERING")){
+						searchdeptID = 601;
+					}
+					else if(CB_DEP.equals("CIVIL ENGINEERING")){
+						searchdeptID = 604;
+					}
+					else if(CB_DEP.equals("ELECTRICAL ENGINEERING")){
+						searchdeptID = 603;
+					}
+					else if(CB_DEP.equals("ALLIED")){
+						searchdeptID = 605;
+					} 
+					else if (CB_DEP.equals("DEPARTMENT")){
+						searchdeptID = null;
+					}
+
+					if(CB_SEM.equals("First Semester")){
+						searchsemesterID = 501;
+					}
+					else if(CB_SEM.equals("Second Semester")){
+						searchsemesterID = 502;
+					}
+					else if(CB_SEM.equals("Midyear")){
+						searchsemesterID = 503;
+					}
+					else if(CB_SEM.equals("SEMESTER")){
+						searchsemesterID = null;
+					}
+
+					if(CB_AY.equals("2020 - 2021")){
+						searchyearID = 2020;
+					}
+					else if(CB_AY.equals("2021 - 2022")){
+						searchyearID = 2021;
+					}
+					else if(CB_AY.equals("2022 - 2023")){
+						searchyearID = 2022;
+					}
+					else if(CB_AY.equals("2023 - 2024")){
+						searchyearID = 2023;
+					}
+					else if(CB_AY.equals("2024 - 2025")){
+						searchyearID = 2024;
+					}
+					else if(CB_AY.equals("2025 - 2026")){
+						searchyearID = 2025;
+					}
+					else if(CB_AY.equals("2026 - 2027")){
+						searchyearID = 2026;
+					}
+					else if(CB_AY.equals("2026 - 2027")){
+						searchyearID = 2026;
+					}
+
+					String searchname = searchEngine.getText();
+					loadSearchFacultyData(searchname, CB_AY, CB_DEP, CB_SEM);
+					//System.out.println("Search button PRESSED! Department ID: " + searchdeptID + " Selected dept: " + CB_DEP);
+
+			}
+		});
 	}
 	
 	// Method to load faculty data from the database and populate the UI
@@ -416,6 +489,97 @@ public class listFaculty extends JPanel
 				Body.revalidate();
 			}
 			Body.revalidate();
+		}
+		Body.revalidate();
+		Body.repaint();
+	}
+
+// Method to load new faculty data from the database and populate the UI based on the search parameters
+	public void loadSearchFacultyData(String searchname, String CB_AY, String CB_DEP, String CB_SEM) {
+		List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
+		//System.out.println(facultyDataList);
+		for (FacultyData facultyData : facultyDataList) {
+			if((facultyData.getAcademicYear().equals(CB_AY) && (facultyData.getDepartmentName().equals(CB_DEP)) && (facultyData.getSemesterName().equals(CB_SEM)))){
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+			}
+			
 		}
 		Body.revalidate();
 		Body.repaint();
