@@ -57,47 +57,7 @@ public class HomeWindow
         JTextField Search2;
         
         listFaculty faculty;    // List of Faculty Panel
-        
-        
-        private ActionListener exportToExcel = new ActionListener() 
-        {
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Specify a file to save");
-                int userSelection = fileChooser.showSaveDialog(null);
-    
-                if (userSelection == JFileChooser.APPROVE_OPTION) {
-                    File fileToSave = fileChooser.getSelectedFile();
-                    try (FileWriter writer = new FileWriter(fileToSave + ".csv")) 
-                    {
-                        for (int i = 0; i < model2.getColumnCount(); i++) {
-                            writer.write(model2.getColumnName(i) + ",");
-                        }
-                        writer.write("\n");
-    
-                        for (int row = 0; row < model2.getRowCount(); row++) 
-                        {
-                            for (int col = 0; col < model2.getColumnCount(); col++) 
-                            {
-                                writer.write(model2.getValueAt(row, col) + ",");
-                            }
-                            writer.write("\n");
-                        }
-    
-                        writer.close();
-                        JOptionPane.showMessageDialog(null,
-                                "Data exported to " + fileToSave.getAbsolutePath() + ".csv");
-                    } 
-                    catch (IOException ex) 
-                    {
-                        ex.printStackTrace();
-                        JOptionPane.showMessageDialog(null, "Error exporting to CSV: " + ex.getMessage());
-                    }
-                }
-            }
-        };
+        report reportpage; // Report class
     
         HomeWindow()
         {
@@ -115,6 +75,7 @@ public class HomeWindow
             HomePanel = new JPanel();
             ReportPanel = new JPanel();
             faculty = new listFaculty();
+            reportpage = new report();
 
             HomeButton = new JButton();
             ListFacButton = new JButton();
@@ -125,71 +86,7 @@ public class HomeWindow
             UnivLogo = new JLabel();
             
             faculty.setVisible(false);  // sets List of Faculty Panel not visible
-    
-        //For reporting
-        String[] columnNames2 = {"Name","Department","File","Semester","Status"};
-
-        // Data
-        Object[][] data2 = {
-            {"Froilan Cantillo", "Computer Engineering", "COR", "1st Semester", "Not Uploaded"},
-            {"Michael Romualdo", "Mechanical Engineering", "Quiz 1", "1st Semester", "Not Uploaded"},
-            {"Eloisa Romulo", "Civil Engineering", "Test", "1st Semester", "Not Uploaded"},
-            {"Grecelia Dullas", "Electrical Engineering", "Activity 2", "1st Semester", "Not Uploaded"},
-        };
-        
-        //table model
-        model2 = new DefaultTableModel(data2, columnNames2);
-        
-        class CenterRenderer2 extends DefaultTableCellRenderer 
-        {
-             public CenterRenderer2() 
-             {
-            	 setHorizontalAlignment(JLabel.CENTER);
-             }
-        }
-         
-        //table with the model
-        table2 = new JTable(model2);
-        table2.setBounds(10, 10, 100, 100);
-        table2.getTableHeader().setBounds(0,0, 50,30);
-        table2.getTableHeader().setFont(new Font("ARIAL",Font.BOLD,16));
-        table2.getTableHeader().setBackground(new Color(57, 167, 255));
-        table2.setGridColor(Color.BLACK);
-        table2.setShowGrid(true);
-        table2.setRowHeight(60);
-        table2.setFont(new Font("ARIAL", Font.PLAIN, 10));
-        
-        //scroll pane
-        scrollPane2 = new JScrollPane(table2);
-        table2.setPreferredScrollableViewportSize(new Dimension(870,400));
-        scrollPane2.setBounds(10, 50, 870, 400);
-        
-        //Rendere of each input in table
-        CenterRenderer2 centerRenderer2 = new CenterRenderer2();
-        for (int i = 0; i < table2.getColumnCount(); i++) {
-         table2.getColumnModel().getColumn(i).setCellRenderer(centerRenderer2);
-        }
-        
-        //report
-        report = new JLabel("REPORT");
-        report.setBounds(30, 10, 200, 30);
-        report.setFont(new Font("ARIAL", Font.BOLD, 30));
-        
-        //button
-        button2 = new JButton("Export");
-        button2.setBounds(750, 460, 100, 30);
-        button2.addActionListener(exportToExcel);
-        
-        //table panel
-        jt2 = new JPanel();
-        jt2.setBounds(10,70,900,720);
-        jt2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        jt2.setLayout(null);
-        jt2.add(scrollPane2);
-        jt2.add(report);
-        jt2.add(button2);
-
-        ReportPanel.add(jt2);
+            reportpage.setVisible(false); // sets Report page not visible
 
         //Root Panel is the master of all sub panels
         RootPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -228,7 +125,7 @@ public class HomeWindow
             UnivLogo = new JLabel();
             Image image;
             try {
-                image = ImageIO.read(LoginWindow.class.getResourceAsStream("/Images/UniLogox100.png"));
+                image = ImageIO.read(LoginWindow.class.getResourceAsStream("/Images/logocoebg.png"));
                  ImageIcon imageIcon = new ImageIcon(image);
                 UnivLogo.setIcon(imageIcon);
             } catch (IOException e) {
@@ -293,6 +190,7 @@ public class HomeWindow
                         VideoPanel.setEnabled(true);
 
                         faculty.show(false);
+                        reportpage.show(false);
 
                         ReportPanel.setVisible(false);
                         ReportPanel.setEnabled(false);
@@ -309,6 +207,7 @@ public class HomeWindow
                         VideoPanel.setEnabled(false);
 
                         faculty.show();
+                        reportpage.show(false);
 
                         ReportPanel.setVisible(false);
                         ReportPanel.setEnabled(false);
@@ -325,9 +224,8 @@ public class HomeWindow
                         VideoPanel.setEnabled(false);
 
                         faculty.show(false);
+                        reportpage.show();
                         
-                        ReportPanel.setVisible(true);
-                        ReportPanel.setEnabled(true);
                     }
             });
 
@@ -355,10 +253,11 @@ public class HomeWindow
 
             //Adding of Components to the window
             RootPanel.add(NaviPanel);
-            //RootPanel.add(HomePanel);
+            RootPanel.add(HomePanel);
             RootPanel.add(ReportPanel);
             RootPanel.add(VideoPanel);
             RootPanel.add(faculty);
+            RootPanel.add(reportpage);
 
             //Window Essentials
             HomeWindow.setTitle("COE Faculty Monitoring System");
