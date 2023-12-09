@@ -330,7 +330,6 @@ public class listFaculty extends JPanel
 		JPanel addPanel = new JPanel();
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
-
 	
 		searchBtn.addActionListener(new ActionListener()
 		{

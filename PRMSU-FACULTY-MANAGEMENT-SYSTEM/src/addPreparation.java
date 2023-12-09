@@ -26,14 +26,14 @@ import javax.swing.SwingConstants;
 
 public class addPreparation extends JPanel 
 {
-	JTextField facultyName;
-	JButton addSubjectBtn;
-	JPanel Body;
-	JFrame frame;
-	JComboBox<String> semesterCB, acadYearCB;
-	int currentRow = 0;
-	int currentFacultyID = -1;
-	
+JTextField facultyName;
+JButton addSubjectBtn;
+JPanel Body;
+JFrame frame;
+JComboBox<String> semesterCB, acadYearCB;
+int currentRow = 0;
+int currentFacultyID = -1;
+
 	public addPreparation() 
 	{
 		//new listFaculty();
@@ -172,198 +172,8 @@ public class addPreparation extends JPanel
 					}
 				}
 			});
-				
-		//new add section button on Subjects
-		JButton addSection = sub.addBtn;
-		addSection.addMouseListener(new MouseAdapter() 
-		{
-			@Override
-			public void mousePressed(MouseEvent e) 
-			{
-				addSection addSection = new addSection();
-				addSection.show();
-				
-				addSection.addBtn.addActionListener(new ActionListener() 
-				{
-					public void actionPerformed(ActionEvent e) 
-					{
-						addSectionDialog addSectionDialog = new addSectionDialog();
-						addSectionDialog.show();
-						
-						addSectionDialog.addDialogBtn.addActionListener(new ActionListener() 
-						{
-							public void actionPerformed(ActionEvent e) 
-							{
-								sections sec = new sections();
-								String section = addSectionDialog.sectionTF.getText();
-								String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
-								String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
-								
-								if(section.isEmpty() || addSectionDialog.semesterCB.getSelectedIndex() == 0) 
-								{
-									JOptionPane.showMessageDialog(Body, "invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
-								}
-								else 
-								{
-									
-									addSection.Body.add(sec);
-									sec.sectionLbl.setText(section);
-									sec.semesterLbl.setText(semester);
-									sec.academicYearLbl.setText(academicYear);
-									
-									if (addSection.Body.getComponentCount() > 10) 
-									{ 
-										// Increase the preferred height of the rowPanel
-										Dimension preferredSize = addSection.Body.getPreferredSize();
-										preferredSize.height += 40;
-										addSection.Body.setLayout(new GridLayout(addSection.Body.getComponentCount(), 1));
-										addSection.Body.setPreferredSize(preferredSize);
-										addSection.Body.revalidate();
-									}
-									
-									sec.deleteBtn.addMouseListener(new MouseAdapter() 
-									{
-										public void mousePressed(MouseEvent e) 
-										{
-											addSection.Body.remove(sec);
-											addSection.revalidate();
-											addSection.repaint();
-										}
-									});
-									
-									addSection.Body.revalidate();
-									addSectionDialog.dispose();
-								}	
-							}
-						});
-					}
-				});
-			}
-		});
-				
-		//new edit button on Subjects
-		JButton editSection = sub.editBtn;
-		editSection.addMouseListener(new MouseAdapter() 
-		{
-			@Override
-			public void mousePressed(MouseEvent e) 
-			{
-				editDialog edit = new editDialog();
-				addSubjectDialog editSubject = new addSubjectDialog();
-				edit.SubjectLbl.setText(sub.subjectLbl.getText());
-				edit.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
-				edit.semesterCB.setSelectedItem(sub.semesterLbl.getText());
-				edit.show();
-				
-				edit.editSubject.addMouseListener(new MouseAdapter() 
-				{
-					@Override
-					public void mousePressed(MouseEvent e) 
-					{
-						
-						editSubject.addLbl.setText("Edit Subject");
-						editSubject.addBtn.setText("Done");
-						editSubject.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
-						editSubject.semesterCB.setSelectedItem(sub.semesterLbl.getText());
-						editSubject.show();
-						
-						editSubject.addBtn.addMouseListener(new MouseAdapter() 
-						{
-							public void mousePressed(MouseEvent e) 
-							{
-								sub.subjectLbl.setText(editSubject.codeTF.getText() + " - " + editSubject.decriptionTF.getText());
-								edit.SubjectLbl.setText(editSubject.codeTF.getText() + " - " + editSubject.decriptionTF.getText());
-								editSubject.dispose();
-							}
-						});
-					
-					}
-				});
-						
-				edit.addSection.addMouseListener(new MouseAdapter() 
-				{
-					public void mousePressed(MouseEvent e) 
-					{
-						addSectionDialog addSectionDialog = new addSectionDialog();
-						addSectionDialog.show();
-						
-						addSectionDialog.addDialogBtn.addActionListener(new ActionListener() 
-						{
-							public void actionPerformed(ActionEvent e) 
-							{
-								sections sec = new sections();
-								String section = addSectionDialog.sectionTF.getText();
-								String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
-								String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
-								
-								sec.deleteBtn.addMouseListener(new MouseAdapter() 
-								{
-									public void mousePressed(MouseEvent e) 
-									{
-										edit.sectionPanel.remove(sec);
-										edit.revalidate();
-									}
-								});
-								
-								if(section.isEmpty()) 
-								{
-									JOptionPane.showMessageDialog(Body, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE);
-								}
-								else 
-								{
-									
-									edit.sectionPanel.add(sec);
-									sec.sectionLbl.setText(section);
-									sec.semesterLbl.setText(semester);
-									sec.academicYearLbl.setText(academicYear);
-									currentRow++;
-									
-									if (edit.sectionPanel.getComponentCount() > 10) 
-									{ 
-										// Increase the preferred height of the rowPanel
-										Dimension preferredSize = edit.sectionPanel.getPreferredSize();
-										preferredSize.height += 35;
-										edit.sectionPanel.setLayout(new GridLayout(edit.sectionPanel.getComponentCount(), 1));
-										edit.sectionPanel.setPreferredSize(preferredSize);
-										edit.sectionPanel.revalidate();
-									}
-									
-									sec.deleteBtn.addMouseListener(new MouseAdapter() 
-									{
-										public void mousePressed(MouseEvent e) 
-										{
-											edit.sectionPanel.remove(sec);
-											edit.revalidate();
-											edit.repaint();
-										}
-									});
-									
-									edit.sectionPanel.revalidate();
-									addSectionDialog.dispose();
-								}
-							}
-						});
-					}
-				});
-				
-				sub.revalidate();
-				edit.show();
-			}
-		});
-				//new delete button on Subjects										
-				JButton deleteSection = sub.deleteBtn;
-				deleteSection.addMouseListener(new MouseAdapter() 
-				{
-					@Override
-					public void mousePressed(MouseEvent e) 
-					{
-						Body.remove(sub);
-						revalidate();
-						repaint();
-					}
-				});
-			}
-		});
+		}
+	});
 		
 		
 		addSubjectBtn.setBounds(120, 20, 150, 35);
@@ -418,9 +228,9 @@ public class addPreparation extends JPanel
 		
 		semesterCB = new JComboBox<>();
 		String[] semester = {
-	            "First Semester", "Second Semester", "Midyear"
-	        };
-	
+				"First Semester", "Second Semester", "Midyear"
+			};
+
 		for (String sem : semester) {
 		semesterCB.addItem(sem);
 		semesterCB.setFont(new Font("Arial", Font.BOLD, 13));
@@ -442,13 +252,13 @@ public class addPreparation extends JPanel
 			{
 				// Handle the selected academic year
 				currentFacultyID = DatabaseHandler.getFacultyID(facultyName.getText());
-                String selectedAcademicYear = (String) acadYearCB.getSelectedItem();
+				String selectedAcademicYear = (String) acadYearCB.getSelectedItem();
 				String selectedSemester = (String) semesterCB.getSelectedItem();
-                if (currentFacultyID != -1) {
-                    DatabaseHandler.updateAcademicYear(selectedAcademicYear, currentFacultyID);
-                    DatabaseHandler.updateSemester(selectedSemester, currentFacultyID);
+				if (currentFacultyID != -1) {
+					DatabaseHandler.updateAcademicYear(selectedAcademicYear, currentFacultyID);
+					DatabaseHandler.updateSemester(selectedSemester, currentFacultyID);
 			///////////////////////////////////////////////////////////////////////////////////////////
-	// NEED TO IMPLEMENT A METHOD TO UPDATE listFaculty 'table' when choosing year level and sem in cboxes //
+	// NEED TO IMPLEMENT A METHOD TO UPDATE listFaculty labels when choosing year level and sem in cboxes //
 			//////////////////////////////////////////////////////////////////////////////////////////
 					frame.setVisible(false);
 				}		
@@ -460,7 +270,7 @@ public class addPreparation extends JPanel
 		backBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		backBtn.setBounds(775, 20, 125, 35);
 		Footer.add(backBtn);
-	
+
 		JDialog addDial0g = new JDialog();
 		addDial0g.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		
@@ -469,32 +279,230 @@ public class addPreparation extends JPanel
 		addPanel.setLayout(null);
 		
 		//Responsible for making the window open on the center of the screen on start up
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        int w = frame.getSize().width;
-        int h = frame.getSize().height;
-        int x = (dim.width-w)/2;
-        int y = (dim.height-h)/2;
-        frame.setLocation(x,y);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		int w = frame.getSize().width;
+		int h = frame.getSize().height;
+		int x = (dim.width-w)/2;
+		int y = (dim.height-h)/2;
+		frame.setLocation(x,y);
 		
 	}
-	
+
 	public void fetchAndDisplaySubjects() {
-	// Fetch subjects from the database using DatabaseHandler method
-	List<SubjectData> subjects = DatabaseHandler.getAllSubjects(); 
+		// Fetch subjects associated with the current faculty from the database
+		int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+		List<SubjectData> subjects = DatabaseHandler.getSubjectsByFaculty(facultyID);
 
-	// Iterate through the subjects and add them to the Body panel
-	for (SubjectData subjectData : subjects) {
-		subject sub = new subject();
-		sub.subjectLbl.setText(subjectData.getSubjectName());
-		sub.semesterLbl.setText((String) semesterCB.getSelectedItem());
-		sub.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
+		// Iterate through the subjects and add them to the Body panel
+		for (SubjectData subjectData : subjects) {
+			subject sub = new subject();
+			sub.subjectLbl.setText(subjectData.getSubjectName());
+			sub.semesterLbl.setText((String) semesterCB.getSelectedItem());
+			sub.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
 
-		Body.add(sub);
-	}
+			Body.add(sub);
+			
+			//new add section button on Subjects
+			JButton addSection = sub.addBtn;
+			addSection.addMouseListener(new MouseAdapter() 
+			{
+				@Override
+				public void mousePressed(MouseEvent e) 
+				{
+					addSection addSection = new addSection();
+					addSection.show();
+					
+					addSection.addBtn.addActionListener(new ActionListener() 
+					{
+						public void actionPerformed(ActionEvent e) 
+						{
+							addSectionDialog addSectionDialog = new addSectionDialog();
+							addSectionDialog.show();
+							
+							addSectionDialog.addDialogBtn.addActionListener(new ActionListener() 
+							{
+								public void actionPerformed(ActionEvent e) 
+								{
+									sections sec = new sections();
+									String section = addSectionDialog.sectionTF.getText();
+									String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
+									String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
 
-	// Revalidate and repaint the Body panel
-	Body.revalidate();
-	Body.repaint();
+									// Add section to the database
+									int sectionID = DatabaseHandler.addSection(section);
+									
+									if(section.isEmpty() || addSectionDialog.semesterCB.getSelectedIndex() == 0) 
+									{
+										JOptionPane.showMessageDialog(Body, "invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
+									}
+									else 
+									{
+										addSection.Body.add(sec);
+										sec.sectionLbl.setText(section);
+										sec.semesterLbl.setText(semester);
+										sec.academicYearLbl.setText(academicYear);
+										
+										if (addSection.Body.getComponentCount() > 10) 
+										{ 
+											// Increase the preferred height of the rowPanel
+											Dimension preferredSize = addSection.Body.getPreferredSize();
+											preferredSize.height += 40;
+											addSection.Body.setLayout(new GridLayout(addSection.Body.getComponentCount(), 1));
+											addSection.Body.setPreferredSize(preferredSize);
+											addSection.Body.revalidate();
+										}
+										
+										sec.deleteBtn.addMouseListener(new MouseAdapter() 
+										{
+											public void mousePressed(MouseEvent e) 
+											{
+												addSection.Body.remove(sec);
+												addSection.revalidate();
+												addSection.repaint();
+											}
+										});
+										
+										addSection.Body.revalidate();
+										addSectionDialog.dispose();
+									}	
+								}
+							});
+						}
+					});
+				}
+			});
+			
+			//new edit button on Subjects
+			JButton editSection = sub.editBtn;
+			editSection.addMouseListener(new MouseAdapter() 
+			{
+				@Override
+				public void mousePressed(MouseEvent e) 
+				{
+					editDialog edit = new editDialog();
+					addSubjectDialog editSubject = new addSubjectDialog();
+					edit.SubjectLbl.setText(sub.subjectLbl.getText());
+					edit.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
+					edit.semesterCB.setSelectedItem(sub.semesterLbl.getText());
+					edit.show();
+					
+					edit.editSubject.addMouseListener(new MouseAdapter() 
+					{
+						@Override
+						public void mousePressed(MouseEvent e) 
+						{
+							editSubject.addLbl.setText("Edit Subject");
+							editSubject.addBtn.setText("Done");
+							editSubject.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
+							editSubject.semesterCB.setSelectedItem(sub.semesterLbl.getText());
+							editSubject.show();
+							
+							editSubject.addBtn.addMouseListener(new MouseAdapter() 
+							{
+								public void mousePressed(MouseEvent e) 
+								{
+									sub.subjectLbl.setText(editSubject.codeTF.getText() + " - " + editSubject.decriptionTF.getText());
+									edit.SubjectLbl.setText(editSubject.codeTF.getText() + " - " + editSubject.decriptionTF.getText());
+									editSubject.dispose();
+								}
+							});
+						
+						}
+					});
+							
+					edit.addSection.addMouseListener(new MouseAdapter() 
+					{
+						public void mousePressed(MouseEvent e) 
+						{
+							addSectionDialog addSectionDialog = new addSectionDialog();
+							addSectionDialog.show();
+							System.out.println("BPRESSED");
+							
+							addSectionDialog.addDialogBtn.addActionListener(new ActionListener() 
+							{
+								public void actionPerformed(ActionEvent e) 
+								{
+									sections sec = new sections();
+									System.out.println("BPRESSEDs");
+									String section = addSectionDialog.sectionTF.getText();
+									String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
+									String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
+
+									// Add section to the database
+									int sectionID = DatabaseHandler.addSection(section);
+									
+									sec.deleteBtn.addMouseListener(new MouseAdapter() 
+									{
+										public void mousePressed(MouseEvent e) 
+										{
+											System.out.println("BPRESSED3e");
+											edit.sectionPanel.remove(sec);
+											edit.revalidate();
+										}
+									});
+									
+									if(section.isEmpty()) 
+									{
+										JOptionPane.showMessageDialog(Body, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE);
+									}
+									else 
+									{
+										
+										edit.sectionPanel.add(sec);
+										sec.sectionLbl.setText(section);
+										sec.semesterLbl.setText(semester);
+										sec.academicYearLbl.setText(academicYear);
+										currentRow++;
+										
+										if (edit.sectionPanel.getComponentCount() > 10) 
+										{ 
+											// Increase the preferred height of the rowPanel
+											Dimension preferredSize = edit.sectionPanel.getPreferredSize();
+											preferredSize.height += 35;
+											edit.sectionPanel.setLayout(new GridLayout(edit.sectionPanel.getComponentCount(), 1));
+											edit.sectionPanel.setPreferredSize(preferredSize);
+											edit.sectionPanel.revalidate();
+										}
+										
+										sec.deleteBtn.addMouseListener(new MouseAdapter() 
+										{
+											public void mousePressed(MouseEvent e) 
+											{
+												edit.sectionPanel.remove(sec);
+												edit.revalidate();
+												edit.repaint();
+											}
+										});
+										
+										edit.sectionPanel.revalidate();
+										addSectionDialog.dispose();
+									}
+								}
+							});
+						}
+					});
+					
+					sub.revalidate();
+					edit.show();
+				}
+			});
+			
+			//new delete button on Subjects										
+			JButton deleteSection = sub.deleteBtn;
+			deleteSection.addMouseListener(new MouseAdapter() 
+			{
+				@Override
+				public void mousePressed(MouseEvent e) 
+				{
+					Body.remove(sub);
+					revalidate();
+					repaint();
+				}
+			});
+		}
+		// Revalidate and repaint the Body panel
+		Body.revalidate();
+		Body.repaint();
 	}
 }
 

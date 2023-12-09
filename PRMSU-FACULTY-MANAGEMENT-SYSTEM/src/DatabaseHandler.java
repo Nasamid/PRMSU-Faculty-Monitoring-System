@@ -517,35 +517,118 @@ public class DatabaseHandler {
         }
     }
 
-        // Helper methods for closing resources
-        private static void closeConnection(Connection connection) {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+    public static List<SubjectData> getSubjectsByFaculty(int facultyID) {
+        List<SubjectData> subjects = new ArrayList<>();
+        Connection connection = null;
+
+        try {
+            connection = connect();
+            // Assuming you have a table named "FacultySubjects" that associates faculty and subjects
+            String query = "SELECT subjects.* FROM faculty_subject " +
+                           "JOIN subjects ON faculty_subject.subjectID = subjects.subjectID " +
+                           "WHERE faculty_subject.facultyID = ?";
+            
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, facultyID);
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        int subjectID = resultSet.getInt("subjectID");
+                        String subjectName = resultSet.getString("subject");
+                        String syllabus = resultSet.getString("syllabus");
+
+                        // You may need to adjust the SubjectData constructor based on your SubjectData class
+                        SubjectData subjectData = new SubjectData(subjectID, subjectName, syllabus);
+                        subjects.add(subjectData);
+                    }
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();  // Handle the exception based on your application's requirements
         }
+
+        return subjects;
+    }
+
+    public static int addSection(String section) {
+        try {
+            Connection connection = connect();
+            String query = "INSERT INTO section (section) VALUES (?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                preparedStatement.setString(1, section);
+                preparedStatement.executeUpdate();
     
-        private static void closeStatement(Statement statement) {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                // Get the auto-generated section ID
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Failed to get the generated section ID.");
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception or log it
+            return -1; // Or some error code to indicate failure
         }
+    }
     
-        private static void closeResultSet(ResultSet resultSet) {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+    public static List<String> getSections(int facultyID, int subjectID) {
+        List<String> sectionsList = new ArrayList<>();
+
+        try {
+            Connection connection = connect();
+            String query = "SELECT section FROM faculty_subject_section " +
+                           "WHERE facultyID = ? AND subjectID = ?";
+            
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, facultyID);
+                preparedStatement.setInt(2, subjectID);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    String sectionName = resultSet.getString("section");
+                    sectionsList.add(sectionName);
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception or log it
         }
+
+        return sectionsList;
+    }
+    
+    // Helper methods for closing resources
+    private static void closeConnection(Connection connection) {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void closeStatement(Statement statement) {
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void closeResultSet(ResultSet resultSet) {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
