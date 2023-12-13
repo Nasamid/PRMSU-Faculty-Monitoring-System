@@ -384,6 +384,7 @@ public class listFaculty extends JPanel
 						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
 						preparation.frame.setVisible(true);
 						preparation.fetchAndDisplaySubjects();
+						preparation.Body.revalidate();
 					}
 				});
 				

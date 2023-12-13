@@ -444,9 +444,9 @@ public class DatabaseHandler {
 
      // Associate a faculty with a subject
      public static void associateFacultyWithSubject(int facultyID, int subjectID) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        Connection connection;
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
 
         try {
             connection = connect();
@@ -465,24 +465,12 @@ public class DatabaseHandler {
                 preparedStatement.setInt(1, facultyID);
                 preparedStatement.setInt(2, subjectID);
                 preparedStatement.executeUpdate();
+                preparedStatement.close();
             }
         } catch (SQLException e) {
             e.printStackTrace(); // Handle the exception appropriately
         } finally {
             // Close resources in the reverse order of their creation
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace(); // Handle the exception appropriately
-            }
         }
     }
 
@@ -599,6 +587,74 @@ public class DatabaseHandler {
 
         return sectionsList;
     }
+
+    public static void associateSectionWithFacultySubject(int facultyID, int subjectID, int sectionID) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:main.db")) {
+            String query = "INSERT INTO faculty_subject_section (facultyID, subjectID, sectionID) VALUES (?, ?, ?)";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, facultyID);
+                preparedStatement.setInt(2, subjectID);
+                preparedStatement.setInt(3, sectionID);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception or log it
+        }
+    }
+
+    public static List<String> getSectionsForFacultySubject(int facultyID, int subjectID) {
+        List<String> sectionsList = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:main.db")) {
+            String query = "SELECT s.section FROM faculty_subject_section fss " +
+                           "JOIN section s ON fss.sectionID = s.sectionID " +
+                           "WHERE fss.facultyID = ? AND fss.subjectID = ?";
+            
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, facultyID);
+                preparedStatement.setInt(2, subjectID);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    String section = resultSet.getString("section");
+                    sectionsList.add(section);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception or log it
+        }
+
+        return sectionsList;
+    }
+
+    public List<String> getSectionsByFacultyAndSubject(int facultyID, int subjectID) {
+        List<String> sections = new ArrayList<>();
+    
+        try (Connection connection = connect()) {
+            String sql = "SELECT s.section FROM faculty_subject_section fss " +
+                         "JOIN section s ON fss.sectionID = s.sectionID " +
+                         "WHERE fss.facultyID = ? AND fss.subjectID = ?";
+            
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setInt(1, facultyID);
+                pstmt.setInt(2, subjectID);
+    
+                ResultSet resultSet = pstmt.executeQuery();
+                while (resultSet.next()) {
+                    sections.add(resultSet.getString("section"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return sections;
+    }
+    
     
     // Helper methods for closing resources
     private static void closeConnection(Connection connection) {

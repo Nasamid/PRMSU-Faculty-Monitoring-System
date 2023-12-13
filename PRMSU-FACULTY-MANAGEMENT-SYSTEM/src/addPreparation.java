@@ -111,70 +111,6 @@ int currentFacultyID = -1;
 		//addSubjectBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		addSubjectBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		addSubjectBtn.setFocusable(false);
-
-		addSubjectBtn.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-
-			subject sub = new subject();
-
-			addSubjectDialog add = new addSubjectDialog();
-
-			add.show();
-		
-			add.addBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String code = add.codeTF.getText();
-					String description = add.decriptionTF.getText();
-					String subjectDisplay = code + " " + description;
-			
-					if (code.isEmpty() || description.isEmpty() || add.semesterCB.getSelectedIndex() == 0) {
-						JOptionPane.showMessageDialog(Body, "Invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						// Check if the subject already exists
-						int existingSubjectID = DatabaseHandler.getSubjectID(subjectDisplay);
-			
-						if (existingSubjectID != -1) {
-							// Subject already exists, use the existing ID
-							int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
-							DatabaseHandler.associateFacultyWithSubject(facultyID, existingSubjectID);
-							JOptionPane.showMessageDialog(Body, "Subject Already exists", "Error", JOptionPane.INFORMATION_MESSAGE);
-						} else {
-							// Subject doesn't exist, insert it into the database
-							int subjectID = DatabaseHandler.insertSubject(subjectDisplay);
-			
-							// Fetch the latest subject data from the database
-							SubjectData latestSubject = DatabaseHandler.getLatestSubject();
-			
-							// Update UI components with the new data
-							sub.subjectLbl.setText(latestSubject.getSubjectName());
-							sub.semesterLbl.setText((String) add.semesterCB.getSelectedItem());
-							sub.academicYearLbl.setText((String) add.acadYearCB.getSelectedItem());
-			
-							// Add the subject to the panel
-							Body.add(sub);
-							currentRow++;
-			
-							if (Body.getComponentCount() > 10) {
-								// Increase the preferred height of the rowPanel
-								Dimension preferredSize = Body.getPreferredSize();
-								preferredSize.height += 50;
-								Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
-								Body.setPreferredSize(preferredSize);
-								Body.revalidate();
-							}
-			
-							int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
-							DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
-			
-							Body.revalidate();
-						}
-						add.dispose();
-					}
-				}
-			});
-		}
-	});
-		
 		
 		addSubjectBtn.setBounds(120, 20, 150, 35);
 		Footer.add(addSubjectBtn);
@@ -289,19 +225,99 @@ int currentFacultyID = -1;
 	}
 
 	public void fetchAndDisplaySubjects() {
+		
 		// Fetch subjects associated with the current faculty from the database
 		int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
 		List<SubjectData> subjects = DatabaseHandler.getSubjectsByFaculty(facultyID);
 
 		// Iterate through the subjects and add them to the Body panel
 		for (SubjectData subjectData : subjects) {
-			subject sub = new subject();
-			sub.subjectLbl.setText(subjectData.getSubjectName());
-			sub.semesterLbl.setText((String) semesterCB.getSelectedItem());
-			sub.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
+			subject subject = new subject();
+			subject.subjectLbl.setText(subjectData.getSubjectName());
+			subject.semesterLbl.setText((String) semesterCB.getSelectedItem());
+			subject.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
+			Body.add(subject);
+			Body.revalidate();
+		}
 
-			Body.add(sub);
-			
+			addSubjectBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				subject sub = new subject();
+				addSubjectDialog add = new addSubjectDialog();
+				add.show();
+
+				int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+				List<SubjectData> subjects = DatabaseHandler.getSubjectsByFaculty(facultyID);
+				System.out.println(subjects);
+
+				// Iterate through the subjects and add them to the Body panel
+				for (SubjectData subjectData : subjects) {
+					sub.subjectLbl.setText(subjectData.getSubjectName());
+					sub.semesterLbl.setText((String) semesterCB.getSelectedItem());
+					sub.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
+					System.out.println(subjectData);
+					Body.add(sub);
+					Body.revalidate();
+				}
+
+				Body.revalidate();
+				
+		
+				add.addBtn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						String code = add.codeTF.getText();
+						String description = add.decriptionTF.getText();
+						String subjectDisplay = code + " " + description;
+		
+						if (code.isEmpty() || description.isEmpty() || add.semesterCB.getSelectedIndex() == 0) {
+							JOptionPane.showMessageDialog(Body, "Invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							// Check if the subject already exists
+							int existingSubjectID = DatabaseHandler.getSubjectID(subjectDisplay);
+		
+							if (existingSubjectID != -1) {
+								// Subject already exists, use the existing ID
+								int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+								DatabaseHandler.associateFacultyWithSubject(facultyID, existingSubjectID);
+								JOptionPane.showMessageDialog(Body, "Subject Already exists", "Error", JOptionPane.INFORMATION_MESSAGE);
+							} else {
+								// Subject doesn't exist, insert it into the database
+								int subjectID = DatabaseHandler.insertSubject(subjectDisplay);
+		
+								// Fetch the latest subject data from the database
+								SubjectData latestSubject = DatabaseHandler.getLatestSubject();
+		
+								// Update UI components with the new data
+								sub.subjectLbl.setText(latestSubject.getSubjectName());
+								sub.semesterLbl.setText((String) add.semesterCB.getSelectedItem());
+								sub.academicYearLbl.setText((String) add.acadYearCB.getSelectedItem());
+		
+								// Add the subject to the panel
+								Body.add(sub);
+								currentRow++;
+		
+								if (Body.getComponentCount() > 10) {
+									// Increase the preferred height of the rowPanel
+									Dimension preferredSize = Body.getPreferredSize();
+									preferredSize.height += 50;
+									Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+									Body.setPreferredSize(preferredSize);
+									Body.revalidate();
+								}
+
+								int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+								DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
+		
+								Body.revalidate();
+							}
+							add.dispose();
+						}
+					}
+				});
+			}
+		});
+
+			subject sub = new subject();
 			//new add section button on Subjects
 			JButton addSection = sub.addBtn;
 			addSection.addMouseListener(new MouseAdapter() 
@@ -311,6 +327,28 @@ int currentFacultyID = -1;
 				{
 					addSection addSection = new addSection();
 					addSection.show();
+					DatabaseHandler dbH = new DatabaseHandler();
+					int subjectID = SubjectData.getSubjectID();
+					// Fetch sections associated with the current faculty and subject
+					List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
+					
+
+					// Iterate through sections and display them
+					for (String sectionb : sections) {
+						sections secb = new sections();
+						secb.sectionLbl.setText(sectionb);
+						secb.semesterLbl.setText("");
+						secb.academicYearLbl.setText("");
+
+						System.out.println(sectionb);
+
+						// Add the section to the Body panel
+						addSection.Body.add(secb);
+						addSection.Body.revalidate();
+						addSection.Body.repaint();
+
+						// Additional code for handling delete and other actions for sections
+					}
 					
 					addSection.addBtn.addActionListener(new ActionListener() 
 					{
@@ -327,9 +365,11 @@ int currentFacultyID = -1;
 									String section = addSectionDialog.sectionTF.getText();
 									String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
 									String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
+									
 
 									// Add section to the database
 									int sectionID = DatabaseHandler.addSection(section);
+									DatabaseHandler.associateSectionWithFacultySubject(facultyID, SubjectData.getSubjectID(), sectionID);
 									
 									if(section.isEmpty() || addSectionDialog.semesterCB.getSelectedIndex() == 0) 
 									{
@@ -337,10 +377,24 @@ int currentFacultyID = -1;
 									}
 									else 
 									{
-										addSection.Body.add(sec);
-										sec.sectionLbl.setText(section);
-										sec.semesterLbl.setText(semester);
-										sec.academicYearLbl.setText(academicYear);
+										int subjectID = SubjectData.getSubjectID();
+										int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+										DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
+										
+										DatabaseHandler dbH = new DatabaseHandler();
+										// Fetch sections associated with the current faculty and subject
+										List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
+										sections secb = new sections();
+										// Iterate through sections and display them
+										for (String sectionb : sections) {
+											secb.sectionLbl.setText(sectionb);
+											secb.semesterLbl.setText("");
+											secb.academicYearLbl.setText("");
+										}
+										// Add the section to the Body panel
+										addSection.Body.add(secb);
+										addSection.Body.revalidate();
+										addSection.Body.repaint();
 										
 										if (addSection.Body.getComponentCount() > 10) 
 										{ 
@@ -352,25 +406,20 @@ int currentFacultyID = -1;
 											addSection.Body.revalidate();
 										}
 										
-										sec.deleteBtn.addMouseListener(new MouseAdapter() 
-										{
-											public void mousePressed(MouseEvent e) 
-											{
-												addSection.Body.remove(sec);
-												addSection.revalidate();
-												addSection.repaint();
-											}
-										});
+										
 										
 										addSection.Body.revalidate();
 										addSectionDialog.dispose();
 									}	
 								}
 							});
+						
+
 						}
 					});
 				}
 			});
+		
 			
 			//new edit button on Subjects
 			JButton editSection = sub.editBtn;
@@ -468,6 +517,7 @@ int currentFacultyID = -1;
 										{
 											public void mousePressed(MouseEvent e) 
 											{
+												System.out.println("BUTTON PRESSED");
 												edit.sectionPanel.remove(sec);
 												edit.revalidate();
 												edit.repaint();
@@ -494,15 +544,17 @@ int currentFacultyID = -1;
 				@Override
 				public void mousePressed(MouseEvent e) 
 				{
+					System.out.println("Delete pressed");
 					Body.remove(sub);
-					revalidate();
-					repaint();
+					Body.revalidate();
+					Body.repaint();
 				}
 			});
-		}
+		
 		// Revalidate and repaint the Body panel
 		Body.revalidate();
 		Body.repaint();
+	
 	}
 }
 

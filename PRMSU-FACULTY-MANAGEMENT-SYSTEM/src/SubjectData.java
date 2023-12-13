@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class SubjectData {
 
     private int subjectID;
-    private String subjectName;
+    private static String subjectName;
     private String syllabus;
 
     public SubjectData(int subjectID, String subjectName, String syllabus) {
@@ -15,7 +15,7 @@ public class SubjectData {
         this.syllabus = syllabus;
     }
 
-    public int getSubjectID() {
+    public static int getSubjectID() {
         int subjectID = -1;
 
         String query = "SELECT subjectID FROM subjects WHERE subject = ?";
