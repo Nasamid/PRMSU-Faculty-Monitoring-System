@@ -43,6 +43,7 @@ public class editDialog extends JDialog {
 	
 	public static void main(String[] args) 
 	{
+		FlatMacLightLaf.registerCustomDefaultsSource("Properties");
 		FlatMacLightLaf.setup();
 		try 
 		{
@@ -88,7 +89,7 @@ public class editDialog extends JDialog {
 		SubjectLbl.setColumns(10);
 		
 		headerPanel = new JPanel();
-		headerPanel.setBackground(SystemColor.textHighlight);
+		headerPanel.setBackground(new Color(255, 128, 41));
 		headerPanel.setBounds(0, 0, 600, 35);
 		contentPanel.add(headerPanel);
 		
@@ -117,7 +118,7 @@ public class editDialog extends JDialog {
 			buttonPane.setBounds(0, 475, 600, 40);
 			contentPanel.add(buttonPane);
 			buttonPane.setBorder(null);
-			buttonPane.setBackground(SystemColor.textHighlight);
+			buttonPane.setBackground(new Color(255, 128, 41));
 			buttonPane.setLayout(null);
 			{
 				doneBtn = new JButton("Done");

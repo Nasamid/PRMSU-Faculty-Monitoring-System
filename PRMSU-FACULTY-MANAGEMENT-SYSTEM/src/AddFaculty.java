@@ -153,7 +153,7 @@ public class AddFaculty extends JDialog
 			footerPanel.setBounds(0, 345, 400, 38);
 			contentPanel.add(footerPanel);
 			footerPanel.setBorder(null);
-			footerPanel.setBackground(SystemColor.textHighlight);
+			footerPanel.setBackground(new Color(255, 128, 41));
 			footerPanel.setLayout(null);
 			{
 				addBtn = new JButton("Add");
@@ -185,7 +185,7 @@ public class AddFaculty extends JDialog
 		}
 		
 		headerPanel = new JPanel();
-		headerPanel.setBackground(SystemColor.textHighlight);
+		headerPanel.setBackground(new Color(255, 128, 41));
 		headerPanel.setBounds(0, 0, 400, 40);
 		contentPanel.add(headerPanel);
         

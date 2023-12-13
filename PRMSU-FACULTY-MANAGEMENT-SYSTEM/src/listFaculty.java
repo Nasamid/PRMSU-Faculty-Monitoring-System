@@ -218,9 +218,9 @@ public class listFaculty extends JPanel
 		searchEngine.setBounds(730, 80, 200, 30);
 		add(searchEngine);
 		
-		JPanel Header1 = new JPanelGradient();
+		JPanel Header1 = new JPanel();
 		Header1.setLayout(null);
-		Header1.setBackground(SystemColor.textHighlight);
+		Header1.setBackground(new Color(255, 128, 41));
 		Header1.setBounds(0, 120, 1000, 40);
 		add(Header1);
 		

@@ -66,6 +66,7 @@ public class HomeWindow
             Color backgroundColor = new Color(0,0,122);
             Color complimentColor = new Color(0, 122, 122);
             Color TextHighlightColor = new Color(236,189,68);
+            Color JPanelColor = new Color(255, 128, 41);
 
             //Instantiations
             HomeWindow = new JFrame();
@@ -137,36 +138,36 @@ public class HomeWindow
 
             HomeButton.setText("Home");
             //HomeButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            HomeButton.setBackground(complimentColor);
-            HomeButton.setForeground(Color.WHITE);
+            //HomeButton.setBackground(complimentColor);
+            //HomeButton.setForeground(Color.WHITE);
             HomeButton.setBounds(30,150,120,30);
             HomeButton.setFocusable(false);
 
             ListFacButton.setText("List of Faculty");
             //ListFacButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            ListFacButton.setBackground(complimentColor);
-            ListFacButton.setForeground(Color.WHITE);
+            //ListFacButton.setBackground(complimentColor);
+            //ListFacButton.setForeground(Color.WHITE);
             ListFacButton.setBounds(30,200,120,30);
             ListFacButton.setFocusable(false);
 
             ReportButton.setText("Report");
             //ReportButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            ReportButton.setBackground(complimentColor);
-            ReportButton.setForeground(Color.WHITE);
+            //ReportButton.setBackground(complimentColor);
+            //ReportButton.setForeground(Color.WHITE);
             ReportButton.setBounds(30,250,120,30);
             ReportButton.setFocusable(false);
 
             HelpButton.setText("Help");
             //HelpButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            HelpButton.setBackground(complimentColor);
-            HelpButton.setForeground(Color.WHITE);
+            //HelpButton.setBackground(complimentColor);
+            //HelpButton.setForeground(Color.WHITE);
             HelpButton.setBounds(30,300,120,30);
             HelpButton.setFocusable(false);
 
             LogoutButton.setText("Logout");
             //LogoutButton.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-            LogoutButton.setBackground(complimentColor);
-            LogoutButton.setForeground(Color.WHITE);
+            //LogoutButton.setBackground(complimentColor);
+            //LogoutButton.setForeground(Color.WHITE);
             LogoutButton.setBounds(30,350,120,30);
             LogoutButton.setFocusable(true);
 
@@ -285,6 +286,7 @@ public class HomeWindow
         }
 
         public static void main(String[] args) {
+            FlatMacLightLaf.registerCustomDefaultsSource("Properties");
             FlatMacLightLaf.setup();
         	EventQueue.invokeLater(new Runnable() {
     			public void run() {

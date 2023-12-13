@@ -71,12 +71,12 @@ public class UploadDocWindow {
         //TopPanel.setBorder(BorderFactory.createLineBorder(Color.gold));
         TopPanel.setBounds(0,0,1080, 75);
         TopPanel.setLayout(null);
-        TopPanel.setBackground(new Color(0, 120, 215));
+        TopPanel.setBackground(new Color(255, 128, 41));
 
         DocPreviewText.setBounds(25, 25, 250,15);
         DocPreviewText.setFont(new Font("Arial", Font.BOLD, 15));
 
-        File pdfFile = new File("PRMSU-FACULTY-MANAGEMENT-SYSTEM" + File.separator + "src" + File.separator + "Documents" + File.separator + "Testing.pdf");
+        File pdfFile = new File("PRMSU-FACULTY-MANAGEMENT-SYSTEM" + File.separator + "src" + File.separator + "Documents" + File.separator + "PDFVIEWER.pdf");
         String pdfFilePath = pdfFile.getAbsolutePath();
 
         //This code snipet opens the pdf in the pdf viewer and sets the zoom level
@@ -266,6 +266,7 @@ public class UploadDocWindow {
 
     }
     public static void main(String[] args) {
+        FlatMacLightLaf.registerCustomDefaultsSource("Properties");
         FlatMacLightLaf.setup();
         new UploadDocWindow();
     }

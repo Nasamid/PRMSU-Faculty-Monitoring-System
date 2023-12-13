@@ -75,7 +75,7 @@ public class addSubjectDialog extends JDialog
 		contentPanel.add(decriptionTF);
 		
 		panel = new JPanel();
-		panel.setBackground(SystemColor.textHighlight);
+		panel.setBackground(new Color(255, 128, 41));
 		panel.setBounds(0, 0, 386, 35);
 		contentPanel.add(panel);
 		
@@ -114,7 +114,7 @@ public class addSubjectDialog extends JDialog
 			JPanel buttonPane = new JPanel();
 			//buttonPane.setBorder(null);
 			buttonPane.setBounds(0, 230, 386, 40);
-			buttonPane.setBackground(SystemColor.textHighlight);
+			buttonPane.setBackground(new Color(255, 128, 41));
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(null);
 			{

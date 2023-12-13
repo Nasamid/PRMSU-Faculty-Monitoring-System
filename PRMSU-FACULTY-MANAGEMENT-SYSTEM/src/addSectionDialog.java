@@ -81,7 +81,7 @@ public class addSectionDialog extends JDialog
 		sectionTF.setColumns(10);
 		
 		panel = new JPanel();
-		panel.setBackground(SystemColor.textHighlight);
+		panel.setBackground(new Color(255, 128, 41));
 		panel.setBounds(0, 0, 386, 30);
 		contentPanel.add(panel);
 		
@@ -121,7 +121,7 @@ public class addSectionDialog extends JDialog
 			JPanel buttonPane = new JPanel();
 			//buttonPane.setBorder(null);
 			buttonPane.setBounds(0, 150, 386, 50);
-			buttonPane.setBackground(SystemColor.textHighlight);
+			buttonPane.setBackground(new Color(255, 128, 41));
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(null);
 			{

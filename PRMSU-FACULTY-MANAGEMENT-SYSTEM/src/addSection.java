@@ -45,7 +45,7 @@ public class addSection extends JDialog
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(null);
 			buttonPane.setBounds(0, 425, 600, 38);
-			buttonPane.setBackground(SystemColor.textHighlight);
+			buttonPane.setBackground(new Color(255, 128, 41));
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(null);
 			{
@@ -78,7 +78,7 @@ public class addSection extends JDialog
 			JPanel HeaderPane = new JPanel();
 			HeaderPane.setLayout(null);
 			HeaderPane.setBorder(null);
-			HeaderPane.setBackground(SystemColor.textHighlight);
+			HeaderPane.setBackground(new Color(255, 128, 41));
 			HeaderPane.setBounds(0, 0, 600, 40);
 			getContentPane().add(HeaderPane);
 			{

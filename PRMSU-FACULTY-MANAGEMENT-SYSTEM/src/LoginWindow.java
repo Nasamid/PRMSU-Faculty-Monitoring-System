@@ -71,7 +71,7 @@ public class LoginWindow extends javax.swing.JFrame{
     Color BGpanel = new Color(255,255,255,150);
     Color HeadText = new Color(251,201,1);
     Color HeadText2 = new Color(255,255,255);
-    Color complimentColor = new Color(0, 122, 122);
+    Color complimentColor = new Color(255, 96, 28);
     
     //Instantiaions of Panels
     PTextHolder = new JPanelGradient();
@@ -129,8 +129,8 @@ public class LoginWindow extends javax.swing.JFrame{
     
 
     LoginButton = new JButton("Login");
-    LoginButton.setBackground(complimentColor);
-    LoginButton.setForeground(Color.WHITE);
+    //LoginButton.setBackground(complimentColor);
+    //LoginButton.setForeground(Color.WHITE);
     LoginButton.setBounds(935,24,100,30);
     LoginButton.setFocusable(false);
 
@@ -402,6 +402,7 @@ public class LoginWindow extends javax.swing.JFrame{
 }
 
     public static void main(String[] args) {
+        FlatMacLightLaf.registerCustomDefaultsSource("Properties");
         FlatMacLightLaf.setup();
         new LoginWindow();
     }
@@ -416,7 +417,7 @@ public class LoginWindow extends javax.swing.JFrame{
 
             Color C1 = new Color(255, 198, 43);
             Color C2 = new Color(255, 77, 41);
-            GradientPaint gp = new GradientPaint(75,0,C1,180,height,C2);
+            GradientPaint gp = new GradientPaint(0,0,C1,180,height,C2);
             g2d.setPaint(gp);
             g2d.fillRect(0, 0, width, height);
             
