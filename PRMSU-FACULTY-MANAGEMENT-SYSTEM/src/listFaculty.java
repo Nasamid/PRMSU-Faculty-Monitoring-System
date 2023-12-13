@@ -1,6 +1,9 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -215,7 +218,7 @@ public class listFaculty extends JPanel
 		searchEngine.setBounds(730, 80, 200, 30);
 		add(searchEngine);
 		
-		JPanel Header1 = new JPanel();
+		JPanel Header1 = new JPanelGradient();
 		Header1.setLayout(null);
 		Header1.setBackground(SystemColor.textHighlight);
 		Header1.setBounds(0, 120, 1000, 40);
@@ -532,6 +535,23 @@ public class listFaculty extends JPanel
 		}
 		Body.revalidate();
 		Body.repaint();
+	}
+
+	//This class is to add gradient to the JPanels
+	class JPanelGradient extends JPanel{
+		protected void paintComponent(Graphics g){
+			Graphics2D g2d = (Graphics2D) g;
+			int width = getWidth();
+			int height = getHeight();
+
+
+			Color C1 = new Color(255, 198, 43);
+			Color C2 = new Color(255, 77, 41);
+			GradientPaint gp = new GradientPaint(75,0,C2,180,height,C2);
+			g2d.setPaint(gp);
+			g2d.fillRect(0, 0, width, height);
+			
+		}
 	}
 		
 }

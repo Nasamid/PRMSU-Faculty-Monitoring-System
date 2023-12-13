@@ -1,6 +1,9 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.SystemColor;
@@ -23,14 +26,14 @@ import javax.swing.SwingConstants;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
-public class LoginWindow {
+public class LoginWindow extends javax.swing.JFrame{
 
     JFrame LoginWindow;
     JPanel PTextHolder, PButtonHolder,BgPanel;
     JPanel PTextM,PTextV,PTextQP;
 
     JLabel LBGimage;
-    JLabel UnivText, UnivLogo, TitleMission, TitleVision, TitleQP, TitleQP2;
+    JLabel UnivText, CollegeText, UnivLogo, TitleMission, TitleVision, TitleQP, TitleQP2;
     JLabel mtext1, mtext2, mtext3, mtext4, mtext5, mtext6, mtext7, mtext8, mtext9;
     JLabel vtext1, vtext2, vtext3, vtext4;
     JLabel qptext1, qptext2, qptext3, qptext4, qptext5, qptext6, qptext7, qptext8, qptext9;
@@ -67,20 +70,26 @@ public class LoginWindow {
     Color textpanel = new Color(0,0,0);
     Color BGpanel = new Color(255,255,255,150);
     Color HeadText = new Color(251,201,1);
+    Color HeadText2 = new Color(255,255,255);
     Color complimentColor = new Color(0, 122, 122);
     
     //Instantiaions of Panels
-    PTextHolder = new JPanel();
+    PTextHolder = new JPanelGradient();
     PButtonHolder = new JPanel();
     PTextM = new JPanel();
     PTextV = new JPanel();
     PTextQP = new JPanel();
     
     //Top Panel Graphics
-    UnivText = new JLabel("President Ramon Magsaysay State University",null,SwingConstants.TRAILING);
-    UnivText.setBounds(0, 17, 748,40);
-    UnivText.setForeground(HeadText);
-    UnivText.setFont(new Font("Arial", Font.BOLD, 30));
+    UnivText = new JLabel("President Ramon Magsaysay State University",null,SwingConstants.LEADING);
+    UnivText.setBounds(100, 10, 720,30);
+    UnivText.setForeground(HeadText2);
+    UnivText.setFont(new Font("Arial", Font.BOLD, 25));
+    
+    CollegeText = new JLabel("College of Engineering",null,SwingConstants.LEADING);
+    CollegeText.setBounds(100, 35, 720,30);
+    CollegeText.setForeground(HeadText2);
+    CollegeText.setFont(new Font("Arial", Font.BOLD, 25));
 
     //This is for adding the university logo
     UnivLogo = new JLabel();
@@ -277,7 +286,7 @@ public class LoginWindow {
    
 
     //Graphics for the Panels
-    PTextHolder.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    PTextHolder.setBorder(BorderFactory.createLineBorder(new Color(172, 29, 0)));
     PTextHolder.setBackground(SystemColor.textHighlight);
     PTextHolder.setBounds(0,0,1365, 75);
     PTextHolder.setLayout(null);
@@ -330,6 +339,7 @@ public class LoginWindow {
         
     //This section is for adding of components to the Panels
     PTextHolder.add(UnivText);
+    PTextHolder.add(CollegeText);
     PTextHolder.add(UnivLogo);
     PTextHolder.add(LoginButton);
     PTextHolder.add(Login);
@@ -396,4 +406,20 @@ public class LoginWindow {
         new LoginWindow();
     }
     
+    //This class is to add gradient to the JPanels
+    class JPanelGradient extends JPanel{
+        protected void paintComponent(Graphics g){
+            Graphics2D g2d = (Graphics2D) g;
+            int width = getWidth();
+            int height = getHeight();
+
+
+            Color C1 = new Color(255, 198, 43);
+            Color C2 = new Color(255, 77, 41);
+            GradientPaint gp = new GradientPaint(75,0,C1,180,height,C2);
+            g2d.setPaint(gp);
+            g2d.fillRect(0, 0, width, height);
+            
+        }
+    }
 }
