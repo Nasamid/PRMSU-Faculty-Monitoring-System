@@ -52,7 +52,7 @@ public class listFaculty extends JPanel
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(SystemColor.text);
-		scrollPane.setBounds(0, 165, 1000, 540);
+		scrollPane.setBounds(0, 160, 1000, 540);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		
 		JPanel Header = new JPanel();
@@ -68,9 +68,9 @@ public class listFaculty extends JPanel
 		Header.add(headerTitle);
 		
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBackground(SystemColor.textHighlight);
-		separator_1.setForeground(SystemColor.textHighlight);
-		separator_1.setBounds(25, 65, 950, 3);
+		separator_1.setBackground(new Color(255, 77, 41));
+		separator_1.setForeground(new Color(255, 77, 41));
+		separator_1.setBounds(25, 65, 950, 5);
 		Header.add(separator_1);
 		
 		Body = new JPanel();
@@ -252,44 +252,32 @@ public class listFaculty extends JPanel
 		academicYearLbl.setBounds(710, 10, 100, 20);
 		Header1.add(academicYearLbl);
 		
-		JSeparator separator = new JSeparator();
-		separator.setForeground(Color.BLACK);
-		separator.setBackground(Color.WHITE);
-		separator.setBounds(10, 5, 980, 1);
-		Header1.add(separator);
-		
-		JSeparator separator1 = new JSeparator();
-		separator1.setForeground(Color.BLACK);
-		separator1.setBackground(Color.WHITE);
-		separator1.setBounds(10, 35, 980, 1);
-		Header1.add(separator1);
-		
 		JSeparator separator2 = new JSeparator();
 		separator2.setOrientation(SwingConstants.VERTICAL);
-		separator2.setForeground(Color.BLACK);
+		separator2.setForeground(Color.WHITE);
 		separator2.setBackground(Color.WHITE);
-		separator2.setBounds(295, 10, 1, 20);
+		separator2.setBounds(295, 10, 2, 20);
 		Header1.add(separator2);
 		
 		JSeparator separator3 = new JSeparator();
 		separator3.setOrientation(SwingConstants.VERTICAL);
-		separator3.setForeground(Color.BLACK);
+		separator3.setForeground(Color.WHITE);
 		separator3.setBackground(Color.WHITE);
-		separator3.setBounds(825, 10, 1, 20);
+		separator3.setBounds(825, 10, 2, 20);
 		Header1.add(separator3);
 		
 		JSeparator separator4 = new JSeparator();
 		separator4.setOrientation(SwingConstants.VERTICAL);
-		separator4.setForeground(Color.BLACK);
+		separator4.setForeground(Color.WHITE);
 		separator4.setBackground(Color.WHITE);
-		separator4.setBounds(515, 10, 1, 20);
+		separator4.setBounds(515, 10, 2, 20);
 		Header1.add(separator4);
 		
 		JSeparator separator5 = new JSeparator();
 		separator5.setOrientation(SwingConstants.VERTICAL);
-		separator5.setForeground(Color.BLACK);
+		separator5.setForeground(Color.WHITE);
 		separator5.setBackground(Color.WHITE);
-		separator5.setBounds(695, 10, 1, 20);
+		separator5.setBounds(695, 10, 2, 20);
 		Header1.add(separator5);
 		add(scrollPane);
 		

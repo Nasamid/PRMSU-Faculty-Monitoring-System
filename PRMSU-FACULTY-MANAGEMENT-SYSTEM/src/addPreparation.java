@@ -26,10 +26,12 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.MatteBorder;
 
 public class addPreparation extends JPanel 
 {
-JTextField facultyName;
+JLabel facultyName;
 JButton addSubjectBtn;
 JPanel Body;
 JFrame frame;
@@ -47,6 +49,7 @@ int currentFacultyID = -1;
 		setLayout(null);
 		
 		frame = new JFrame();
+		frame.setResizable(false);
 		frame.setSize(1000, 720);
 		frame.getContentPane().add(this);
 		
@@ -61,16 +64,13 @@ int currentFacultyID = -1;
 		panelLbl.setBounds(10, 10, 159, 25);
 		Header.add(panelLbl);
 		
-		facultyName = new JTextField();
-		//facultyName.setText("Danilo Llaga Jr.");
+		facultyName = new JLabel();
+		facultyName.setBorder(new TitledBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)), "Faculty:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Arial", Font.BOLD, 12), new Color(0, 0, 0)));
 		facultyName.setBackground(SystemColor.text);
 		facultyName.setHorizontalAlignment(SwingConstants.CENTER);
-		facultyName.setEditable(false);
-		//facultyName.setBorder(new LineBorder(SystemColor.textText, 1, true));
-		facultyName.setFont(new Font("Arial", Font.BOLD, 15));
+		facultyName.setFont(new Font("Arial", Font.BOLD, 17));
 		facultyName.setBounds(45, 50, 350, 35);
 		Header.add(facultyName);
-		facultyName.setColumns(10);
 		
 		JLabel acadLbl = new JLabel("Academic Year :");
 		acadLbl.setFont(new Font("Arial", Font.BOLD, 15));
@@ -130,7 +130,7 @@ int currentFacultyID = -1;
 					String description = add.decriptionTF.getText();
 					String subjectDisplay = code + " " + description;
 			
-					if (code.isEmpty() || description.isEmpty() || add.semesterCB.getSelectedIndex() == 0) {
+					if (code.isEmpty() || description.isEmpty()) {
 						JOptionPane.showMessageDialog(Body, "Invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						// Check if the subject already exists
@@ -150,8 +150,6 @@ int currentFacultyID = -1;
 			
 							// Update UI components with the new data
 							sub.subjectLbl.setText(latestSubject.getSubjectName());
-							sub.semesterLbl.setText((String) add.semesterCB.getSelectedItem());
-							sub.academicYearLbl.setText((String) add.acadYearCB.getSelectedItem());
 			
 							// Add the subject to the panel
 							Body.add(sub);
@@ -197,8 +195,9 @@ int currentFacultyID = -1;
 		Panel.add(lblSubject);
 		
 		JSeparator separator1 = new JSeparator();
+		separator1.setForeground(new Color(255, 77, 41));
 		separator1.setOrientation(SwingConstants.VERTICAL);
-		separator1.setBounds(400, 2, 1, 20);
+		separator1.setBounds(400, 2, 2, 20);
 		Panel.add(separator1);
 		
 		JLabel semesterLbl = new JLabel("Semester");
@@ -209,8 +208,9 @@ int currentFacultyID = -1;
 		Panel.add(semesterLbl);
 		
 		JSeparator separator2 = new JSeparator();
+		separator2.setForeground(new Color(255, 77, 41));
 		separator2.setOrientation(SwingConstants.VERTICAL);
-		separator2.setBounds(600, 2, 1, 20);
+		separator2.setBounds(600, 2, 2, 20);
 		Panel.add(separator2);
 		
 		JLabel academicYearLbl = new JLabel("Academic Year");
@@ -221,13 +221,11 @@ int currentFacultyID = -1;
 		Panel.add(academicYearLbl);
 		
 		JSeparator separator4 = new JSeparator();
+		separator4.setForeground(new Color(255, 77, 41));
 		separator4.setOrientation(SwingConstants.VERTICAL);
-		separator4.setBounds(770, 2, 1, 20);
+		separator4.setBounds(770, 2, 2, 20);
 		Panel.add(separator4);
 		
-		JSeparator separator3 = new JSeparator();
-		separator3.setBounds(20, 145, 920, 1);
-		add(separator3);
 		
 		semesterCB = new JComboBox<>();
 		String[] semester = {
@@ -328,13 +326,11 @@ int currentFacultyID = -1;
 								{
 									sections sec = new sections();
 									String section = addSectionDialog.sectionTF.getText();
-									String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
-									String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
 
 									// Add section to the database
 									int sectionID = DatabaseHandler.addSection(section);
 									
-									if(section.isEmpty() || addSectionDialog.semesterCB.getSelectedIndex() == 0) 
+									if(section.isEmpty()) 
 									{
 										JOptionPane.showMessageDialog(Body, "invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
 									}
@@ -342,8 +338,6 @@ int currentFacultyID = -1;
 									{
 										addSection.Body.add(sec);
 										sec.sectionLbl.setText(section);
-										sec.semesterLbl.setText(semester);
-										sec.academicYearLbl.setText(academicYear);
 										
 										if (addSection.Body.getComponentCount() > 10) 
 										{ 
@@ -396,8 +390,6 @@ int currentFacultyID = -1;
 						{
 							editSubject.addLbl.setText("Edit Subject");
 							editSubject.addBtn.setText("Done");
-							editSubject.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
-							editSubject.semesterCB.setSelectedItem(sub.semesterLbl.getText());
 							editSubject.show();
 							
 							editSubject.addBtn.addMouseListener(new MouseAdapter() 
@@ -428,8 +420,6 @@ int currentFacultyID = -1;
 									sections sec = new sections();
 									System.out.println("BPRESSEDs");
 									String section = addSectionDialog.sectionTF.getText();
-									String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
-									String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
 
 									// Add section to the database
 									int sectionID = DatabaseHandler.addSection(section);
@@ -453,8 +443,6 @@ int currentFacultyID = -1;
 										
 										edit.sectionPanel.add(sec);
 										sec.sectionLbl.setText(section);
-										sec.semesterLbl.setText(semester);
-										sec.academicYearLbl.setText(academicYear);
 										currentRow++;
 										
 										if (edit.sectionPanel.getComponentCount() > 10) 

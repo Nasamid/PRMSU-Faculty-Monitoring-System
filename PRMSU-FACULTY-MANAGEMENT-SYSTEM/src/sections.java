@@ -13,15 +13,16 @@ import javax.swing.SwingConstants;
 
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import javax.swing.border.MatteBorder;
 
 public class sections extends JPanel 
 {
-	JLabel sectionLbl, semesterLbl, academicYearLbl;
+	JLabel sectionLbl;
 	JButton deleteBtn;
 	
 	public sections() 
 	{
-		setBorder(null);
+		setBorder(new MatteBorder(1, 0, 1, 0, (Color) new Color(255, 77, 41)));
 		setPreferredSize(new Dimension(600, 35));
 		setBackground(Color.BLACK);
 		setBackground(SystemColor.text);
@@ -36,46 +37,24 @@ public class sections extends JPanel
 		Panel.setLayout(null);
 		
 		sectionLbl = new JLabel("");
-		sectionLbl.setBounds(15, 0, 230, 25);
+		sectionLbl.setBounds(15, 0, 490, 25);
 		Panel.add(sectionLbl);
 		sectionLbl.setLabelFor(sectionLbl);
 		//sectionLbl.setBorder(null);
-		sectionLbl.setFont(new Font("Arial", Font.BOLD, 10));
-		
-		semesterLbl = new JLabel("");
-		semesterLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		semesterLbl.setFont(new Font("Arial", Font.BOLD, 10));
-		//semesterLbl.setBorder(null);
-		semesterLbl.setBounds(255, 0, 135, 25);
-		Panel.add(semesterLbl);
-		
-		academicYearLbl = new JLabel("");
-		academicYearLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		academicYearLbl.setFont(new Font("Arial", Font.BOLD, 10));
-		//academicYearLbl.setBorder(null);
-		academicYearLbl.setBounds(400, 0, 135, 25);
-		Panel.add(academicYearLbl);
+		sectionLbl.setFont(new Font("Arial", Font.BOLD, 15));
 		
 		deleteBtn = new JButton("");
 		deleteBtn.setIcon(new ImageIcon(sections.class.getResource("/Images/Delete16x.png")));
 		deleteBtn.setBorder(null);
 		deleteBtn.setBackground(SystemColor.text);
 		deleteBtn.setFont(new Font("Arial", Font.BOLD, 10));
-		deleteBtn.setBounds(540, 0, 30, 20);
+		deleteBtn.setBounds(545, 0, 30, 20);
 		Panel.add(deleteBtn);
 		
 		JSeparator separator = new JSeparator();
+		separator.setForeground(new Color(255, 77, 41));
 		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBounds(250, 0, 1, 20);
+		separator.setBounds(530, 0, 2, 20);
 		Panel.add(separator);
-		
-		JSeparator separator2 = new JSeparator();
-		separator2.setOrientation(SwingConstants.VERTICAL);
-		separator2.setBounds(395, 0, 1, 20);
-		Panel.add(separator2);
-		
-		JSeparator separator3 = new JSeparator();
-		separator3.setBounds(10, 32, 580, 1);
-		add(separator3);
 	}
 }

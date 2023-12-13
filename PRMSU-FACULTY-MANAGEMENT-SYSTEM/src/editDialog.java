@@ -69,6 +69,7 @@ public class editDialog extends JDialog {
         int x = (screenWidth - frameWidth) / 2;
         int y = (screenHeight - frameHeight) / 2;
         setBounds(x, y, frameWidth, frameHeight);
+        setResizable(false);
         
 		contentPanel.setBounds(0, 0, 600, 513);
 		setTitle("Add Subject");
@@ -97,7 +98,7 @@ public class editDialog extends JDialog {
 		headerPanel.add(addLbl);
 		addLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		addLbl.setBackground(SystemColor.textHighlight);
-		addLbl.setFont(new Font("Arial", Font.BOLD, 17));
+		addLbl.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		editSubject = new JButton("");
 		editSubject.setIcon(new ImageIcon(editDialog.class.getResource("/Images/Edit25x.png")));
@@ -167,6 +168,7 @@ public class editDialog extends JDialog {
 		sectionPanel.setLayout(new GridLayout(10,0));
 		
 		JSeparator separator = new JSeparator();
+		separator.setForeground(new Color(255, 77, 41));
 		separator.setBounds(25, 90, 550, 2);
 		contentPanel.add(separator);
 		
@@ -185,8 +187,9 @@ public class editDialog extends JDialog {
 		Panel.add(sectionLbl);
 		
 		separator1 = new JSeparator();
+		separator1.setForeground(new Color(255, 77, 41));
 		separator1.setOrientation(SwingConstants.VERTICAL);
-		separator1.setBounds(250, 2, 1, 20);
+		separator1.setBounds(250, 3, 2, 20);
 		Panel.add(separator1);
 		
 		semesterLbl = new JLabel("Semester");
@@ -197,8 +200,9 @@ public class editDialog extends JDialog {
 		Panel.add(semesterLbl);
 		
 		separator2 = new JSeparator();
+		separator2.setForeground(new Color(255, 77, 41));
 		separator2.setOrientation(SwingConstants.VERTICAL);
-		separator2.setBounds(395, 2, 1, 20);
+		separator2.setBounds(395, 3, 2, 20);
 		Panel.add(separator2);
 		
 		academicYearLbl = new JLabel("A.Y.");
@@ -209,10 +213,13 @@ public class editDialog extends JDialog {
 		Panel.add(academicYearLbl);
 		
 		separator3 = new JSeparator();
-		separator3.setBounds(25, 115, 550, 1);
+		separator3.setForeground(new Color(255, 77, 41));
+		separator3.setBackground(null);
+		separator3.setBounds(25, 115, 550, 2);
 		contentPanel.add(separator3);
 		
 		semesterCB = new JComboBox();
+		semesterCB.setEnabled(false);
 		semesterCB.setModel(new DefaultComboBoxModel(new String[] {"SEMESTER", "First Semester", "Second Semester", "Midyear"}));
 		semesterCB.setFont(new Font("Arial", Font.PLAIN, 10));
 		//semesterCB.setBorder(null);
@@ -221,6 +228,7 @@ public class editDialog extends JDialog {
 		contentPanel.add(semesterCB);
 		
 		acadYearCB = new JComboBox();
+		acadYearCB.setEnabled(false);
 		acadYearCB.setFont(new Font("Arial", Font.PLAIN, 10));
 		//acadYearCB.setBorder(null);
 		acadYearCB.setBackground(SystemColor.text);
