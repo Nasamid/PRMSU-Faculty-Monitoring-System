@@ -111,6 +111,10 @@ int currentFacultyID = -1;
 		//addSubjectBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		addSubjectBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		addSubjectBtn.setFocusable(false);
+
+		
+		
+		
 		
 		addSubjectBtn.setBounds(120, 20, 150, 35);
 		Footer.add(addSubjectBtn);
@@ -225,21 +229,19 @@ int currentFacultyID = -1;
 	}
 
 	public void fetchAndDisplaySubjects() {
-		
 		// Fetch subjects associated with the current faculty from the database
 		int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
 		List<SubjectData> subjects = DatabaseHandler.getSubjectsByFaculty(facultyID);
 
 		// Iterate through the subjects and add them to the Body panel
 		for (SubjectData subjectData : subjects) {
-			subject subject = new subject();
-			subject.subjectLbl.setText(subjectData.getSubjectName());
-			subject.semesterLbl.setText((String) semesterCB.getSelectedItem());
-			subject.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
-			Body.add(subject);
+			subject sub = new subject();
+			sub.subjectLbl.setText(subjectData.getSubjectName());
+			sub.semesterLbl.setText((String) semesterCB.getSelectedItem());
+			sub.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
+			Body.add(sub);
 			Body.revalidate();
-		}
-
+			
 			addSubjectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				subject sub = new subject();
@@ -259,8 +261,6 @@ int currentFacultyID = -1;
 					Body.add(sub);
 					Body.revalidate();
 				}
-
-				Body.revalidate();
 				
 		
 				add.addBtn.addActionListener(new ActionListener() {
@@ -317,7 +317,6 @@ int currentFacultyID = -1;
 			}
 		});
 
-			subject sub = new subject();
 			//new add section button on Subjects
 			JButton addSection = sub.addBtn;
 			addSection.addMouseListener(new MouseAdapter() 
@@ -554,7 +553,7 @@ int currentFacultyID = -1;
 		// Revalidate and repaint the Body panel
 		Body.revalidate();
 		Body.repaint();
-	
+	}
 	}
 }
 
