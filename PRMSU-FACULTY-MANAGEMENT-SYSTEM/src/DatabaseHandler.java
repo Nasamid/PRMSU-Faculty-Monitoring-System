@@ -442,6 +442,30 @@ public class DatabaseHandler {
         return subjects;
     }
 
+    public List<String> getSectionsByFacultyAndSubject(int facultyID, int subjectID) {
+        List<String> sections = new ArrayList<>();
+
+        try (Connection connection = connect()) {
+            String sql = "SELECT s.section FROM faculty_subject_section fss " +
+                         "JOIN section s ON fss.sectionID = s.sectionID " +
+                         "WHERE fss.facultyID = ? AND fss.subjectID = ?";
+
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setInt(1, facultyID);
+                pstmt.setInt(2, subjectID);
+
+                ResultSet resultSet = pstmt.executeQuery();
+                while (resultSet.next()) {
+                    sections.add(resultSet.getString("section"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sections;
+    }
+
      // Associate a faculty with a subject
      public static void associateFacultyWithSubject(int facultyID, int subjectID) {
         Connection connection = null;
@@ -484,6 +508,29 @@ public class DatabaseHandler {
                 e.printStackTrace(); // Handle the exception appropriately
             }
         }
+    }
+
+    public static int getSubjectIDByFaculty(String facultyName, String subjectName) {
+        int subjectID = -1;
+    
+        String query = "SELECT fss.subjectID " +
+                       "FROM faculty_subject_section fss " +
+                       "JOIN subjects s ON fss.subjectID = s.subjectID " +
+                       "WHERE fss.facultyName = ? AND s.subject = ?";
+        
+        try (Connection connection = DatabaseHandler.connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, facultyName);
+            preparedStatement.setString(2, subjectName);
+    
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                subjectID = resultSet.getInt("subjectID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return subjectID;
     }
 
     public static int getSubjectID(String subjectDisplay) {
@@ -598,6 +645,22 @@ public class DatabaseHandler {
         }
 
         return sectionsList;
+    }
+
+    public static void associateSectionWithFacultySubject(int facultyID, int subjectID, int sectionID) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:main.db")) {
+            String query = "INSERT INTO faculty_subject_section (facultyID, subjectID, sectionID) VALUES (?, ?, ?)";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, facultyID);
+                preparedStatement.setInt(2, subjectID);
+                preparedStatement.setInt(3, sectionID);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception or log it
+        }
     }
     
     // Helper methods for closing resources
