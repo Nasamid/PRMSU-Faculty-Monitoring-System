@@ -26,12 +26,10 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.MatteBorder;
 
 public class addPreparation extends JPanel 
 {
-JLabel facultyName;
+JTextField facultyName;
 JButton addSubjectBtn;
 JPanel Body;
 JFrame frame;
@@ -49,7 +47,6 @@ int currentFacultyID = -1;
 		setLayout(null);
 		
 		frame = new JFrame();
-		frame.setResizable(false);
 		frame.setSize(1000, 720);
 		frame.getContentPane().add(this);
 		
@@ -64,13 +61,16 @@ int currentFacultyID = -1;
 		panelLbl.setBounds(10, 10, 159, 25);
 		Header.add(panelLbl);
 		
-		facultyName = new JLabel();
-		facultyName.setBorder(new TitledBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)), "Faculty:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Arial", Font.BOLD, 12), new Color(0, 0, 0)));
+		facultyName = new JTextField();
+		//facultyName.setText("Danilo Llaga Jr.");
 		facultyName.setBackground(SystemColor.text);
 		facultyName.setHorizontalAlignment(SwingConstants.CENTER);
-		facultyName.setFont(new Font("Arial", Font.BOLD, 17));
+		facultyName.setEditable(false);
+		//facultyName.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		facultyName.setFont(new Font("Arial", Font.BOLD, 15));
 		facultyName.setBounds(45, 50, 350, 35);
 		Header.add(facultyName);
+		facultyName.setColumns(10);
 		
 		JLabel acadLbl = new JLabel("Academic Year :");
 		acadLbl.setFont(new Font("Arial", Font.BOLD, 15));
@@ -195,9 +195,8 @@ int currentFacultyID = -1;
 		Panel.add(lblSubject);
 		
 		JSeparator separator1 = new JSeparator();
-		separator1.setForeground(new Color(255, 77, 41));
 		separator1.setOrientation(SwingConstants.VERTICAL);
-		separator1.setBounds(400, 2, 2, 20);
+		separator1.setBounds(400, 2, 1, 20);
 		Panel.add(separator1);
 		
 		JLabel semesterLbl = new JLabel("Semester");
@@ -208,9 +207,8 @@ int currentFacultyID = -1;
 		Panel.add(semesterLbl);
 		
 		JSeparator separator2 = new JSeparator();
-		separator2.setForeground(new Color(255, 77, 41));
 		separator2.setOrientation(SwingConstants.VERTICAL);
-		separator2.setBounds(600, 2, 2, 20);
+		separator2.setBounds(600, 2, 1, 20);
 		Panel.add(separator2);
 		
 		JLabel academicYearLbl = new JLabel("Academic Year");
@@ -221,11 +219,13 @@ int currentFacultyID = -1;
 		Panel.add(academicYearLbl);
 		
 		JSeparator separator4 = new JSeparator();
-		separator4.setForeground(new Color(255, 77, 41));
 		separator4.setOrientation(SwingConstants.VERTICAL);
-		separator4.setBounds(770, 2, 2, 20);
+		separator4.setBounds(770, 2, 1, 20);
 		Panel.add(separator4);
 		
+		JSeparator separator3 = new JSeparator();
+		separator3.setBounds(20, 145, 920, 1);
+		add(separator3);
 		
 		semesterCB = new JComboBox<>();
 		String[] semester = {
@@ -312,6 +312,43 @@ int currentFacultyID = -1;
 				{
 					addSection addSection = new addSection();
 					addSection.show();
+					DatabaseHandler dbH = new DatabaseHandler();
+					int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
+					System.out.println(subjectData.getSubjectName());
+					// Fetch sections associated with the current faculty and subject
+					List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
+					
+
+					// Iterate through sections and display them
+					for (String sectionb : sections) {
+						sections secb = new sections();
+						secb.sectionLbl.setText(sectionb);
+
+						System.out.println(sectionb);
+
+						// Add the section to the Body panel
+						addSection.Body.add(secb);
+						addSection.Body.revalidate();
+						addSection.Body.repaint();
+
+						secb.deleteBtn.addMouseListener(new MouseAdapter() {
+							public void mousePressed(MouseEvent e) {
+								// Get the sectionID associated with the section label
+								int sectionID = DatabaseHandler.getSectionID(sectionb);
+					
+								// Delete entry in faculty_subject_section table
+								DatabaseHandler.deleteFacultySubjectSectionBySectionID(sectionID);
+					
+								// Delete section from the section table
+								DatabaseHandler.deleteSection(sectionID);
+					
+								// Remove the section from the Body panel
+								addSection.Body.remove(secb);
+								addSection.revalidate();
+								addSection.repaint();
+							}
+						});
+					}
 					
 					addSection.addBtn.addActionListener(new ActionListener() 
 					{
@@ -326,9 +363,10 @@ int currentFacultyID = -1;
 								{
 									sections sec = new sections();
 									String section = addSectionDialog.sectionTF.getText();
-
+									
 									// Add section to the database
 									int sectionID = DatabaseHandler.addSection(section);
+									DatabaseHandler.associateSectionWithFacultySubject(facultyID, DatabaseHandler.getSubjectID(subjectData.getSubjectName()), sectionID);
 									
 									if(section.isEmpty()) 
 									{
@@ -336,8 +374,22 @@ int currentFacultyID = -1;
 									}
 									else 
 									{
-										addSection.Body.add(sec);
-										sec.sectionLbl.setText(section);
+										int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
+										int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+										DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
+										
+										DatabaseHandler dbH = new DatabaseHandler();
+										// Fetch sections associated with the current faculty and subject
+										List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
+										sections secb = new sections();
+										// Iterate through sections and display them
+										for (String sectionb : sections) {
+											secb.sectionLbl.setText(sectionb);
+										}
+										// Add the section to the Body panel
+										addSection.Body.add(secb);
+										addSection.Body.revalidate();
+										addSection.Body.repaint();
 										
 										if (addSection.Body.getComponentCount() > 10) 
 										{ 
@@ -348,26 +400,19 @@ int currentFacultyID = -1;
 											addSection.Body.setPreferredSize(preferredSize);
 											addSection.Body.revalidate();
 										}
-										
-										sec.deleteBtn.addMouseListener(new MouseAdapter() 
-										{
-											public void mousePressed(MouseEvent e) 
-											{
-												addSection.Body.remove(sec);
-												addSection.revalidate();
-												addSection.repaint();
-											}
-										});
-										
+
 										addSection.Body.revalidate();
 										addSectionDialog.dispose();
 									}	
 								}
 							});
+						
+
 						}
 					});
 				}
 			});
+		
 			
 			//new edit button on Subjects
 			JButton editSection = sub.editBtn;
@@ -378,9 +423,23 @@ int currentFacultyID = -1;
 				{
 					editDialog edit = new editDialog();
 					addSubjectDialog editSubject = new addSubjectDialog();
-					edit.SubjectLbl.setText(sub.subjectLbl.getText());
-					edit.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
-					edit.semesterCB.setSelectedItem(sub.semesterLbl.getText());
+					DatabaseHandler dbH = new DatabaseHandler();
+					int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
+					List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
+					
+
+					// Iterate through sections and display them
+					for (String sectionb : sections) {
+						sections secb = new sections();
+						secb.sectionLbl.setText(sectionb);
+
+						System.out.println(sectionb);
+
+						// Add the section to the Body panel
+						editSection.add(secb);
+						editSection.revalidate();
+						editSection.repaint();
+					}
 					edit.show();
 					
 					edit.editSubject.addMouseListener(new MouseAdapter() 
@@ -459,6 +518,7 @@ int currentFacultyID = -1;
 										{
 											public void mousePressed(MouseEvent e) 
 											{
+												System.out.println("BUTTON PRESSED");
 												edit.sectionPanel.remove(sec);
 												edit.revalidate();
 												edit.repaint();
@@ -485,17 +545,18 @@ int currentFacultyID = -1;
 				@Override
 				public void mousePressed(MouseEvent e) 
 				{
+					System.out.println("Delete pressed");
 					Body.remove(sub);
-					revalidate();
-					repaint();
+					Body.revalidate();
+					Body.repaint();
 				}
 			});
-		}
+		
 		// Revalidate and repaint the Body panel
 		Body.revalidate();
 		Body.repaint();
 	}
-	//This class is to add gradient to the JPanels
+	}
 	class JPanelGradient extends JPanel{
 		protected void paintComponent(Graphics g){
 			Graphics2D g2d = (Graphics2D) g;
@@ -504,8 +565,8 @@ int currentFacultyID = -1;
 
 
 			Color C1 = new Color(255, 198, 43);
-			Color C2 = new Color(255, 128, 41);
-			GradientPaint gp = new GradientPaint(0,0,C2,1080,height,C2);
+			Color C2 = new Color(255, 77, 41);
+			GradientPaint gp = new GradientPaint(75,0,C1,180,height,C2);
 			g2d.setPaint(gp);
 			g2d.fillRect(0, 0, width, height);
 			
