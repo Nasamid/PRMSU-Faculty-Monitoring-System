@@ -116,4 +116,45 @@ public class FacultyData {
 
         return facultyID;
     }
+
+    public static int getOriginFacultyID() {
+       int facultyID = -1;
+
+        String query = "SELECT facultyID FROM faculty WHERE facultyID = ?";
+        
+        try (Connection connection = DatabaseHandler.connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                facultyID = resultSet.getInt("facultyID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return facultyID;
+    }
+    
+    public static String getLastNameByFacultyID(int facultyID) {
+        String lastName = null;
+
+        String query = "SELECT facultyID FROM fID_lastName WHERE facultyID = ?";
+
+        try (Connection connection = DatabaseHandler.connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, facultyID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                lastName = resultSet.getString("lastName");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lastName;
+    }
 }

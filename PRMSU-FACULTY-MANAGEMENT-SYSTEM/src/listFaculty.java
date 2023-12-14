@@ -104,6 +104,7 @@ public class listFaculty extends JPanel
 								|| addFaculty.departmentCB.getSelectedIndex() == 0) {
 							JOptionPane.showMessageDialog(frame, "Please insert complete information.", "Insufficient Data", JOptionPane.INFORMATION_MESSAGE);
 						} else {
+
 							// Get the corresponding IDs
 							int departmentID = DatabaseHandler.getDepartmentID(department);
 							int yearID = DatabaseHandler.getYearID(academicYear);
@@ -113,14 +114,22 @@ public class listFaculty extends JPanel
 				
 							// Insert data into the SQLite database and get the generated facultyID
 							int facultyID = DatabaseHandler.insertFaculty(facultyName, departmentID, yearID, semesterID);
+
+							int fIDlast = FacultyData.getFacultyID();
 				
 							// Do something with the generated facultyID if needed
 							DatabaseHandler.insertFLnID(facultyID, lastName);
+
+							// Convert facultyID to a string
+							String facultyIDString = String.valueOf(facultyID);
 				
 							faculty.facultyNameLbl.setText(facultyName);
 							faculty.departmentLbl.setText(department);
 							faculty.semesterLbl.setText(semester);
 							faculty.academicYearLbl.setText(academicYear);
+
+							documentfaculty docfaculty = new documentfaculty(facultyIDString, lastName);
+        					docfaculty.register();
 				
 							facultyNames.add(facultyName);
 							Body.add(faculty);
@@ -176,10 +185,21 @@ public class listFaculty extends JPanel
 						if (confirm == JOptionPane.YES_OPTION) {
 							// Assuming you have a method in DatabaseHandler to delete faculty by ID
 							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
-							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+							
+							//int originfacultyID = DatabaseHandler.
+							int lastnamefacultyID = DatabaseHandler.getFacultyIDByLastName(addFaculty.lastNameTF.getText());
+
+							boolean deleted = DatabaseHandler.deleteFacultyByID(lastnamefacultyID);
+							
+							// Convert facultyID to a string
+							String facultyIDString = String.valueOf(lastnamefacultyID);
+
 
 							if (deleted) {
 								Body.remove(faculty);
+								documentfaculty docfaculty = new documentfaculty(facultyIDString, addFaculty.lastNameTF.getText());
+								System.out.println("faculty ID: " + lastnamefacultyID);
+        						docfaculty.deleteProfileFolder();
 								revalidate();
 								repaint();
 							} else {
