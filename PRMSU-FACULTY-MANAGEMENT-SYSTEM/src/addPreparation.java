@@ -333,16 +333,11 @@ int currentFacultyID = -1;
 
 						secb.deleteBtn.addMouseListener(new MouseAdapter() {
 							public void mousePressed(MouseEvent e) {
-								// Get the sectionID associated with the section label
-								int sectionID = DatabaseHandler.getSectionID(sectionb);
-					
-								// Delete entry in faculty_subject_section table
-								DatabaseHandler.deleteFacultySubjectSectionBySectionID(sectionID);
-					
-								// Delete section from the section table
-								DatabaseHandler.deleteSection(sectionID);
-					
-								// Remove the section from the Body panel
+							// Get the sectionID associated with the section label
+							int sectionID = DatabaseHandler.getSectionID(sectionb);
+
+							// Delete entry in faculty_subject_section table
+							DatabaseHandler.deleteFacultySubjectSection(facultyID, subjectID, sectionID);
 								addSection.Body.remove(secb);
 								addSection.revalidate();
 								addSection.repaint();

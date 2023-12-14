@@ -675,6 +675,21 @@ public class DatabaseHandler {
         }
     }
 
+    public static void deleteFacultySubjectSection(int facultyID, int subjectID, int sectionID) {
+        String query = "DELETE FROM faculty_subject_section WHERE facultyID = ? AND subjectID = ? AND sectionID = ?";
+    
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setInt(2, subjectID);
+            preparedStatement.setInt(3, sectionID);
+    
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void deleteFacultySubjectSectionBySectionID(int sectionID) {
         String query = "DELETE FROM faculty_subject_section WHERE sectionID = ?";
     
@@ -693,6 +708,20 @@ public class DatabaseHandler {
         try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, sectionID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void insertFLnID(int facultyID, String lastName) {
+        String query = "INSERT INTO fID_lastName (facultyID, lastName) VALUES (?, ?)";
+
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setString(2, lastName);
+
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

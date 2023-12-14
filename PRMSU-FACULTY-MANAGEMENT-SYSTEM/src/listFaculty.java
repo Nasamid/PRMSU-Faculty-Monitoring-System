@@ -91,6 +91,7 @@ public class listFaculty extends JPanel
 
 				addFaculty.addBtn.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						String lastName = addFaculty.lastNameTF.getText();
 						String facultyName = addFaculty.firstNameTF.getText() + " " + addFaculty.middleNameTF.getText() + " " + addFaculty.lastNameTF.getText() + " " + addFaculty.extNameTF.getText();
 						String department = (String) addFaculty.departmentCB.getSelectedItem();
 						String academicYear = (String) addFaculty.acadYearCB.getSelectedItem();
@@ -112,6 +113,7 @@ public class listFaculty extends JPanel
 							int facultyID = DatabaseHandler.insertFaculty(facultyName, departmentID, yearID, semesterID);
 				
 							// Do something with the generated facultyID if needed
+							DatabaseHandler.insertFLnID(facultyID, lastName);
 				
 							faculty.facultyNameLbl.setText(facultyName);
 							faculty.departmentLbl.setText(department);
