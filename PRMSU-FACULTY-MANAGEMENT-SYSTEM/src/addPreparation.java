@@ -346,7 +346,7 @@ int currentFacultyID = -1;
 								{
 									sections sec = new sections();
 									String section = addSectionDialog.sectionTF.getText();
-
+									
 									// Add section to the database
 									int sectionID = DatabaseHandler.addSection(section);
 									DatabaseHandler.associateSectionWithFacultySubject(facultyID, DatabaseHandler.getSubjectIDByFaculty(facultyName.getText(), subjectData.getSubjectName()), sectionID);
