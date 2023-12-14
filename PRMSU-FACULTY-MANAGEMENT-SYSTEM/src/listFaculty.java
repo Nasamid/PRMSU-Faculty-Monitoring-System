@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class listFaculty extends JPanel
 	JButton addFacultyBtn;
 	List<String> facultyNames = new ArrayList<>();
 	List<Integer> facultyIndex = new ArrayList<>();
-	String CB_SEM,CB_AY,CB_DEP,SRCH_NAME;
+	String CB_SORT,SRCH_NAME;
 	
 	public listFaculty() {
 	
@@ -284,39 +286,18 @@ public class listFaculty extends JPanel
 		Header1.add(separator5);
 		add(scrollPane);
 		
-		JComboBox semesterCB = new JComboBox();
-		semesterCB.setModel(new DefaultComboBoxModel(new String[] {"SEMESTER", "First Semester", "Second Semester", "Midyear"}));
-		semesterCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		//semesterCB.setBorder(null);
-		semesterCB.setBackground(SystemColor.text);
-		semesterCB.setBounds(405, 85, 110, 20);
-		add(semesterCB);
-		
-		JComboBox acadYearCB = new JComboBox();
-		acadYearCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		//acadYearCB.setBorder(null);
-		acadYearCB.setBackground(SystemColor.text);
-		acadYearCB.setBounds(525, 85, 110, 20);
-		add(acadYearCB);
-		
-		JComboBox departmentCB = new JComboBox();
-		departmentCB.setModel(new DefaultComboBoxModel(new String[] {"DEPARTMENT", "MECHANICAL ENGINEERING", "COMPUTER ENGINEERING", "CIVIL ENGINEERING", "ELECTRICAL ENGINEERING", "ALLIED"}));
-		departmentCB.setFont(new Font("Arial", Font.PLAIN, 10));
-		//departmentCB.setBorder(null);
-		departmentCB.setBackground(SystemColor.text);
-		departmentCB.setBounds(285, 85, 110, 20);
-		add(departmentCB);
+		JComboBox SortByCB = new JComboBox();
+		SortByCB.setModel(new DefaultComboBoxModel(new String[] {"SORT BY", "DEPARTMENT", "SEMESTER", "YEAR"}));
+		SortByCB.setFont(new Font("Arial", Font.PLAIN, 10));
+		//SortByCB.setBorder(null);
+		SortByCB.setBackground(SystemColor.text);
+		SortByCB.setBounds(600, 80, 110, 30);
+		add(SortByCB);
 		
 		JLabel sortLbl = new JLabel("Sort :");
 		sortLbl.setFont(new Font("Arial", Font.BOLD, 13));
-		sortLbl.setBounds(240, 85, 40, 20);
+		sortLbl.setBounds(550, 80, 40, 30);
 		add(sortLbl);
-		
-		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		acadYearCB.addItem("YEAR");
-		for (int year = currentYear - 3; year <= currentYear + 3; year++) {
-			acadYearCB.addItem(String.valueOf(year) + " - " + String.valueOf(year +1));
-        }
 		
 		JDialog addDial0g = new JDialog();
 		addDial0g.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -329,9 +310,7 @@ public class listFaculty extends JPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				String CB_DEP = departmentCB.getSelectedItem().toString();
-				String CB_SEM = semesterCB.getSelectedItem().toString();
-				String CB_AY = acadYearCB.getSelectedItem().toString();
+				String CB_SORT = SortByCB.getSelectedItem().toString();
 
 				String searchname = searchEngine.getText();
 
@@ -340,10 +319,48 @@ public class listFaculty extends JPanel
 				Body.repaint();
 
 				
-				loadSearchFacultyData(searchname, CB_AY, CB_DEP, CB_SEM);
+				//loadSearchFacultyData(searchname, CB_AY, CB_DEP, CB_SEM);
 				scrollPane.revalidate();
 				scrollPane.repaint();					
 
+			}
+		});
+
+		//This is an item listener for the Sort Combo Box
+		SortByCB.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					Object item = e.getItem();
+					String sortString = item.toString();
+					System.out.println(sortString);
+
+					if(sortString.equalsIgnoreCase("DEPARTMENT")){
+						Body.removeAll();
+						Body.revalidate();
+						Body.repaint();
+
+						SortDepartmentFacultyData(sortString);
+
+					}
+					if(sortString.equalsIgnoreCase("SEMESTER")){
+						Body.removeAll();
+						Body.revalidate();
+						Body.repaint();
+
+						SortSemesterFacultyData(sortString);
+
+					}
+
+					if(sortString.equalsIgnoreCase("YEAR")){
+						Body.removeAll();
+						Body.revalidate();
+						Body.repaint();
+
+						SortYearFacultyData(sortString);
+
+					}
+					
+				}
 			}
 		});
 	}
@@ -529,6 +546,816 @@ public class listFaculty extends JPanel
 		Body.repaint();
 	}
 
+	// Method to SORT the Department of the Faculty in Descending order
+	public void SortDepartmentFacultyData(String CB_SORT) {
+		List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
+		//System.out.println(facultyDataList);
+
+
+		for (FacultyData facultyData : facultyDataList) {
+
+			if((facultyData.getDepartmentName().equalsIgnoreCase("Allied"))){
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+			}
+			
+		}
+
+
+		for (FacultyData facultyData : facultyDataList) {
+
+			if((facultyData.getDepartmentName().equalsIgnoreCase("Civil Engineering"))){
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+			}
+			
+		}
+
+
+
+		for (FacultyData facultyData : facultyDataList) {
+
+			if((facultyData.getDepartmentName().equalsIgnoreCase("Computer Engineering"))){
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+			}
+			
+		}
+
+
+
+		for (FacultyData facultyData : facultyDataList) {
+
+			if((facultyData.getDepartmentName().equalsIgnoreCase("Electrical Engineering"))){
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+			}
+			
+		}
+
+
+		for (FacultyData facultyData : facultyDataList) {
+
+			if((facultyData.getDepartmentName().equalsIgnoreCase("Mechanical Engineering"))){
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+			}
+			
+		}
+
+		Body.revalidate();
+		Body.repaint();
+	}
+
+
+	// Method to load new faculty data from the database and populate the UI based on the search parameters
+	public void SortSemesterFacultyData(String CB_SORT) {
+		List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
+		//System.out.println(facultyDataList);
+		for (FacultyData facultyData : facultyDataList) {
+
+			if((facultyData.getSemesterName().equalsIgnoreCase("First Semester"))){
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+			}
+			
+		}
+
+
+		for (FacultyData facultyData : facultyDataList) {
+
+			if((facultyData.getSemesterName().equalsIgnoreCase("Second Semester"))){
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+			}
+			
+		}
+
+
+
+		for (FacultyData facultyData : facultyDataList) {
+
+			if((facultyData.getSemesterName().equalsIgnoreCase("Midyear"))){
+			faculty faculty = new faculty();
+
+			// Retrieve department details
+			int departmentID = facultyData.getDepartmentID();
+			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+		
+			// Retrieve academic year details
+			int yearID = facultyData.getYearID();
+			String academicYear = DatabaseHandler.getAcademicYear(yearID);
+		
+			// Retrieve semester details
+			int semesterID = facultyData.getSemesterID();
+			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+			JButton addPreparation = faculty.addBtn;
+				addPreparation.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						addPreparation preparation = new addPreparation();
+						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+						preparation.frame.setVisible(true);
+						preparation.fetchAndDisplaySubjects();
+					}
+				});
+				
+				
+				JButton uploadDocument = faculty.uploadBtn;
+				uploadDocument.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						new UploadDocWindow();
+					}
+				});
+				
+				JButton deleteFaculty = faculty.deleteBtn;
+				deleteFaculty.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							// Assuming you have a method in DatabaseHandler to delete faculty by ID
+							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+							if (deleted) {
+								Body.remove(faculty);
+								revalidate();
+								repaint();
+							} else {
+								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					}
+				});
+	
+			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+			faculty.departmentLbl.setText(departmentName);
+			faculty.semesterLbl.setText(semesterName);
+			faculty.academicYearLbl.setText(academicYear);
+
+			facultyNames.add(facultyData.getFacultyName());
+			Body.add(faculty);
+			currentRow++;
+
+			if (Body.getComponentCount() >= 12) {
+				// Increase the preferred height of the rowPanel
+				Dimension preferredSize = Body.getPreferredSize();
+				preferredSize.height += 80;
+				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+				Body.setPreferredSize(preferredSize);
+				Body.revalidate();
+			}
+			Body.revalidate();
+			}
+			
+		}
+
+
+		Body.revalidate();
+		Body.repaint();
+	}
+
+	// Method to load new faculty data from the database and populate the UI based on the search parameters
+	public void SortYearFacultyData(String CB_SORT) {
+		List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
+		int sortYearID = 2020;
+		while(sortYearID <= 2026){
+			for (FacultyData facultyData : facultyDataList) {
+
+				if((facultyData.getYearID() == sortYearID)){
+				faculty faculty = new faculty();
+
+				// Retrieve department details
+				int departmentID = facultyData.getDepartmentID();
+				String departmentName = DatabaseHandler.getDepartmentName(departmentID);
+			
+				// Retrieve academic year details
+				int yearID = facultyData.getYearID();
+				String academicYear = DatabaseHandler.getAcademicYear(yearID);
+			
+				// Retrieve semester details
+				int semesterID = facultyData.getSemesterID();
+				String semesterName = DatabaseHandler.getSemesterName(semesterID);
+
+				JButton addPreparation = faculty.addBtn;
+					addPreparation.addActionListener(new ActionListener() 
+					{
+						public void actionPerformed(ActionEvent e) 
+						{
+							addPreparation preparation = new addPreparation();
+							preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+							preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+							preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+							preparation.frame.setVisible(true);
+							preparation.fetchAndDisplaySubjects();
+						}
+					});
+					
+					
+					JButton uploadDocument = faculty.uploadBtn;
+					uploadDocument.addActionListener(new ActionListener() 
+					{
+						public void actionPerformed(ActionEvent e) 
+						{
+							new UploadDocWindow();
+						}
+					});
+					
+					JButton deleteFaculty = faculty.deleteBtn;
+					deleteFaculty.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+							
+							if (confirm == JOptionPane.YES_OPTION) {
+								// Assuming you have a method in DatabaseHandler to delete faculty by ID
+								int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+								boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+								if (deleted) {
+									Body.remove(faculty);
+									revalidate();
+									repaint();
+								} else {
+									JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+								}
+								
+							}
+						}
+					});
+		
+				faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+				faculty.departmentLbl.setText(departmentName);
+				faculty.semesterLbl.setText(semesterName);
+				faculty.academicYearLbl.setText(academicYear);
+
+				facultyNames.add(facultyData.getFacultyName());
+				Body.add(faculty);
+				currentRow++;
+
+				if (Body.getComponentCount() >= 12) {
+					// Increase the preferred height of the rowPanel
+					Dimension preferredSize = Body.getPreferredSize();
+					preferredSize.height += 80;
+					Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+					Body.setPreferredSize(preferredSize);
+					Body.revalidate();
+				}
+				Body.revalidate();
+				}
+				
+			}
+			sortYearID++;
+		}
+		Body.revalidate();
+		Body.repaint();
+	}
+
+
+
+
+
+
+	
 	//This class is to add gradient to the JPanels
 	class JPanelGradient extends JPanel{
 		protected void paintComponent(Graphics g){
