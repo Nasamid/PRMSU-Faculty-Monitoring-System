@@ -10,16 +10,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
 
 public class subject extends JPanel 
 {
 	JLabel subjectLbl, academicYearLbl, semesterLbl;
 	JButton addBtn, editBtn, deleteBtn;
-	private JSeparator separator;
 
 	public subject() 
 	{
-		setBorder(null);
+		setBorder(new MatteBorder(1, 0, 1, 0, (Color) new Color(255, 77, 41)));
 		setPreferredSize(new Dimension(950, 45));
 		setBackground(Color.BLACK);
 		setBackground(SystemColor.text);
@@ -64,10 +64,6 @@ public class subject extends JPanel
 		deleteBtn.setBounds(880, 2, 35, 30);
 		panel.add(deleteBtn);
 		
-		separator = new JSeparator();
-		separator.setBounds(0, 34, 920, 1);
-		panel.add(separator);
-		
 		semesterLbl = new JLabel("Semester");
 		semesterLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		semesterLbl.setFont(new Font("Arial", Font.BOLD, 15));
@@ -82,19 +78,22 @@ public class subject extends JPanel
 		academicYearLbl.setBounds(610, 0, 150, 35);
 		panel.add(academicYearLbl);
 		
+		JSeparator separator1 = new JSeparator();
+		separator1.setForeground(new Color(255, 77, 41));
+		separator1.setOrientation(SwingConstants.VERTICAL);
+		separator1.setBounds(400, 3, 2, 29);
+		panel.add(separator1);
+		
 		JSeparator separator2 = new JSeparator();
+		separator2.setForeground(new Color(255, 77, 41));
 		separator2.setOrientation(SwingConstants.VERTICAL);
-		separator2.setBounds(400, 3, 1, 29);
+		separator2.setBounds(600, 3, 2, 29);
 		panel.add(separator2);
 		
 		JSeparator separator3 = new JSeparator();
+		separator3.setForeground(new Color(255, 77, 41));
 		separator3.setOrientation(SwingConstants.VERTICAL);
-		separator3.setBounds(600, 3, 1, 29);
+		separator3.setBounds(770, 3, 2, 29);
 		panel.add(separator3);
-		
-		JSeparator separator4 = new JSeparator();
-		separator4.setOrientation(SwingConstants.VERTICAL);
-		separator4.setBounds(770, 3, 1, 29);
-		panel.add(separator4);
 	}
 }

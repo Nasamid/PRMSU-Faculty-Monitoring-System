@@ -1,6 +1,9 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
@@ -47,7 +50,7 @@ int currentFacultyID = -1;
 		frame.setSize(1000, 720);
 		frame.getContentPane().add(this);
 		
-		JPanel Header = new JPanel();
+		JPanel Header = new JPanelGradient();
 		Header.setBackground(SystemColor.textHighlight);
 		add(Header);
 		Header.setBounds(0,0,1000, 110);
@@ -86,7 +89,7 @@ int currentFacultyID = -1;
 		acadYearCB.setBounds(540, 55, 150, 25);
 		Header.add(acadYearCB);
 		
-		JPanel Footer = new JPanel();
+		JPanel Footer = new JPanelGradient();
 		Footer.setBackground(SystemColor.textHighlight);
 		Footer.setBounds(0, 610, 1000, 110);
 		add(Footer);
@@ -112,8 +115,66 @@ int currentFacultyID = -1;
 		addSubjectBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		addSubjectBtn.setFocusable(false);
 
+		addSubjectBtn.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+
+			subject sub = new subject();
+
+			addSubjectDialog add = new addSubjectDialog();
+
+			add.show();
 		
-		
+			add.addBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String code = add.codeTF.getText();
+					String description = add.decriptionTF.getText();
+					String subjectDisplay = code + " " + description;
+			
+					if (code.isEmpty() || description.isEmpty()) {
+						JOptionPane.showMessageDialog(Body, "Invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						// Check if the subject already exists
+						int existingSubjectID = DatabaseHandler.getSubjectID(subjectDisplay);
+			
+						if (existingSubjectID != -1) {
+							// Subject already exists, use the existing ID
+							int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+							DatabaseHandler.associateFacultyWithSubject(facultyID, existingSubjectID);
+							JOptionPane.showMessageDialog(Body, "Subject Already exists", "Error", JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							// Subject doesn't exist, insert it into the database
+							int subjectID = DatabaseHandler.insertSubject(subjectDisplay);
+			
+							// Fetch the latest subject data from the database
+							SubjectData latestSubject = DatabaseHandler.getLatestSubject();
+			
+							// Update UI components with the new data
+							sub.subjectLbl.setText(latestSubject.getSubjectName());
+			
+							// Add the subject to the panel
+							Body.add(sub);
+							currentRow++;
+			
+							if (Body.getComponentCount() > 10) {
+								// Increase the preferred height of the rowPanel
+								Dimension preferredSize = Body.getPreferredSize();
+								preferredSize.height += 50;
+								Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+								Body.setPreferredSize(preferredSize);
+								Body.revalidate();
+							}
+			
+							int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+							DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
+			
+							Body.revalidate();
+						}
+						add.dispose();
+					}
+				}
+			});
+		}
+	});
 		
 		
 		addSubjectBtn.setBounds(120, 20, 150, 35);
@@ -239,84 +300,9 @@ int currentFacultyID = -1;
 			sub.subjectLbl.setText(subjectData.getSubjectName());
 			sub.semesterLbl.setText((String) semesterCB.getSelectedItem());
 			sub.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
+
 			Body.add(sub);
-			Body.revalidate();
 			
-			addSubjectBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				subject sub = new subject();
-				addSubjectDialog add = new addSubjectDialog();
-				add.show();
-
-				int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
-				List<SubjectData> subjects = DatabaseHandler.getSubjectsByFaculty(facultyID);
-				System.out.println(subjects);
-
-				// Iterate through the subjects and add them to the Body panel
-				for (SubjectData subjectData : subjects) {
-					sub.subjectLbl.setText(subjectData.getSubjectName());
-					sub.semesterLbl.setText((String) semesterCB.getSelectedItem());
-					sub.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
-					System.out.println(subjectData);
-					Body.add(sub);
-					Body.revalidate();
-				}
-				
-		
-				add.addBtn.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						String code = add.codeTF.getText();
-						String description = add.decriptionTF.getText();
-						String subjectDisplay = code + " " + description;
-		
-						if (code.isEmpty() || description.isEmpty() || add.semesterCB.getSelectedIndex() == 0) {
-							JOptionPane.showMessageDialog(Body, "Invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);
-						} else {
-							// Check if the subject already exists
-							int existingSubjectID = DatabaseHandler.getSubjectID(subjectDisplay);
-		
-							if (existingSubjectID != -1) {
-								// Subject already exists, use the existing ID
-								int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
-								DatabaseHandler.associateFacultyWithSubject(facultyID, existingSubjectID);
-								JOptionPane.showMessageDialog(Body, "Subject Already exists", "Error", JOptionPane.INFORMATION_MESSAGE);
-							} else {
-								// Subject doesn't exist, insert it into the database
-								int subjectID = DatabaseHandler.insertSubject(subjectDisplay);
-		
-								// Fetch the latest subject data from the database
-								SubjectData latestSubject = DatabaseHandler.getLatestSubject();
-		
-								// Update UI components with the new data
-								sub.subjectLbl.setText(latestSubject.getSubjectName());
-								sub.semesterLbl.setText((String) add.semesterCB.getSelectedItem());
-								sub.academicYearLbl.setText((String) add.acadYearCB.getSelectedItem());
-		
-								// Add the subject to the panel
-								Body.add(sub);
-								currentRow++;
-		
-								if (Body.getComponentCount() > 10) {
-									// Increase the preferred height of the rowPanel
-									Dimension preferredSize = Body.getPreferredSize();
-									preferredSize.height += 50;
-									Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
-									Body.setPreferredSize(preferredSize);
-									Body.revalidate();
-								}
-
-								int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
-								DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
-		
-								Body.revalidate();
-							}
-							add.dispose();
-						}
-					}
-				});
-			}
-		});
-
 			//new add section button on Subjects
 			JButton addSection = sub.addBtn;
 			addSection.addMouseListener(new MouseAdapter() 
@@ -327,7 +313,7 @@ int currentFacultyID = -1;
 					addSection addSection = new addSection();
 					addSection.show();
 					DatabaseHandler dbH = new DatabaseHandler();
-					int subjectID = SubjectData.getSubjectID();
+					int subjectID =  DatabaseHandler.getSubjectIDByFaculty(facultyName.getText(), subjectData.getSubjectName());
 					// Fetch sections associated with the current faculty and subject
 					List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
 					
@@ -336,8 +322,6 @@ int currentFacultyID = -1;
 					for (String sectionb : sections) {
 						sections secb = new sections();
 						secb.sectionLbl.setText(sectionb);
-						secb.semesterLbl.setText("");
-						secb.academicYearLbl.setText("");
 
 						System.out.println(sectionb);
 
@@ -362,21 +346,18 @@ int currentFacultyID = -1;
 								{
 									sections sec = new sections();
 									String section = addSectionDialog.sectionTF.getText();
-									String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
-									String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
 									
-
 									// Add section to the database
 									int sectionID = DatabaseHandler.addSection(section);
-									DatabaseHandler.associateSectionWithFacultySubject(facultyID, SubjectData.getSubjectID(), sectionID);
+									DatabaseHandler.associateSectionWithFacultySubject(facultyID, DatabaseHandler.getSubjectIDByFaculty(facultyName.getText(), subjectData.getSubjectName()), sectionID);
 									
-									if(section.isEmpty() || addSectionDialog.semesterCB.getSelectedIndex() == 0) 
+									if(section.isEmpty()) 
 									{
 										JOptionPane.showMessageDialog(Body, "invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
 									}
 									else 
 									{
-										int subjectID = SubjectData.getSubjectID();
+										int subjectID =  DatabaseHandler.getSubjectIDByFaculty(facultyName.getText(), subjectData.getSubjectName());
 										int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
 										DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
 										
@@ -387,8 +368,6 @@ int currentFacultyID = -1;
 										// Iterate through sections and display them
 										for (String sectionb : sections) {
 											secb.sectionLbl.setText(sectionb);
-											secb.semesterLbl.setText("");
-											secb.academicYearLbl.setText("");
 										}
 										// Add the section to the Body panel
 										addSection.Body.add(secb);
@@ -441,8 +420,6 @@ int currentFacultyID = -1;
 						{
 							editSubject.addLbl.setText("Edit Subject");
 							editSubject.addBtn.setText("Done");
-							editSubject.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
-							editSubject.semesterCB.setSelectedItem(sub.semesterLbl.getText());
 							editSubject.show();
 							
 							editSubject.addBtn.addMouseListener(new MouseAdapter() 
@@ -473,8 +450,6 @@ int currentFacultyID = -1;
 									sections sec = new sections();
 									System.out.println("BPRESSEDs");
 									String section = addSectionDialog.sectionTF.getText();
-									String semester = (String) addSectionDialog.semesterCB.getSelectedItem();
-									String academicYear = (String) addSectionDialog.acadYearCB.getSelectedItem();
 
 									// Add section to the database
 									int sectionID = DatabaseHandler.addSection(section);
@@ -498,8 +473,6 @@ int currentFacultyID = -1;
 										
 										edit.sectionPanel.add(sec);
 										sec.sectionLbl.setText(section);
-										sec.semesterLbl.setText(semester);
-										sec.academicYearLbl.setText(academicYear);
 										currentRow++;
 										
 										if (edit.sectionPanel.getComponentCount() > 10) 
@@ -554,6 +527,21 @@ int currentFacultyID = -1;
 		Body.revalidate();
 		Body.repaint();
 	}
+	}
+	class JPanelGradient extends JPanel{
+		protected void paintComponent(Graphics g){
+			Graphics2D g2d = (Graphics2D) g;
+			int width = getWidth();
+			int height = getHeight();
+
+
+			Color C1 = new Color(255, 198, 43);
+			Color C2 = new Color(255, 77, 41);
+			GradientPaint gp = new GradientPaint(75,0,C1,180,height,C2);
+			g2d.setPaint(gp);
+			g2d.fillRect(0, 0, width, height);
+			
+		}
 	}
 }
 

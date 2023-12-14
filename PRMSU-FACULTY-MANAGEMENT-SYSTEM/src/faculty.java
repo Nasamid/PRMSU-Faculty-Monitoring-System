@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
 
 public class faculty extends JPanel 
 {
@@ -21,14 +22,11 @@ public class faculty extends JPanel
 	
 	public faculty() 
 	{
+		setBorder(new MatteBorder(1, 0, 1, 0, (Color) new Color(255, 77, 41)));
 		setPreferredSize(new Dimension(1000, 45));
 		setBackground(Color.BLACK);
 		setBackground(SystemColor.text);
 		setLayout(null);
-		
-		JSeparator separator4 = new JSeparator();
-		separator4.setBounds(10, 44, 980, 1);
-		add(separator4);
 		
 		panel = new JPanel();
 		panel.setBorder(null);

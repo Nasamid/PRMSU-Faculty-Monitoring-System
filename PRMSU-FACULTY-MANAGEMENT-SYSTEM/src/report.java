@@ -150,10 +150,27 @@ public class report extends JPanel{
         
         //table panel
         this.setBounds(180,0,1000,720);
-        this.setBackground(SystemColor.textHighlight);
+        //this.setBackground(SystemColor.textHighlight);
         this.setLayout(null);
         this.add(scrollPane2);
         this.add(report);
         this.add(button2);
+    }
+
+    //This class is to add gradient to the JPanels
+    class JPanelGradient extends report{
+        protected void paintComponent(Graphics g){
+            Graphics2D g2d = (Graphics2D) g;
+            int width = getWidth();
+            int height = getHeight();
+
+
+            Color C1 = new Color(255, 198, 43);
+            Color C2 = new Color(255, 77, 41);
+            GradientPaint gp = new GradientPaint(75,0,C1,180,height,C2);
+            g2d.setPaint(gp);
+            g2d.fillRect(0, 0, width, height);
+            
+        }
     }
 }
