@@ -31,10 +31,10 @@ public class AddFaculty extends JDialog
 	JLabel departmentLbl;
 	JLabel acadYear;
 	JLabel semesterLbl;
-	JComboBox departmentCB, acadYearCB, semesterCB;
+	JComboBox departmentCB, acadYearCB, semesterCB = new JComboBox<>();
 
-	public AddFaculty() 
-	{
+	public AddFaculty() { 
+	
 		
 		// Set the dimensions and location of the JFrame to center it
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

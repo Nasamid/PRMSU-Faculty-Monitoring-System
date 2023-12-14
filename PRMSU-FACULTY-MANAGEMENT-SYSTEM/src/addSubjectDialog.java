@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
+import java.awt.BorderLayout;
 public class addSubjectDialog extends JDialog 
 {
 
@@ -36,7 +37,7 @@ public class addSubjectDialog extends JDialog
         int screenHeight = screenSize.height;
 
         int frameWidth = 500;
-        int frameHeight = 300;
+        int frameHeight = 295;
         int x = (screenWidth - frameWidth) / 2;
         int y = (screenHeight - frameHeight) / 2;
         setBounds(x, y, frameWidth, frameHeight);
@@ -55,7 +56,7 @@ public class addSubjectDialog extends JDialog
 		//codeTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		codeTF.setBackground(SystemColor.text);
 		codeTF.setFont(new Font("Arial", Font.PLAIN, 15));
-		codeTF.setBounds(50, 58, 400, 55);
+		codeTF.setBounds(50, 60, 400, 55);
 		contentPanel.add(codeTF);
 		codeTF.setColumns(10);
 		
@@ -70,19 +71,20 @@ public class addSubjectDialog extends JDialog
 		
 		panel = new JPanel();
 		panel.setBackground(new Color(255, 128, 41));
-		panel.setBounds(0, 0, 386, 35);
+		panel.setBounds(0, 0, 500, 50);
 		contentPanel.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
 		
 		addLbl = new JLabel("Add Subject");
 		panel.add(addLbl);
 		addLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		addLbl.setBackground(SystemColor.textHighlight);
-		addLbl.setFont(new Font("Arial", Font.BOLD, 22));
+		addLbl.setFont(new Font("Arial", Font.BOLD, 25));
 		
 		{
 			JPanel buttonPane = new JPanel();
 			//buttonPane.setBorder(null);
-			buttonPane.setBounds(0, 230, 386, 40);
+			buttonPane.setBounds(0, 210, 500, 50);
 			buttonPane.setBackground(new Color(255, 128, 41));
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(null);
