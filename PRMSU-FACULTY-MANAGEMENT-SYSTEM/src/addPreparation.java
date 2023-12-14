@@ -26,16 +26,20 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.TitledBorder;
 
 public class addPreparation extends JPanel 
 {
-JTextField facultyName;
+JLabel facultyName;
 JButton addSubjectBtn;
 JPanel Body;
 JFrame frame;
 JComboBox<String> semesterCB, acadYearCB;
 int currentRow = 0;
 int currentFacultyID = -1;
+String code, description;
 
 	public addPreparation() 
 	{
@@ -58,19 +62,18 @@ int currentFacultyID = -1;
 		
 		JLabel panelLbl = new JLabel("Preparation");
 		panelLbl.setFont(new Font("Arial", Font.BOLD, 20));
-		panelLbl.setBounds(10, 10, 159, 25);
+		panelLbl.setBounds(10, 5, 159, 25);
 		Header.add(panelLbl);
 		
-		facultyName = new JTextField();
-		//facultyName.setText("Danilo Llaga Jr.");
+		facultyName = new JLabel();
+		facultyName.setBorder(new TitledBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)), "Faculty:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Arial", Font.BOLD, 13), new Color(0, 0, 0)));
 		facultyName.setBackground(SystemColor.text);
 		facultyName.setHorizontalAlignment(SwingConstants.CENTER);
-		facultyName.setEditable(false);
 		//facultyName.setBorder(new LineBorder(SystemColor.textText, 1, true));
-		facultyName.setFont(new Font("Arial", Font.BOLD, 15));
-		facultyName.setBounds(45, 50, 350, 35);
+		facultyName.setForeground(SystemColor.WHITE);
+		facultyName.setFont(new Font("Arial", Font.BOLD, 20));
+		facultyName.setBounds(20, 40, 400, 40);
 		Header.add(facultyName);
-		facultyName.setColumns(10);
 		
 		JLabel acadLbl = new JLabel("Academic Year :");
 		acadLbl.setFont(new Font("Arial", Font.BOLD, 15));
@@ -87,6 +90,7 @@ int currentFacultyID = -1;
 		//acadYearCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		acadYearCB.setBackground(SystemColor.text);
 		acadYearCB.setBounds(540, 55, 150, 25);
+		acadYearCB.setEnabled(false);
 		Header.add(acadYearCB);
 		
 		JPanel Footer = new JPanelGradient();
@@ -110,8 +114,6 @@ int currentFacultyID = -1;
 		
 		addSubjectBtn = new JButton("Add Subject");
 		addSubjectBtn.setBackground(SystemColor.text);
-		
-		//addSubjectBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		addSubjectBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		addSubjectBtn.setFocusable(false);
 
@@ -126,9 +128,9 @@ int currentFacultyID = -1;
 		
 			add.addBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String code = add.codeTF.getText();
-					String description = add.decriptionTF.getText();
-					String subjectDisplay = code + " " + description;
+					code = add.codeTF.getText();
+					description = add.decriptionTF.getText();
+					String subjectDisplay = code + " - " + description;
 			
 					if (code.isEmpty() || description.isEmpty()) {
 						JOptionPane.showMessageDialog(Body, "Invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -237,6 +239,7 @@ int currentFacultyID = -1;
 		semesterCB.setFont(new Font("Arial", Font.BOLD, 13));
 		//semesterCB.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		semesterCB.setBounds(820, 55, 150, 25);
+		semesterCB.setEnabled(false);
 		Header.add(semesterCB);
 		}
 		
@@ -311,6 +314,8 @@ int currentFacultyID = -1;
 				public void mousePressed(MouseEvent e) 
 				{
 					addSection addSection = new addSection();
+					addSection.setTitle("Add Section");
+					addSection.setResizable(false);
 					addSection.show();
 					DatabaseHandler dbH = new DatabaseHandler();
 					int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
@@ -416,120 +421,48 @@ int currentFacultyID = -1;
 				@Override
 				public void mousePressed(MouseEvent e) 
 				{
-					editDialog edit = new editDialog();
-					addSubjectDialog editSubject = new addSubjectDialog();
-					DatabaseHandler dbH = new DatabaseHandler();
-					int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
-					List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
+					addSubjectDialog add = new addSubjectDialog();
+					String subject = sub.subjectLbl.getText();
+					String[] codeAndSubject = subject.split(" - ");
+
+					add.setTitle("Edit Subject");
+					add.addLbl.setText("Edit Subject");
+					add.addBtn.setText("Edit");
+					add.setTitle("Edit Subject");
+					add.codeTF.setText(codeAndSubject[0]);
+					System.out.println("code TF AFTER");
+					add.decriptionTF.setText(codeAndSubject[1]);
 					
+					add.show();
 
-					// Iterate through sections and display them
-					for (String sectionb : sections) {
-						sections secb = new sections();
-						secb.sectionLbl.setText(sectionb);
-
-						System.out.println(sectionb);
-
-						// Add the section to the Body panel
-						editSection.add(secb);
-						editSection.revalidate();
-						editSection.repaint();
-					}
-					edit.show();
-					
-					edit.editSubject.addMouseListener(new MouseAdapter() 
+					//Edit subject button listener
+					add.addBtn.addActionListener(new ActionListener() 
 					{
 						@Override
-						public void mousePressed(MouseEvent e) 
-						{
-							editSubject.addLbl.setText("Edit Subject");
-							editSubject.addBtn.setText("Done");
-							editSubject.show();
-							
-							editSubject.addBtn.addMouseListener(new MouseAdapter() 
-							{
-								public void mousePressed(MouseEvent e) 
-								{
-									sub.subjectLbl.setText(editSubject.codeTF.getText() + " - " + editSubject.decriptionTF.getText());
-									edit.SubjectLbl.setText(editSubject.codeTF.getText() + " - " + editSubject.decriptionTF.getText());
-									editSubject.dispose();
-								}
-							});
-						
-						}
-					});
-							
-					edit.addSection.addMouseListener(new MouseAdapter() 
-					{
-						public void mousePressed(MouseEvent e) 
-						{
-							addSectionDialog addSectionDialog = new addSectionDialog();
-							addSectionDialog.show();
-							System.out.println("BPRESSED");
-							
-							addSectionDialog.addDialogBtn.addActionListener(new ActionListener() 
-							{
-								public void actionPerformed(ActionEvent e) 
-								{
-									sections sec = new sections();
-									System.out.println("BPRESSEDs");
-									String section = addSectionDialog.sectionTF.getText();
+							public void actionPerformed(ActionEvent e) {
+								// TODO Auto-generated method stub
+								System.out.println("Gumagana ako");
 
-									// Add section to the database
-									int sectionID = DatabaseHandler.addSection(section);
-									
-									sec.deleteBtn.addMouseListener(new MouseAdapter() 
-									{
-										public void mousePressed(MouseEvent e) 
-										{
-											System.out.println("BPRESSED3e");
-											edit.sectionPanel.remove(sec);
-											edit.revalidate();
-										}
-									});
-									
-									if(section.isEmpty()) 
-									{
-										JOptionPane.showMessageDialog(Body, "invalid Code or Description", "Error", JOptionPane.INFORMATION_MESSAGE);
-									}
-									else 
-									{
-										
-										edit.sectionPanel.add(sec);
-										sec.sectionLbl.setText(section);
-										currentRow++;
-										
-										if (edit.sectionPanel.getComponentCount() > 10) 
-										{ 
-											// Increase the preferred height of the rowPanel
-											Dimension preferredSize = edit.sectionPanel.getPreferredSize();
-											preferredSize.height += 35;
-											edit.sectionPanel.setLayout(new GridLayout(edit.sectionPanel.getComponentCount(), 1));
-											edit.sectionPanel.setPreferredSize(preferredSize);
-											edit.sectionPanel.revalidate();
-										}
-										
-										sec.deleteBtn.addMouseListener(new MouseAdapter() 
-										{
-											public void mousePressed(MouseEvent e) 
-											{
-												System.out.println("BUTTON PRESSED");
-												edit.sectionPanel.remove(sec);
-												edit.revalidate();
-												edit.repaint();
-											}
-										});
-										
-										edit.sectionPanel.revalidate();
-										addSectionDialog.dispose();
-									}
+								int existingSubjectID = DatabaseHandler.getSubjectID(subject);
+								String newCode = add.codeTF.getText();
+								String newDescription = add.decriptionTF.getText();
+								String newSubjectDisplay = newCode + " - " + newDescription;
+
+								if (existingSubjectID != -1) {
+									// Update the subject name in the database
+									DatabaseHandler.updateSubjectName(existingSubjectID, newSubjectDisplay);
+					
+									// Update the UI components with the new data
+									sub.subjectLbl.setText(newSubjectDisplay);
+					
+									// Refresh the display
+									Body.revalidate();
+									Body.repaint();
+									add.dispose();
 								}
-							});
 						}
 					});
-					
 					sub.revalidate();
-					edit.show();
 				}
 			});
 			
@@ -541,6 +474,16 @@ int currentFacultyID = -1;
 				public void mousePressed(MouseEvent e) 
 				{
 					System.out.println("Delete pressed");
+
+					// Get the subjectID associated with the subject label
+					int subjectID = DatabaseHandler.getSubjectID(sub.subjectLbl.getText());
+
+					// Delete entry in faculty_subject_section table
+					DatabaseHandler.deleteFacultySubjectSectionBySubjectID(subjectID);
+			
+					// Delete entry in subjects table
+					DatabaseHandler.deleteSubjectByID(subjectID);
+
 					Body.remove(sub);
 					Body.revalidate();
 					Body.repaint();

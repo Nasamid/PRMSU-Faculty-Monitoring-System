@@ -27,6 +27,55 @@ public class DatabaseHandler {
         return connection;
     }
 
+    public static int getFssID(int facultyID, int subjectID) {
+        int fssID = -1;
+
+        String query = "SELECT fssID FROM faculty_subject_section WHERE facultyID = ? AND subjectID = ?";
+
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setInt(2, subjectID);
+
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                fssID = resultSet.getInt("fssID");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return fssID;
+    }
+
+
+    public static int getSectionIDByFacultySubject(int facultyID, int subjectID) {
+        int sectionID = -1;
+
+        String query = "SELECT sectionID FROM faculty_subject_section WHERE facultyID = ? AND subjectID = ?";
+
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setInt(2, subjectID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                sectionID = resultSet.getInt("sectionID");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sectionID;
+    }
+
+
     // Insert faculty data into the database
     public static int insertFaculty(String facultyName, int departmentID, int yearID, int semesterID) {
         String query = "INSERT INTO faculty (name, deptID, yearID, semesterID) VALUES (?, ?, ?, ?)";
@@ -696,6 +745,40 @@ public class DatabaseHandler {
         try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, sectionID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteFacultySubjectSectionBySubjectID(int subjectID) {
+        String query = "DELETE FROM faculty_subject_section WHERE subjectID = ?";
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, subjectID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateSubjectName(int subjectID, String newSubjectName) {
+        String query = "UPDATE subjects SET subject = ? WHERE subjectID = ?";
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, newSubjectName);
+            preparedStatement.setInt(2, subjectID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteSubjectByID(int subjectID) {
+        String query = "DELETE FROM subjects WHERE subjectID = ?";
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, subjectID);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
