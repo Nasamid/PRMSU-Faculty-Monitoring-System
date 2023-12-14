@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -93,6 +92,7 @@ public class listFaculty extends JPanel
 					public void actionPerformed(ActionEvent e) {
 						String lastName = addFaculty.lastNameTF.getText();
 						String facultyName = addFaculty.firstNameTF.getText() + " " + addFaculty.middleNameTF.getText() + " " + addFaculty.lastNameTF.getText() + " " + addFaculty.extNameTF.getText();
+						String lastName = addFaculty.lastNameTF.getText();  // Extracting last name
 						String department = (String) addFaculty.departmentCB.getSelectedItem();
 						String academicYear = (String) addFaculty.acadYearCB.getSelectedItem();
 						String semester = (String) addFaculty.semesterCB.getSelectedItem();
@@ -111,6 +111,9 @@ public class listFaculty extends JPanel
 				
 							// Insert data into the SQLite database and get the generated facultyID
 							int facultyID = DatabaseHandler.insertFaculty(facultyName, departmentID, yearID, semesterID);
+				
+							// Insert data into the fLnID table
+							DatabaseHandler.insertFLnID(facultyID, lastName);
 				
 							// Do something with the generated facultyID if needed
 							DatabaseHandler.insertFLnID(facultyID, lastName);
@@ -377,6 +380,7 @@ public class listFaculty extends JPanel
 						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
 						preparation.frame.setVisible(true);
 						preparation.fetchAndDisplaySubjects();
+						preparation.Body.revalidate();
 					}
 				});
 				
