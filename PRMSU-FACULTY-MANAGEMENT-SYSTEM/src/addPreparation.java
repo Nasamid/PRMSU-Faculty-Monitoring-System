@@ -316,7 +316,8 @@ String code, description;
 					addSection addSection = new addSection();
 					addSection.show();
 					DatabaseHandler dbH = new DatabaseHandler();
-					int subjectID =  DatabaseHandler.getSubjectIDByFaculty(facultyName.getText(), subjectData.getSubjectName());
+					int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
+					System.out.println(subjectData.getSubjectName());
 					// Fetch sections associated with the current faculty and subject
 					List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
 					
@@ -333,7 +334,20 @@ String code, description;
 						addSection.Body.revalidate();
 						addSection.Body.repaint();
 
-						// Additional code for handling delete and other actions for sections
+						secb.deleteBtn.addMouseListener(new MouseAdapter() {
+							public void mousePressed(MouseEvent e) {
+								// Get the sectionID associated with the section label
+								int sectionID = DatabaseHandler.getSectionID(sectionb);
+					
+								// Delete entry in faculty_subject_section table
+								DatabaseHandler.deleteFacultySubjectSectionBySectionID(sectionID);
+					
+								// Remove the section from the Body panel
+								addSection.Body.remove(secb);
+								addSection.revalidate();
+								addSection.repaint();
+							}
+						});
 					}
 					
 					addSection.addBtn.addActionListener(new ActionListener() 
@@ -349,10 +363,10 @@ String code, description;
 								{
 									sections sec = new sections();
 									String section = addSectionDialog.sectionTF.getText();
-
+									
 									// Add section to the database
 									int sectionID = DatabaseHandler.addSection(section);
-									DatabaseHandler.associateSectionWithFacultySubject(facultyID, DatabaseHandler.getSubjectIDByFaculty(facultyName.getText(), subjectData.getSubjectName()), sectionID);
+									DatabaseHandler.associateSectionWithFacultySubject(facultyID, DatabaseHandler.getSubjectID(subjectData.getSubjectName()), sectionID);
 									
 									if(section.isEmpty()) 
 									{
@@ -360,7 +374,7 @@ String code, description;
 									}
 									else 
 									{
-										int subjectID =  DatabaseHandler.getSubjectIDByFaculty(facultyName.getText(), subjectData.getSubjectName());
+										int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
 										int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
 										DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
 										
@@ -386,9 +400,7 @@ String code, description;
 											addSection.Body.setPreferredSize(preferredSize);
 											addSection.Body.revalidate();
 										}
-										
-										
-										
+
 										addSection.Body.revalidate();
 										addSectionDialog.dispose();
 									}	
