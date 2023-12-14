@@ -13,6 +13,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.List;
+import java.awt.Image;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -51,6 +54,7 @@ String code, description;
 		setLayout(null);
 		
 		frame = new JFrame();
+		frame.setTitle("Add Preparation");
 		frame.setSize(1000, 720);
 		frame.getContentPane().add(this);
 		
@@ -290,6 +294,14 @@ String code, description;
 		JPanel addPanel = new JPanel();
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
+
+		Image logo;
+            try {
+                logo = ImageIO.read(addPreparation.class.getResourceAsStream("/Images/addfacultyicon16x.png"));
+                frame.setIconImage(logo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 		
 		//Responsible for making the window open on the center of the screen on start up
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -299,6 +311,9 @@ String code, description;
 		int y = (dim.height-h)/2;
 		frame.setLocation(x,y);
 		
+	}
+
+	private static void setIconImage(Image logo) {
 	}
 
 	public void fetchAndDisplaySubjects() {

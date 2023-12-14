@@ -137,7 +137,7 @@ public class LoginWindow extends javax.swing.JFrame{
     OffButton = new JButton();
     Image image2;
             try {
-                image2 = ImageIO.read(LoginWindow.class.getResourceAsStream("/Images/offbuttonblue.png"));
+                image2 = ImageIO.read(LoginWindow.class.getResourceAsStream("/Images/offbuttonblue1.png"));
                  ImageIcon imageIcon = new ImageIcon(image2);
                 OffButton.setIcon(imageIcon);
             } catch (IOException e) {

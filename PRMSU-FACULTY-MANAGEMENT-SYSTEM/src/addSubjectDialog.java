@@ -6,6 +6,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
+import java.awt.Image;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -43,6 +46,14 @@ public class addSubjectDialog extends JDialog
         int y = (screenHeight - frameHeight) / 2;
         setBounds(x, y, frameWidth, frameHeight);
         setResizable(false);
+
+		Image logo;
+            try {
+                logo = ImageIO.read(addSubjectDialog.class.getResourceAsStream("/Images/addsubjecticon16x.png"));
+                this.setIconImage(logo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         
 		contentPanel.setBounds(0, 0, 500, 210);
 		setTitle("Add Subject");

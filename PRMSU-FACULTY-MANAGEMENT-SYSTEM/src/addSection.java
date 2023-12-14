@@ -6,6 +6,9 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Image;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -36,6 +39,14 @@ public class addSection extends JDialog
         int frameHeight = 480;
         int x = (screenWidth - frameWidth) / 2;
         int y = (screenHeight - frameHeight) / 2;
+
+		Image logo;
+            try {
+                logo = ImageIO.read(addSection.class.getResourceAsStream("/Images/addsubjecticon16x.png"));
+                this.setIconImage(logo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         setBounds(x, y, frameWidth, frameHeight);
 		setTitle("Add Subject");

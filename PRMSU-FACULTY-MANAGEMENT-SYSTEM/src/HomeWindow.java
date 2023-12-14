@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,7 +42,7 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 public class HomeWindow 
 {
         JFrame HomeWindow;
-        JPanel RootPanel, NaviPanel, HomePanel, ReportPanel;
+        JPanel RootPanel, NaviPanel, HomePanel, ReportPanel,BGpanel;
         JButton HomeButton, ListFacButton, ReportButton, HelpButton, LogoutButton;
         JLabel UnivLogo, HPimage;
         JPanel VideoPanel;
@@ -87,7 +88,7 @@ public class HomeWindow
             UnivLogo = new JLabel();
             
             faculty.setVisible(false);  // sets List of Faculty Panel not visible
-            reportpage.setVisible(false); // sets Report page not visible
+            reportpage.panel.setVisible(false); // sets Report page not visible
 
         //Root Panel is the master of all sub panels
         RootPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -107,9 +108,29 @@ public class HomeWindow
 
         //The Home Panel will host the video slideshow Marlou and Ralph proposed
         //The Color BG is a placeholder
+        BGpanel = new JPanelGradient();
+        BGpanel.setLayout(new GridBagLayout());
+
+        JLabel HPimage = new JLabel();
+        try {
+            BufferedImage bg = ImageIO.read(HomeWindow.class.getResourceAsStream("/Images/homewindowbg2.png"));
+            ImageIcon imageIcon = new ImageIcon(bg);
+            HPimage.setIcon(imageIcon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        BGpanel.add(HPimage, new GridBagConstraints());
+        
+        // Assuming HomePanel is a member variable of your existing class
+        HomePanel.setLayout(new BorderLayout());
+        HomePanel.add(BGpanel);
+
+
+
+
         HomePanel.setBorder(BorderFactory.createLineBorder(TextHighlightColor));
-        HomePanel.setBounds(180,0,900, 720);
-        HomePanel.setLayout(null);
+        HomePanel.setBounds(180,0,1000, 720);
 
             VideoPanel.setVisible(true);
 
@@ -191,7 +212,7 @@ public class HomeWindow
                         VideoPanel.setEnabled(true);
 
                         faculty.show(false);
-                        reportpage.show(false);
+                        reportpage.panel.show(false);
 
                         ReportPanel.setVisible(false);
                         ReportPanel.setEnabled(false);
@@ -208,7 +229,7 @@ public class HomeWindow
                         VideoPanel.setEnabled(false);
 
                         faculty.show();
-                        reportpage.show(false);
+                        reportpage.panel.show(false);
 
                         ReportPanel.setVisible(false);
                         ReportPanel.setEnabled(false);
@@ -225,7 +246,7 @@ public class HomeWindow
                         VideoPanel.setEnabled(false);
 
                         faculty.show(false);
-                        reportpage.show();
+                        reportpage.panel.show();
                         
                     }
             });
@@ -258,7 +279,7 @@ public class HomeWindow
             RootPanel.add(ReportPanel);
             RootPanel.add(VideoPanel);
             RootPanel.add(faculty);
-            RootPanel.add(reportpage);
+            RootPanel.add(reportpage.panel);
 
             //Window Essentials
             HomeWindow.setTitle("COE Faculty Monitoring System");

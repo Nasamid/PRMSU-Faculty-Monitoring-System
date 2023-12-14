@@ -16,6 +16,9 @@ import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+import javax.imageio.ImageIO;
+import java.awt.Image;
+import java.io.IOException;
 
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
@@ -59,6 +62,14 @@ public class addSectionDialog extends JDialog
         int y = (screenHeight - frameHeight) / 2;
 
         setBounds(x, y, frameWidth, frameHeight);
+
+		Image logo;
+            try {
+                logo = ImageIO.read(addSectionDialog.class.getResourceAsStream("/Images/addsubjecticon16x.png"));
+                this.setIconImage(logo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         
 		contentPanel.setBounds(0, 0, 500, 140);
 		setTitle("Add Section");
