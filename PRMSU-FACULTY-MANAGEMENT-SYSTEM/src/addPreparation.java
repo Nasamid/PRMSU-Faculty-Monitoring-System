@@ -168,6 +168,14 @@ String code, description;
 			
 							int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
 							DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
+							
+
+							String lastName = DatabaseHandler.getLastNameByFacultyID(facultyID);
+							
+							// Create subject folders for the faculty
+							documentfaculty faculty = new documentfaculty(String.valueOf(facultyID), lastName);
+							//faculty.register();
+							faculty.createSubjectFolderInSubdirectories(latestSubject.getSubjectName());
 			
 							Body.revalidate();
 						}
@@ -175,6 +183,7 @@ String code, description;
 					}
 				}
 			});
+			
 		}
 	});
 		

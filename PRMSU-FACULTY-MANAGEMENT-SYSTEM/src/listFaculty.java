@@ -114,8 +114,6 @@ public class listFaculty extends JPanel
 				
 							// Insert data into the SQLite database and get the generated facultyID
 							int facultyID = DatabaseHandler.insertFaculty(facultyName, departmentID, yearID, semesterID);
-
-							int fIDlast = FacultyData.getFacultyID();
 				
 							// Do something with the generated facultyID if needed
 							DatabaseHandler.insertFLnID(facultyID, lastName);
