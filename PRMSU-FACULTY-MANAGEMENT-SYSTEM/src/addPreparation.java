@@ -423,9 +423,23 @@ int currentFacultyID = -1;
 				{
 					editDialog edit = new editDialog();
 					addSubjectDialog editSubject = new addSubjectDialog();
-					edit.SubjectLbl.setText(sub.subjectLbl.getText());
-					edit.acadYearCB.setSelectedItem(sub.academicYearLbl.getText());
-					edit.semesterCB.setSelectedItem(sub.semesterLbl.getText());
+					DatabaseHandler dbH = new DatabaseHandler();
+					int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
+					List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
+					
+
+					// Iterate through sections and display them
+					for (String sectionb : sections) {
+						sections secb = new sections();
+						secb.sectionLbl.setText(sectionb);
+
+						System.out.println(sectionb);
+
+						// Add the section to the Body panel
+						editSection.add(secb);
+						editSection.revalidate();
+						editSection.repaint();
+					}
 					edit.show();
 					
 					edit.editSubject.addMouseListener(new MouseAdapter() 
