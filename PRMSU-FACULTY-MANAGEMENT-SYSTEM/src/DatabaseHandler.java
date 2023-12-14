@@ -561,27 +561,39 @@ public class DatabaseHandler {
         return subjects;
     }
 
-    public static int addSection(String section) {
-        try {
-            Connection connection = connect();
-            String query = "INSERT INTO section (section) VALUES (?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                preparedStatement.setString(1, section);
-                preparedStatement.executeUpdate();
+    public static int addSection(String sectionName) {
+        int sectionID = -1;
     
-                // Get the auto-generated section ID
-                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+        String insertQuery = "INSERT INTO section (section) VALUES (?)";
+        String selectQuery = "SELECT sectionID FROM section WHERE section = ?";
+    
+        try (Connection connection = connect();
+             PreparedStatement insertStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
+    
+            // Insert section into the sections table
+            insertStatement.setString(1, sectionName);
+            int rowsAffected = insertStatement.executeUpdate();
+    
+            if (rowsAffected > 0) {
+                // Retrieve the generated section ID
+                ResultSet generatedKeys = insertStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                } else {
-                    throw new SQLException("Failed to get the generated section ID.");
+                    sectionID = generatedKeys.getInt(1);
+                }
+    
+                // Optionally, you can also select the section ID to ensure accuracy
+                selectStatement.setString(1, sectionName);
+                ResultSet resultSet = selectStatement.executeQuery();
+                if (resultSet.next()) {
+                    sectionID = resultSet.getInt("sectionID");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle the exception or log it
-            return -1; // Or some error code to indicate failure
         }
+    
+        return sectionID;
     }
     
     public static List<String> getSections(int facultyID, int subjectID) {
@@ -677,6 +689,49 @@ public class DatabaseHandler {
             e.printStackTrace();
             // Handle the exception or log it
         }
+    }
+
+    public static void deleteFacultySubjectSectionBySectionID(int sectionID) {
+        String query = "DELETE FROM faculty_subject_section WHERE sectionID = ?";
+    
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, sectionID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void deleteSection(int sectionID) {
+        String query = "DELETE FROM section WHERE sectionID = ?";
+    
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, sectionID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int getSectionID(String sectionName) {
+        int sectionID = -1;
+    
+        String query = "SELECT sectionID FROM section WHERE section = ?";
+        
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, sectionName);
+    
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                sectionID = resultSet.getInt("sectionID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sectionID;
     }
     
     // Helper methods for closing resources
