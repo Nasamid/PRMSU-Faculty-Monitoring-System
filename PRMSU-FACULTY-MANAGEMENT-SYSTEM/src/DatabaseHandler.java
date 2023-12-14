@@ -728,6 +728,28 @@ public class DatabaseHandler {
         }
     }
 
+    public static String getLastNameByFacultyID(int facultyID) {
+        String lastName = null;
+
+        String query = "SELECT lastName FROM fID_lastName WHERE facultyID = ?";
+
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, facultyID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                lastName = resultSet.getString("lastName");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lastName;
+    }
+
     public static int getSectionID(String sectionName) {
         int sectionID = -1;
     

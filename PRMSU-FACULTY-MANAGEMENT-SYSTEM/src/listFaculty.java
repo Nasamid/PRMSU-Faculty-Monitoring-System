@@ -102,6 +102,7 @@ public class listFaculty extends JPanel
 								|| addFaculty.departmentCB.getSelectedIndex() == 0) {
 							JOptionPane.showMessageDialog(frame, "Please insert complete information.", "Insufficient Data", JOptionPane.INFORMATION_MESSAGE);
 						} else {
+							
 							// Get the corresponding IDs
 							int departmentID = DatabaseHandler.getDepartmentID(department);
 							int yearID = DatabaseHandler.getYearID(academicYear);
@@ -114,12 +115,19 @@ public class listFaculty extends JPanel
 				
 							// Do something with the generated facultyID if needed
 							DatabaseHandler.insertFLnID(facultyID, lastName);
+
+							// Convert facultyID to a string
+							String facultyIDString = String.valueOf(facultyID);
+
 				
 							faculty.facultyNameLbl.setText(facultyName);
 							faculty.departmentLbl.setText(department);
 							faculty.semesterLbl.setText(semester);
 							faculty.academicYearLbl.setText(academicYear);
 				
+							documentfaculty docfaculty = new documentfaculty(facultyIDString, lastName);
+        					docfaculty.register();
+							
 							facultyNames.add(facultyName);
 							Body.add(faculty);
 							currentRow++;
@@ -175,9 +183,16 @@ public class listFaculty extends JPanel
 							// Assuming you have a method in DatabaseHandler to delete faculty by ID
 							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
 							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+							String lastName = DatabaseHandler.getLastNameByFacultyID(facultyID+3);
+
+							// Convert facultyID to a string
+							String facultyIDString = String.valueOf(facultyID+3);
 
 							if (deleted) {
 								Body.remove(faculty);
+								documentfaculty docfaculty = new documentfaculty(facultyIDString, lastName);
+								System.out.println("faculty ID: " + facultyID);
+        						docfaculty.deleteProfileFolder();
 								revalidate();
 								repaint();
 							} else {
