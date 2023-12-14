@@ -331,7 +331,23 @@ int currentFacultyID = -1;
 						addSection.Body.revalidate();
 						addSection.Body.repaint();
 
-						// Additional code for handling delete and other actions for sections
+						secb.deleteBtn.addMouseListener(new MouseAdapter() {
+							public void mousePressed(MouseEvent e) {
+								// Get the sectionID associated with the section label
+								int sectionID = DatabaseHandler.getSectionID(sectionb);
+					
+								// Delete entry in faculty_subject_section table
+								DatabaseHandler.deleteFacultySubjectSectionBySectionID(sectionID);
+					
+								// Delete section from the section table
+								DatabaseHandler.deleteSection(sectionID);
+					
+								// Remove the section from the Body panel
+								addSection.Body.remove(secb);
+								addSection.revalidate();
+								addSection.repaint();
+							}
+						});
 					}
 					
 					addSection.addBtn.addActionListener(new ActionListener() 
@@ -384,7 +400,7 @@ int currentFacultyID = -1;
 											addSection.Body.setPreferredSize(preferredSize);
 											addSection.Body.revalidate();
 										}
-										
+
 										addSection.Body.revalidate();
 										addSectionDialog.dispose();
 									}	

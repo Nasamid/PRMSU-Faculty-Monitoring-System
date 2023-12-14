@@ -674,6 +674,49 @@ public class DatabaseHandler {
             // Handle the exception or log it
         }
     }
+
+    public static void deleteFacultySubjectSectionBySectionID(int sectionID) {
+        String query = "DELETE FROM faculty_subject_section WHERE sectionID = ?";
+    
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, sectionID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void deleteSection(int sectionID) {
+        String query = "DELETE FROM section WHERE sectionID = ?";
+    
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, sectionID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int getSectionID(String sectionName) {
+        int sectionID = -1;
+    
+        String query = "SELECT sectionID FROM section WHERE section = ?";
+        
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, sectionName);
+    
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                sectionID = resultSet.getInt("sectionID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sectionID;
+    }
     
     // Helper methods for closing resources
     private static void closeConnection(Connection connection) {
