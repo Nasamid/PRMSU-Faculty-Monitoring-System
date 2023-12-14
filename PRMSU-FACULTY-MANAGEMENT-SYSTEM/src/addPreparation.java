@@ -339,9 +339,6 @@ int currentFacultyID = -1;
 								// Delete entry in faculty_subject_section table
 								DatabaseHandler.deleteFacultySubjectSectionBySectionID(sectionID);
 					
-								// Delete section from the section table
-								DatabaseHandler.deleteSection(sectionID);
-					
 								// Remove the section from the Body panel
 								addSection.Body.remove(secb);
 								addSection.revalidate();

@@ -733,6 +733,20 @@ public class DatabaseHandler {
         }
         return sectionID;
     }
+
+    public static void insertFLnID(int facultyID, String lastName) {
+        String query = "INSERT INTO fID_lastName (facultyID, lastName) VALUES (?, ?)";
+        
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setString(2, lastName);
+    
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     
     // Helper methods for closing resources
     private static void closeConnection(Connection connection) {
