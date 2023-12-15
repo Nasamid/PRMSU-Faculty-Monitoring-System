@@ -1,14 +1,22 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
 import java.util.ArrayList;
 import java.util.List;
 import UploadDocTreeNodes.*;
+import uk.ac.manchester.cs.bhig.jtreetable.JTreeTable;
+
 import java.awt.*;
 import java.io.File;
-import java.io.IOException; 
+import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
+import org.jdesktop.swingx.JXTreeTable;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
@@ -19,7 +27,7 @@ public class UploadDocWindow {
     JButton AddFileButton, DeleteFileButton;
     JComboBox<String> CFacultyName, CSchoolYear, CSemester;
     
-    UploadDocWindow(){
+    public UploadDocWindow(int facultyID){
 
         JFrame UploadDocFrame = new JFrame("Upload Documents");
 
@@ -51,8 +59,7 @@ public class UploadDocWindow {
         JPanel viewerComponentPanel = factory.buildViewerPanel();
         viewerComponentPanel.setBounds(5,-100,440, 720);
 
-        JScrollPane scrollPane = new JScrollPane(viewerComponentPanel);
-        scrollPane.setPreferredSize(new Dimension(450, 575));
+        
         
         controller.getDocumentViewController().setAnnotationCallback(
                 new org.icepdf.ri.common.MyAnnotationCallback(
@@ -84,7 +91,7 @@ public class UploadDocWindow {
         float zoomLevel = 0.6f;
         controller.setZoom(zoomLevel);
 
-        JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
+        
         horizontalScrollBar.setValue((horizontalScrollBar.getMaximum() / 2) + 30 );
 
         AddFileButton = new JButton();
@@ -128,17 +135,17 @@ public class UploadDocWindow {
         DeleteFileText.setFont(new Font("Arial", Font.BOLD, 10));
 
         //This Section of the code is where the ComboBoxes are Located
-        String[] FacultyName = {"Daniel Mercurio", "Danilo Llaga", "Ralph Farinas"};
+        //String[] FacultyName = {};
+        JLabel FacultyName = new JLabel();
         String[] SchoolYear = {"2023-2024", "2024-2025", "2025-2026"};
         String[] Semester = {"1st Semester", "2nd Semester", "Mid Year"};
 
         int topcompwidth = 200, yaxis = 25;
         
-        for (String Name : FacultyName) {
-            CFacultyName.addItem(Name);
-            CFacultyName.setEnabled(false);
-        }
-        CFacultyName.setBounds(25,yaxis, topcompwidth, 25);
+        FacultyName.setBounds(25,yaxis, topcompwidth, 25);
+        FacultyName.setText(DatabaseHandler.getLastNameByFacultyID(facultyID).toString());
+        
+        String lastName = FacultyName.getText();
 
         for (String Year : SchoolYear) {
             CSchoolYear.addItem(Year);
@@ -163,72 +170,90 @@ public class UploadDocWindow {
         CSemester.setBounds((topcompwidth*4+10)+30,yaxis, topcompwidth, 25);
         //End of Combobox Section
 
+        String facultyIDString = String.valueOf(DatabaseHandler.getFacultyIDByLastName(lastName));
+
+        String filepath = documentfaculty.getPath(facultyIDString, lastName);
+
+        String path = Paths.get("PRMSU-FACULTY-MANAGEMENT-SYSTEM", "src", "Documents", "faculty", facultyIDString + "-" + lastName).toString();
+        System.out.println("file path is: "+path);
+        File facultyFolder = new File(path);  // Update with the actual path
+        
+        DefaultMutableTreeNode rootNode = createTreeNodes(facultyFolder);
+        String[] columnNames = {" ", "Status", "Date Submitted"}; // Adjust as needed
+
+        CustomTreeTableModel treeTableModel = new CustomTreeTableModel(rootNode, columnNames);
+        JXTreeTable treeTable = new JXTreeTable(treeTableModel);
+        JScrollPane scrollPane = new JScrollPane(treeTable);
+        
+        JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
+        
+
 		List<String[]> content = new ArrayList<>();
 
-        //This Section is just temporary placeholder for what the table will contain
-        content.add(new String[] { "Load" });
-        content.add(new String[] { "Teaching Load", "Uploaded", "04/11/2023" });
+        // //This Section is just temporary placeholder for what the table will contain
+        // content.add(new String[] { "Load" });
+        // content.add(new String[] { "Teaching Load", "Uploaded", "04/11/2023" });
 
-		content.add(new String[] { "Syllabus" });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Syllabus" });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
 
-		content.add(new String[] { "Class Record" });
-        content.add(new String[] { "Software Design", " " });
-		content.add(new String[] { "BSCpE 3A", "Uploaded", "04/11/2023" });
-		content.add(new String[] { "BSCpE 3B", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Computer Aided Drafting", " " });
-		content.add(new String[] { "BSCpE 3A", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "BSCpE 3B", "Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Class Record" });
+        // content.add(new String[] { "Software Design", " " });
+		// content.add(new String[] { "BSCpE 3A", "Uploaded", "04/11/2023" });
+		// content.add(new String[] { "BSCpE 3B", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Computer Aided Drafting", " " });
+		// content.add(new String[] { "BSCpE 3A", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "BSCpE 3B", "Uploaded", "04/11/2023" });
 
-        content.add(new String[] { "Grade Sheet" });
-        content.add(new String[] { "Software Design", " " });
-		content.add(new String[] { "BSCpE 3A", "Uploaded", "04/11/2023" });
-		content.add(new String[] { "BSCpE 3B", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Computer Aided Drafting", " " });
-		content.add(new String[] { "BSCpE 3A", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "BSCpE 3B", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Grade Sheet" });
+        // content.add(new String[] { "Software Design", " " });
+		// content.add(new String[] { "BSCpE 3A", "Uploaded", "04/11/2023" });
+		// content.add(new String[] { "BSCpE 3B", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Computer Aided Drafting", " " });
+		// content.add(new String[] { "BSCpE 3A", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "BSCpE 3B", "Uploaded", "04/11/2023" });
         
-        content.add(new String[] { "Exam with Answer Key" });
-        content.add(new String[] { "Midterm", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Final", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Exam with Answer Key" });
+        // content.add(new String[] { "Midterm", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Final", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
 
-        content.add(new String[] { "Table of Specification" });
-        content.add(new String[] { "Midterm", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Final", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Table of Specification" });
+        // content.add(new String[] { "Midterm", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Final", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
 
-        content.add(new String[] { "Item Analysis" });
-        content.add(new String[] { "Midterm", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Final", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
-        //End of placeholder section
+        // content.add(new String[] { "Item Analysis" });
+        // content.add(new String[] { "Midterm", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Final", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+        // //End of placeholder section
 
-		TreeTable treeTable = new TreeTable(content);
+		//TreeTable treeTable = new TreeTable(content);
 		UploadDocFrame.setLayout(new BorderLayout());
 
-        TreeTablePanel.add(new JScrollPane(treeTable.getTreeTable()), BorderLayout.CENTER);
+        //TreeTablePanel.add(new JScrollPane(treeTable.getTreeTable()), BorderLayout.CENTER);
 		//UploadDocFrame.add(new JScrollPane(treeTable.getTreeTable()), BorderLayout.CENTER);
         
         TopPanel.add(Department);
-        TopPanel.add(CFacultyName);
+        TopPanel.add(FacultyName);
         TopPanel.add(CSchoolYear);
         TopPanel.add(CSemester);
 
@@ -267,10 +292,58 @@ public class UploadDocWindow {
         UploadDocFrame.setVisible(true);
 		UploadDocFrame.setVisible(true);
 
+
     }
-    public static void main(String[] args) {
-        FlatMacLightLaf.registerCustomDefaultsSource("Properties");
-        FlatMacLightLaf.setup();
-        new UploadDocWindow();
+
+
+    private DefaultMutableTreeNode createTreeNodes(File folder) {
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root");
+        File[] files = folder.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    // Add folder as parent node
+                    DefaultMutableTreeNode parentNode = new DefaultMutableTreeNode(file.getName());
+                    rootNode.add(parentNode);
+
+                    // Read subfolders and files
+                    readSubfoldersAndFiles(file, parentNode);
+                }
+            }
+        }
+
+        return rootNode;
     }
+
+
+    private void readSubfoldersAndFiles(File folder, DefaultMutableTreeNode parentNode) {
+        File[] files = folder.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    // Add subfolder as child node
+                    DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(file.getName());
+                    parentNode.add(childNode);
+
+                    // Read subfolders and files recursively
+                    readSubfoldersAndFiles(file, childNode);
+                } else {
+                    // Add file information as child node
+                    String fileName = file.getName();
+                    String[] fileInfo = {fileName, null, null};  // Change this according to your structure
+                    DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(fileInfo);
+                    parentNode.add(childNode);
+                }
+            }
+        }
+    }
+
+
+    // public static void main(String[] args) {
+    //     FlatMacLightLaf.registerCustomDefaultsSource("Properties");
+    //     FlatMacLightLaf.setup();
+    //     new UploadDocWindow();
+    // }
 }

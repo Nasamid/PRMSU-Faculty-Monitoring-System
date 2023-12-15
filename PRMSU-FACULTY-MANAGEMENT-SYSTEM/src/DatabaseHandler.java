@@ -4,7 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DatabaseHandler {
@@ -425,7 +427,7 @@ public class DatabaseHandler {
     }
 
     // Get the latest subject data from the database
-    public static SubjectData getLatestSubject() {
+    public static SubjectData  getLatestSubject() {
         String query = "SELECT * FROM subjects ORDER BY subjectID DESC LIMIT 1";
 
         try (Connection connection = connect();
@@ -446,6 +448,34 @@ public class DatabaseHandler {
 
         return null;
     }
+
+        public static void insertTeachingLoad(int facultyID, String path, int status) {
+        String insertTeachingLoadQuery = "INSERT INTO teaching_load (facultyID, path, date, status) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertTeachingLoadQuery)) {
+
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setString(2, path);
+            preparedStatement.setString(3, null);
+            preparedStatement.setInt(4, 0);
+            
+
+            preparedStatement.executeUpdate();
+            System.out.println("Teaching load entry added successfully.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Failed to insert teaching load entry.");
+        }
+    }
+
+    private static String getCurrentDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
 
     public static String getSubjectName(int subjectID) {
         String query = "SELECT subject FROM subjects WHERE subjectID = ?";

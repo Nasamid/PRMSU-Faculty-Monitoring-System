@@ -129,6 +129,11 @@ public class documentfaculty {
             System.err.println("Failed to rename subject folder for " + facultyIDString + "-" + lastName + " - " + courseCode + " - " + courseDescription + " to " + newCode + " - " + newDescription);
         }
     }
+
+    public static String getPath(String facultyIDString, String lastName){
+        String path = Paths.get("PRMSU-FACULTY-MANAGEMENT-SYSTEM", "src", "Documents", "faculty", facultyIDString + "-" + lastName, "load").toString();
+        return path;
+    }
     
     
 
