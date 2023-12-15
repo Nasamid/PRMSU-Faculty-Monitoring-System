@@ -136,11 +136,13 @@ public class UploadDocWindow {
         
         for (String Name : FacultyName) {
             CFacultyName.addItem(Name);
+            CFacultyName.setEnabled(false);
         }
         CFacultyName.setBounds(25,yaxis, topcompwidth, 25);
 
         for (String Year : SchoolYear) {
             CSchoolYear.addItem(Year);
+            CSchoolYear.setEnabled(false);
         }
 
         Department.setText("Computer Engineering");
@@ -155,6 +157,7 @@ public class UploadDocWindow {
         
         for (String Sem : Semester) {
             CSemester.addItem(Sem);
+            CSemester.setEnabled(false);
         }
 
         CSemester.setBounds((topcompwidth*4+10)+30,yaxis, topcompwidth, 25);

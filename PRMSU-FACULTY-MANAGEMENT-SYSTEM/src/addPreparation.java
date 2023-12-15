@@ -125,12 +125,13 @@ String code, description;
 		public void actionPerformed(ActionEvent e) {
 
 			subject sub = new subject();
-
+			System.out.println(" add subject big button");
 			addSubjectDialog add = new addSubjectDialog();
+			System.out.println("Creates new subj dialog");
 
 			add.show();
 		
-			add.addBtn.addActionListener(new ActionListener() {
+			add.addBtn.addActionListener(new ActionListener() { // creates ne row of subj
 				public void actionPerformed(ActionEvent e) {
 					code = add.codeTF.getText();
 					description = add.decriptionTF.getText();
@@ -156,6 +157,79 @@ String code, description;
 			
 							// Update UI components with the new data
 							sub.subjectLbl.setText(latestSubject.getSubjectName());
+							sub.semesterLbl.setText((String) semesterCB.getSelectedItem());
+							sub.academicYearLbl.setText((String) acadYearCB.getSelectedItem());
+
+							addSectionDialog addSectionDialog = new addSectionDialog();
+
+
+							
+							
+							addSectionDialog.addDialogBtn.addActionListener(new ActionListener() 
+							{
+								public void actionPerformed(ActionEvent e) 
+								{
+									addSection addSection = new addSection();
+									SubjectData subjectData = new SubjectData(subjectID, subjectDisplay, subjectDisplay);
+									addSection.setTitle("Add Section");
+									addSection.setResizable(false);
+									addSection.show();
+									DatabaseHandler dbH = new DatabaseHandler();
+									int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
+									System.out.println(subjectData.getSubjectName());
+									int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+									// Fetch sections associated with the current faculty and subject
+									sections sec = new sections();
+									String section = addSectionDialog.sectionTF.getText();
+
+									// Add section to the database
+									int sectionID = DatabaseHandler.addSection(section);
+									DatabaseHandler.associateSectionWithFacultySubject(facultyID, DatabaseHandler.getSubjectID(subjectData.getSubjectName()), sectionID);
+									
+									if(section.isEmpty()) 
+									{
+										JOptionPane.showMessageDialog(Body, "invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE); //edit the frame
+									}
+									else 
+									{
+
+										DatabaseHandler.associateFacultyWithSubject(facultyID, subjectID);
+		
+										// Fetch sections associated with the current faculty and subject
+										List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
+										sections secb = new sections();
+										// Iterate through sections and display them
+										for (String sectionb : sections) {
+											secb.sectionLbl.setText(sectionb);
+										}
+										// Add the section to the Body panel
+										addSection.Body.add(secb);
+										addSection.Body.revalidate();
+										addSection.Body.repaint();
+										
+										if (addSection.Body.getComponentCount() > 10) 
+										{ 
+											// Increase the preferred height of the rowPanel
+											Dimension preferredSize = addSection.Body.getPreferredSize();
+											preferredSize.height += 40;
+											addSection.Body.setLayout(new GridLayout(addSection.Body.getComponentCount(), 1));
+											addSection.Body.setPreferredSize(preferredSize);
+											addSection.Body.revalidate();
+										}
+
+										String lastName = DatabaseHandler.getLastNameByFacultyID(facultyID);
+
+										// Create subject folders for the faculty
+										documentfaculty faculty = new documentfaculty(String.valueOf(facultyID), lastName);
+										//faculty.register();
+										faculty.createSectionFolderInSubject(subjectData.getSubjectName(),section);
+
+										addSection.Body.revalidate();
+										addSectionDialog.dispose();
+									}	
+								}
+							});
+
 			
 							// Add the subject to the panel
 							Body.add(sub);
@@ -425,6 +499,13 @@ String code, description;
 											addSection.Body.revalidate();
 										}
 
+										String lastName = DatabaseHandler.getLastNameByFacultyID(facultyID);
+
+										// Create subject folders for the faculty
+										documentfaculty faculty = new documentfaculty(String.valueOf(facultyID), lastName);
+										//faculty.register();
+										faculty.createSectionFolderInSubject(subjectData.getSubjectName(),section);
+
 										addSection.Body.revalidate();
 										addSectionDialog.dispose();
 									}	
@@ -478,7 +559,16 @@ String code, description;
 					
 									// Update the UI components with the new data
 									sub.subjectLbl.setText(newSubjectDisplay);
-					
+									
+									String lastName = DatabaseHandler.getLastNameByFacultyID(facultyID);
+
+									// Create subject folders for the faculty
+									documentfaculty faculty = new documentfaculty(String.valueOf(facultyID), lastName);
+									//faculty.register();
+
+
+									faculty.renameSubjectFolders(add.codeTF.getText(),add.decriptionTF.getText(),newCode,newDescription);
+
 									// Refresh the display
 									Body.revalidate();
 									Body.repaint();
@@ -508,6 +598,15 @@ String code, description;
 					// Delete entry in subjects table
 					DatabaseHandler.deleteSubjectByID(subjectID);
 
+					String lastName = DatabaseHandler.getLastNameByFacultyID(facultyID);
+
+					// Create subject folders for the faculty
+					documentfaculty faculty = new documentfaculty(String.valueOf(facultyID), lastName);
+					//faculty.register();
+
+					faculty.deleteSubjectFolderInSubdirectories(sub.subjectLbl.getText());
+	
+					
 					Body.remove(sub);
 					Body.revalidate();
 					Body.repaint();

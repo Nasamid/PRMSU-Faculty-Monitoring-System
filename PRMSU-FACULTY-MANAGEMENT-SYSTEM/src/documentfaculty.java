@@ -82,6 +82,56 @@ public class documentfaculty {
         }
     }
 
+    public void renameSubjectFolders(String courseCode, String courseDescription, String newCode, String newDescription) {
+        try {
+            // Specify the path of the faculty's profile folder
+            Path facultyDirectory = Paths.get("PRMSU-FACULTY-MANAGEMENT-SYSTEM", "src", "Documents", "faculty", facultyIDString + "-" + lastName);
+    
+            // Specify the subdirectories where the subject folders need to be renamed
+            String[] subdirectories = {"class record", "grade sheet", "syllabus", "exam with answer key", "item analysis", "tables of specification"};
+    
+            for (String subdirectory : subdirectories) {
+                // Rename the subject folders inside each subdirectory
+                if (subdirectory.equals("exam with answer key") || subdirectory.equals("item analysis") || subdirectory.equals("tables of specification")) {
+                    Path oldSubjectDirectoryMidterm = facultyDirectory.resolve(subdirectory).resolve("Midterms").resolve(courseCode + " - " + courseDescription);
+                    Path newSubjectDirectoryMidterm = facultyDirectory.resolve(subdirectory).resolve("Midterms").resolve(newCode + " - " + newDescription);
+    
+                    Files.createDirectories(newSubjectDirectoryMidterm); // Ensure parent directory exists
+                    Files.move(oldSubjectDirectoryMidterm, newSubjectDirectoryMidterm, StandardCopyOption.REPLACE_EXISTING);
+    
+                    // Delete the old directory after moving its contents
+                    //Files.delete(oldSubjectDirectoryMidterm);
+                    
+                    Path oldSubjectDirectoryFinals = facultyDirectory.resolve(subdirectory).resolve("Finals").resolve(courseCode + " - " + courseDescription);
+                    Path newSubjectDirectoryFinals = facultyDirectory.resolve(subdirectory).resolve("Finals").resolve(newCode + " - " + newDescription);
+    
+                    Files.createDirectories(newSubjectDirectoryFinals); // Ensure parent directory exists
+                    Files.move(oldSubjectDirectoryFinals, newSubjectDirectoryFinals, StandardCopyOption.REPLACE_EXISTING);
+    
+                    // Delete the old directory after moving its contents
+                    //Files.delete(oldSubjectDirectoryFinals);
+
+                } else {
+                    Path oldSubjectDirectory = facultyDirectory.resolve(subdirectory).resolve(courseCode + " - " + courseDescription);
+                    Path newSubjectDirectory = facultyDirectory.resolve(subdirectory).resolve(newCode + " - " + newDescription);
+    
+                    Files.createDirectories(newSubjectDirectory); // Ensure parent directory exists
+                    Files.move(oldSubjectDirectory, newSubjectDirectory, StandardCopyOption.REPLACE_EXISTING);
+    
+                    // Delete the old directory after moving its contents
+                    //Files.delete(oldSubjectDirectory);
+                }
+    
+                System.out.println("Subject folder renamed for " + facultyIDString + "-" + lastName + " - " + courseCode + " - " + courseDescription + " to " + newCode + " - " + newDescription + " in " + subdirectory);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to rename subject folder for " + facultyIDString + "-" + lastName + " - " + courseCode + " - " + courseDescription + " to " + newCode + " - " + newDescription);
+        }
+    }
+    
+    
+
     public void createSectionFolderInSubject(String subjectName, String sectionName) {
         try {
             // Specify the path of the faculty's profile folder
@@ -95,6 +145,37 @@ public class documentfaculty {
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Failed to create section folder for " + facultyIDString + "-" + lastName + " - " + subjectName + " - " + sectionName);
+        }
+    }
+
+    
+    public void deleteSubjectFolderInSubdirectories(String subjectName) {
+        try {
+            // Specify the path of the faculty's profile folder
+            Path facultyDirectory = Paths.get("PRMSU-FACULTY-MANAGEMENT-SYSTEM", "src", "Documents", "faculty", facultyIDString + "-" + lastName);
+
+            // Specify the subdirectories where the subject folder needs to be created
+            String[] subdirectories = {"class record", "grade sheet", "syllabus", "exam with answer key", "item analysis", "tables of specification"};
+
+            for (String subdirectory : subdirectories) {
+                // Create the subject folder inside each subdirectory
+                if(subdirectory.equals("exam with answer key") || subdirectory.equals("item analysis") || subdirectory.equals("table of specification")){
+                    Path subjectDirectory = facultyDirectory.resolve(subdirectory).resolve("Midterms").resolve(subjectName);
+                    Path subjectDirectory2 = facultyDirectory.resolve(subdirectory).resolve("Finals").resolve(subjectName);
+                    Files.delete(subjectDirectory);
+                    Files.delete(subjectDirectory2);
+                }
+                else{
+                    Path subjectDirectory = facultyDirectory.resolve(subdirectory).resolve(subjectName);
+                    Files.delete(subjectDirectory);
+                }
+                
+
+                System.out.println("Subject folder deleted for " + facultyIDString + "-" + lastName + " - " + subjectName + " in " + subdirectory);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to delete subject folder for " + facultyIDString + "-" + lastName + " - " + subjectName);
         }
     }
 
@@ -116,11 +197,11 @@ public class documentfaculty {
         }
     }
 
-    public static void main(String[] args) {
-        // Example usage
-        documentfaculty faculty = new documentfaculty("1", "JohnDoe");
-        faculty.register();
-        faculty.createSubjectFolderInSubdirectories("Mathematics");
-        faculty.createSectionFolderInSubject("Mathematics", "SectionA");
-    }
+    // public static void main(String[] args) {
+    //     // Example usage
+    //     documentfaculty faculty = new documentfaculty("1", "JohnDoe");
+    //     faculty.register();
+    //     faculty.createSubjectFolderInSubdirectories("Mathematics");
+    //     faculty.createSectionFolderInSubject("Mathematics", "SectionA");
+    // }
 }
