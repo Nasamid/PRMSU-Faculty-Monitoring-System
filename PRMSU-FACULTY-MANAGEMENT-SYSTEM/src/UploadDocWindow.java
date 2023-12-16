@@ -59,11 +59,7 @@ public class UploadDocWindow {
         JPanel viewerComponentPanel = factory.buildViewerPanel();
         viewerComponentPanel.setBounds(5,-100,440, 720);
 
-        
-        
-        controller.getDocumentViewController().setAnnotationCallback(
-                new org.icepdf.ri.common.MyAnnotationCallback(
-                        controller.getDocumentViewController()));
+        controller.getDocumentViewController().setAnnotationCallback(new org.icepdf.ri.common.MyAnnotationCallback(controller.getDocumentViewController()));
 
         TreeTablePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         TreeTablePanel.setBounds(5,100,540, 575);
@@ -91,9 +87,6 @@ public class UploadDocWindow {
         float zoomLevel = 0.6f;
         controller.setZoom(zoomLevel);
 
-        
-        horizontalScrollBar.setValue((horizontalScrollBar.getMaximum() / 2) + 30 );
-
         AddFileButton = new JButton();
         Image AddFileIcon;
                 try {
@@ -108,7 +101,7 @@ public class UploadDocWindow {
         AddFileButton.setContentAreaFilled(false);
         AddFileButton.setBorderPainted(false);
         AddFileButton.setBorder(null);
-
+///////////////////////////////////////////////////////   ---->>>>>      ADD        FILE         BUTTON
         AddFileText.setText("Add File");
         AddFileText.setBounds(552, 340, 250,10);
         AddFileText.setForeground(new Color(75,174,79));
@@ -129,6 +122,8 @@ public class UploadDocWindow {
         DeleteFileButton.setBorderPainted(false);
         DeleteFileButton.setBorder(null);
 
+///////////////////////////////////////////////////////   ---->>>>>      DELETE        FILE         BUTTON
+
         DeleteFileText.setText("Delete File");
         DeleteFileText.setBounds(547, 410, 250,10);
         DeleteFileText.setForeground(new Color(255,68,68));
@@ -137,22 +132,54 @@ public class UploadDocWindow {
         //This Section of the code is where the ComboBoxes are Located
         //String[] FacultyName = {};
         JLabel FacultyName = new JLabel();
-        String[] SchoolYear = {"2023-2024", "2024-2025", "2025-2026"};
-        String[] Semester = {"1st Semester", "2nd Semester", "Mid Year"};
+        String[] SchoolYear = {"2020 - 2021","2021 - 2022","2022 - 2023","2023 - 2024", "2024 - 2025", "2025 - 2026", "2026 - 2027"};
+        String[] Semester = {"501", "502", "503"};
+        String[] Departments = {"601", "602", "603", "604", "605"};
 
         int topcompwidth = 200, yaxis = 25;
         
         FacultyName.setBounds(25,yaxis, topcompwidth, 25);
-        FacultyName.setText(DatabaseHandler.getLastNameByFacultyID(facultyID).toString());
+        FacultyName.setText(DatabaseHandler.getFullNameOfFaculty(facultyID));
+        FacultyName.setForeground(Color.white );
+        FacultyName.setFont(new Font("Arial", Font.BOLD, 15));
         
-        String lastName = FacultyName.getText();
+        String lastName = DatabaseHandler.getLastNameByFacultyID(facultyID);
 
         for (String Year : SchoolYear) {
-            CSchoolYear.addItem(Year);
-            CSchoolYear.setEnabled(false);
+            if (Year.substring(0,4).equals(DatabaseHandler.getAcademicYearOfFaculty(facultyID))){
+                CSchoolYear.addItem(Year);
+            break;
+            }
         }
 
-        Department.setText("Computer Engineering");
+        for (String dept : Departments){
+            if(dept.equals(DatabaseHandler.getDepartmentOfFaculty(facultyID))){
+                if(dept == "601"){
+                    Department.setText("Computer Engineering");
+                    break;
+                }
+                else if(dept == "602"){
+                    Department.setText("Mechanical Engineering");
+                    break;
+                }
+                else if(dept == "603"){
+                    Department.setText("Electrical Engineering");
+                    break;
+                }
+                else if(dept == "604"){
+                    Department.setText("Civil Engineering");
+                    break;
+                }
+                else{
+                    Department.setText("Allied");
+                    break;
+                }
+
+            }
+
+        }
+
+
         Department.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         Department.setBackground(Color.white);
         Department.setOpaque(true);
@@ -163,8 +190,21 @@ public class UploadDocWindow {
         CSchoolYear.setBounds((topcompwidth*3+20),yaxis, topcompwidth, 25);
         
         for (String Sem : Semester) {
-            CSemester.addItem(Sem);
-            CSemester.setEnabled(false);
+            if(Sem.equals(DatabaseHandler.getSemOfFaculty(facultyID))){
+                if(Sem == "501"){
+                CSemester.addItem("First Semester");
+                break;
+                }
+                else if(Sem == "502"){
+                CSemester.addItem("Second Semester");
+                break;
+                }
+                else{
+                CSemester.addItem("Midyear");
+                break;
+                }
+            }
+            
         }
 
         CSemester.setBounds((topcompwidth*4+10)+30,yaxis, topcompwidth, 25);
@@ -186,6 +226,7 @@ public class UploadDocWindow {
         JScrollPane scrollPane = new JScrollPane(treeTable);
         
         JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
+        horizontalScrollBar.setValue((horizontalScrollBar.getMaximum() / 2) + 30 );
         
 
 		List<String[]> content = new ArrayList<>();
@@ -249,7 +290,7 @@ public class UploadDocWindow {
 		//TreeTable treeTable = new TreeTable(content);
 		UploadDocFrame.setLayout(new BorderLayout());
 
-        //TreeTablePanel.add(new JScrollPane(treeTable.getTreeTable()), BorderLayout.CENTER);
+        TreeTablePanel.add(new JScrollPane(treeTable), BorderLayout.CENTER);
 		//UploadDocFrame.add(new JScrollPane(treeTable.getTreeTable()), BorderLayout.CENTER);
         
         TopPanel.add(Department);
@@ -257,8 +298,8 @@ public class UploadDocWindow {
         TopPanel.add(CSchoolYear);
         TopPanel.add(CSemester);
 
-        PreviewPanel.add(scrollPane, BorderLayout.CENTER);
-        //PreviewPanel.add(DocPreviewText);
+        //PreviewPanel.add(scrollPane, BorderLayout.CENTER);
+        PreviewPanel.add(DocPreviewText);
 
         UploadDocFrame.add(AddFileButton);
         UploadDocFrame.add(AddFileText);

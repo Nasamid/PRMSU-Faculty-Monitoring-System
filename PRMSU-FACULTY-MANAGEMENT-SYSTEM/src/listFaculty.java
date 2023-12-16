@@ -177,7 +177,7 @@ public class listFaculty extends JPanel
 					public void actionPerformed(ActionEvent e) 
 					{
 						System.out.println("ADD SUBJECT BUTTON PRESSED");
-						new DeprecatedUploadDocWindow();
+						new deprecatedUploadDocWindow();
 					}
 				});
 				
@@ -429,7 +429,7 @@ public class listFaculty extends JPanel
 					public void actionPerformed(ActionEvent e) 
 					{
 						System.out.println("Upload Button Pressed");
-						DeprecatedUploadDocWindow updoc = new DeprecatedUploadDocWindow(DatabaseHandler.getFacultyID(faculty.facultyNameLbl.getText()));
+						UploadDocWindow updoc = new UploadDocWindow(DatabaseHandler.getFacultyID(faculty.facultyNameLbl.getText()));
 					}
 				});
 				
@@ -606,7 +606,7 @@ public void SortDepartmentFacultyData(String CB_SORT) {
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					new DeprecatedUploadDocWindow();
+					new deprecatedUploadDocWindow();
 				}
 			});
 
@@ -693,7 +693,7 @@ public void SortDepartmentFacultyData(String CB_SORT) {
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					new DeprecatedUploadDocWindow();
+					new deprecatedUploadDocWindow();
 				}
 			});
 
@@ -780,7 +780,7 @@ public void SortDepartmentFacultyData(String CB_SORT) {
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					new DeprecatedUploadDocWindow();
+					new deprecatedUploadDocWindow();
 				}
 			});
 
@@ -866,7 +866,7 @@ public void SortDepartmentFacultyData(String CB_SORT) {
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					new DeprecatedUploadDocWindow();
+					new deprecatedUploadDocWindow();
 				}
 			});
 
@@ -960,7 +960,7 @@ public void SortSemesterFacultyData(String CB_SORT) {
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					new DeprecatedUploadDocWindow();
+					new deprecatedUploadDocWindow();
 				}
 			});
 
@@ -1046,7 +1046,7 @@ public void SortSemesterFacultyData(String CB_SORT) {
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					new DeprecatedUploadDocWindow();
+					new deprecatedUploadDocWindow();
 				}
 			});
 
@@ -1133,7 +1133,7 @@ public void SortSemesterFacultyData(String CB_SORT) {
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					new DeprecatedUploadDocWindow();
+					new deprecatedUploadDocWindow();
 				}
 			});
 
@@ -1228,7 +1228,7 @@ public void SortYearFacultyData(String CB_SORT) {
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
-						new DeprecatedUploadDocWindow();
+						new deprecatedUploadDocWindow();
 					}
 				});
 
