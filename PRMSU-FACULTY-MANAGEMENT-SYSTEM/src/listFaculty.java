@@ -520,7 +520,7 @@ public void SortDepartmentFacultyData(String CB_SORT) {
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					new deprecatedUploadDocWindow();
+					new UploadDocWindow();
 				}
 			});
 

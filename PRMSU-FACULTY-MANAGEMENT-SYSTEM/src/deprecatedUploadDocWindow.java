@@ -5,7 +5,8 @@ import java.util.List;
 import UploadDocTreeNodes.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException; 
+import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
@@ -166,60 +167,80 @@ public class deprecatedUploadDocWindow {
 		List<String[]> content = new ArrayList<>();
 
         //This Section is just temporary placeholder for what the table will contain
-        content.add(new String[] { "Load" });
-        content.add(new String[] { "Teaching Load", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Load" });
+        // content.add(new String[] { "Teaching Load", "Uploaded", "04/11/2023" });
 
-		content.add(new String[] { "Syllabus" });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Syllabus" });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
 
-		content.add(new String[] { "Class Record" });
-        content.add(new String[] { "Software Design", " " });
-		content.add(new String[] { "BSCpE 3A", "Uploaded", "04/11/2023" });
-		content.add(new String[] { "BSCpE 3B", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Computer Aided Drafting", " " });
-		content.add(new String[] { "BSCpE 3A", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "BSCpE 3B", "Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Class Record" });
+        // content.add(new String[] { "Software Design", " " });
+		// content.add(new String[] { "BSCpE 3A", "Uploaded", "04/11/2023" });
+		// content.add(new String[] { "BSCpE 3B", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Computer Aided Drafting", " " });
+		// content.add(new String[] { "BSCpE 3A", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "BSCpE 3B", "Uploaded", "04/11/2023" });
 
-        content.add(new String[] { "Grade Sheet" });
-        content.add(new String[] { "Software Design", " " });
-		content.add(new String[] { "BSCpE 3A", "Uploaded", "04/11/2023" });
-		content.add(new String[] { "BSCpE 3B", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Computer Aided Drafting", " " });
-		content.add(new String[] { "BSCpE 3A", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "BSCpE 3B", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Grade Sheet" });
+        // content.add(new String[] { "Software Design", " " });
+		// content.add(new String[] { "BSCpE 3A", "Uploaded", "04/11/2023" });
+		// content.add(new String[] { "BSCpE 3B", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Computer Aided Drafting", " " });
+		// content.add(new String[] { "BSCpE 3A", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "BSCpE 3B", "Uploaded", "04/11/2023" });
         
-        content.add(new String[] { "Exam with Answer Key" });
-        content.add(new String[] { "Midterm", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Final", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Exam with Answer Key" });
+        // content.add(new String[] { "Midterm", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Final", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
 
-        content.add(new String[] { "Table of Specification" });
-        content.add(new String[] { "Midterm", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Final", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Table of Specification" });
+        // content.add(new String[] { "Midterm", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Final", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
 
-        content.add(new String[] { "Item Analysis" });
-        content.add(new String[] { "Midterm", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
-		content.add(new String[] { "Final", " " });
-		content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
-        content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
-        content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Item Analysis" });
+        // content.add(new String[] { "Midterm", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
+		// content.add(new String[] { "Final", " " });
+		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
+        // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
         //End of placeholder section
+
+
+        //This gets the last name of the faculty from the faculty database via the facultyID assigned to them
+        String lastName = DatabaseHandler.getLastNameByFacultyID(1);
+
+        //This gets and converts the faculty ID from the database into a String
+        String facultyIDString = String.valueOf(DatabaseHandler.getFacultyIDByLastName(lastName));
+
+        //This saves the file path of the faculty from the file explorer into a String ignore this since it's not used/relevant to the JXTreeTable it may be redundant since it's not used
+        String filepath = documentfaculty.getPath(facultyIDString, lastName);
+
+        //This gets the file path of the faculty from the file explorer based on the facultyIDString and the lastName
+        String path = Paths.get("PRMSU-FACULTY-MANAGEMENT-SYSTEM", "src", "Documents", "faculty", facultyIDString + "-" + lastName).toString();
+        System.out.println("file path is: "+path);
+
+        //This saves the file path in to a File value
+        File facultyFolder = new File(path);  // Update with the actual path
+
+        scanDirectory(facultyFolder, content, "");
+
 
 		TreeTable treeTable = new TreeTable(content);
 		UploadDocFrame.setLayout(new BorderLayout());
@@ -268,6 +289,40 @@ public class deprecatedUploadDocWindow {
 		UploadDocFrame.setVisible(true);
 
     }
+
+    private static void scanDirectory(File directory, List<String[]> content, String parentPath) {
+        String name = directory.getName();
+        String[] entry;
+
+        if (directory.isDirectory()) {
+            if (!parentPath.isEmpty()) {
+                entry = new String[]{name,"parent empty "," ", directory.getPath()};
+            } else {
+                entry = new String[]{name, "parent not empty "," "," ", parentPath, directory.getPath()};
+            }
+            content.add(entry);
+
+            File[] subDirectories = directory.listFiles(File::isDirectory);
+            if (subDirectories != null) {
+                for (File subDir : subDirectories) {
+                    scanDirectory(subDir, content, name);
+                }
+            }
+            if (subDirectories == null || subDirectories.length == 0) {
+                entry = new String[]{name, "not Submitted", "20/12/2023", directory.getPath()};
+                content.add(entry);
+            }
+
+            // File[] files = directory.listFiles(file -> file.isFile() && file.getName().endsWith(".pdf"));
+            // if (files != null) {
+            //     for (File file : files) {
+            //         entry = new String[]{file.getName(), "not Submitted", "20/12/2023", file.getPath()};
+            //         content.add(entry);
+            //     }
+            // }
+        }
+    }
+    
     public static void main(String[] args) {
         FlatMacLightLaf.registerCustomDefaultsSource("Properties");
         FlatMacLightLaf.setup();

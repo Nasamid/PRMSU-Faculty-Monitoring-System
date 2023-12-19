@@ -26,17 +26,20 @@ public class TreeTable {
         ChildNode subHeader = null;
 		for (String[] data : this.content) {
 			ChildNode child = new ChildNode(data);
-            //If the data inputed is only for column 1, then it becomes a main header
-			if (data.length <= 1) {
+            //If the data inputed is only for column 1 and 2, then it becomes a main header
+			if (data.length <= 4) {
 				root.add(child);
 				mainHeader = child;
                 subHeader = null;
             }
-            else if (data.length == 2 && !data[1].isEmpty()) {
+			//If the data inputed is 4 long and the data at index 1 the data is empty, then it is a subheader
+            else if (data.length == 6 && !data[2].isEmpty()) {
                 if (mainHeader != null) {
                     mainHeader.add(child);
                     subHeader = child;
                 }
+
+			//Else, it is a subheader of the sub
 			} else {
 				if (subHeader != null) {
                     subHeader.add(child);

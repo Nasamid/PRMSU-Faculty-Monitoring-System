@@ -101,7 +101,6 @@ public class UploadDocWindow {
         AddFileButton.setContentAreaFilled(false);
         AddFileButton.setBorderPainted(false);
         AddFileButton.setBorder(null);
-///////////////////////////////////////////////////////   ---->>>>>      ADD        FILE         BUTTON
         AddFileText.setText("Add File");
         AddFileText.setBounds(552, 340, 250,10);
         AddFileText.setForeground(new Color(75,174,79));
@@ -121,8 +120,6 @@ public class UploadDocWindow {
         DeleteFileButton.setContentAreaFilled(false);
         DeleteFileButton.setBorderPainted(false);
         DeleteFileButton.setBorder(null);
-
-///////////////////////////////////////////////////////   ---->>>>>      DELETE        FILE         BUTTON
 
         DeleteFileText.setText("Delete File");
         DeleteFileText.setBounds(547, 410, 250,10);
@@ -223,6 +220,8 @@ public class UploadDocWindow {
 
         CustomTreeTableModel treeTableModel = new CustomTreeTableModel(rootNode, columnNames);
         JXTreeTable treeTable = new JXTreeTable(treeTableModel);
+        treeTable.setColumnControlVisible(true);
+
         JScrollPane scrollPane = new JScrollPane(treeTable);
         
         JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
@@ -338,6 +337,7 @@ public class UploadDocWindow {
 
 
     private DefaultMutableTreeNode createTreeNodes(File folder) {
+        //System.out.println("Creating tree nodes for: " + folder.getAbsolutePath());
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root");
         File[] files = folder.listFiles();
 
@@ -359,8 +359,8 @@ public class UploadDocWindow {
 
 
     private void readSubfoldersAndFiles(File folder, DefaultMutableTreeNode parentNode) {
+        //System.out.println("Reading subfolders and files for: " + folder.getAbsolutePath());
         File[] files = folder.listFiles();
-
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
@@ -382,9 +382,9 @@ public class UploadDocWindow {
     }
 
 
-    // public static void main(String[] args) {
-    //     FlatMacLightLaf.registerCustomDefaultsSource("Properties");
-    //     FlatMacLightLaf.setup();
-    //     new UploadDocWindow();
-    // }
+    public static void main(String[] args) {
+        FlatMacLightLaf.registerCustomDefaultsSource("Properties");
+        FlatMacLightLaf.setup();
+        UploadDocWindow updoc = new UploadDocWindow(2);
+    }
 }
