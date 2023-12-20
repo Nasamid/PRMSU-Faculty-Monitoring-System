@@ -101,6 +101,7 @@ public class UploadDocWindow {
         AddFileButton.setContentAreaFilled(false);
         AddFileButton.setBorderPainted(false);
         AddFileButton.setBorder(null);
+        AddFileButton.setEnabled(false);
 ///////////////////////////////////////////////////////   ---->>>>>      ADD        FILE         BUTTON
         AddFileText.setText("Add File");
         AddFileText.setBounds(552, 340, 250,10);
@@ -121,6 +122,7 @@ public class UploadDocWindow {
         DeleteFileButton.setContentAreaFilled(false);
         DeleteFileButton.setBorderPainted(false);
         DeleteFileButton.setBorder(null);
+        DeleteFileButton.setEnabled(false);
 
 ///////////////////////////////////////////////////////   ---->>>>>      DELETE        FILE         BUTTON
 
@@ -298,7 +300,7 @@ public class UploadDocWindow {
         TopPanel.add(CSchoolYear);
         TopPanel.add(CSemester);
 
-        //PreviewPanel.add(scrollPane, BorderLayout.CENTER);
+        PreviewPanel.add(scrollPane, BorderLayout.CENTER);
         PreviewPanel.add(DocPreviewText);
 
         UploadDocFrame.add(AddFileButton);

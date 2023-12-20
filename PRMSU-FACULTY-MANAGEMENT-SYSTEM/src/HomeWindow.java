@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
@@ -302,6 +304,22 @@ public class HomeWindow
             int x = (dim.width-w)/2;
             int y = (dim.height-h)/2;
             HomeWindow.setLocation(x,y);
+
+            HomePanel.addMouseMotionListener(new MouseMotionListener() {
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    // TODO Auto-generated method stub
+                    throw new UnsupportedOperationException("Unimplemented method 'mouseDragged'");
+                }
+
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    // TODO Auto-generated method stub
+                    throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
+                }
+                
+            });
                 
         
         }
