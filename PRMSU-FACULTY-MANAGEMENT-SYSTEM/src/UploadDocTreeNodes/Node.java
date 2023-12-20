@@ -22,4 +22,7 @@ public class Node extends AbstractMutableTreeTableNode {
 		return (Object[]) getUserObject();
 	}
 
+    public Node(String[] data) {
+        super(data);
+    }
 }
