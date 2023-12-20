@@ -68,6 +68,10 @@ public class documentfaculty {
                     Files.createDirectories(subjectDirectory);
                     Files.createDirectories(subjectDirectory2);
                 }
+                if(subdirectory.equals("load")){
+                    Path subjectDirectory = facultyDirectory.resolve(subdirectory).resolve("Teaching Load").resolve(subjectName);
+                    Files.createDirectories(subjectDirectory);
+                }
                 else{
                     Path subjectDirectory = facultyDirectory.resolve(subdirectory).resolve(subjectName);
                     Files.createDirectories(subjectDirectory);

@@ -1,13 +1,30 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import UploadDocTreeNodes.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
@@ -20,6 +37,7 @@ public class UploadDocWindow {
     JLabel Department, DocPreviewText, AddFileText, DeleteFileText;
     JButton AddFileButton, DeleteFileButton;
     JComboBox<String> CFacultyName, CSchoolYear, CSemester;
+    String selectedPath = "";
     
     UploadDocWindow(int facultyID){
 
@@ -60,6 +78,22 @@ public class UploadDocWindow {
                 new org.icepdf.ri.common.MyAnnotationCallback(
                         controller.getDocumentViewController()));
 
+        
+
+        File pdfFile = new File("PRMSU-FACULTY-MANAGEMENT-SYSTEM" + File.separator + "src" + File.separator + "Documents" + File.separator + "PDFVIEWER.pdf");
+        
+        
+        String pdfFilePath = pdfFile.getAbsolutePath();
+
+        //This code snipet opens the pdf in the pdf viewer and sets the zoom level
+        controller.openDocument(pdfFilePath);
+        float zoomLevel = 0.6f;
+        controller.setZoom(zoomLevel);
+
+        JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
+        horizontalScrollBar.setValue((horizontalScrollBar.getMaximum() / 2) + 30 );
+
+
         TreeTablePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         TreeTablePanel.setBounds(5,100,540, 575);
         TreeTablePanel.setLayout(new BorderLayout());
@@ -77,17 +111,6 @@ public class UploadDocWindow {
 
         DocPreviewText.setBounds(25, 25, 250,15);
         DocPreviewText.setFont(new Font("Arial", Font.BOLD, 15));
-
-        File pdfFile = new File("PRMSU-FACULTY-MANAGEMENT-SYSTEM" + File.separator + "src" + File.separator + "Documents" + File.separator + "PDFVIEWER.pdf");
-        String pdfFilePath = pdfFile.getAbsolutePath();
-
-        //This code snipet opens the pdf in the pdf viewer and sets the zoom level
-        controller.openDocument(pdfFilePath);
-        float zoomLevel = 0.6f;
-        controller.setZoom(zoomLevel);
-
-        JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
-        horizontalScrollBar.setValue((horizontalScrollBar.getMaximum() / 2) + 30 );
 
         AddFileButton = new JButton();
         Image AddFileIcon;
@@ -149,6 +172,7 @@ public class UploadDocWindow {
 
         
         String lastName = DatabaseHandler.getLastNameByFacultyID(facultyID);
+        System.out.println("Faculty ID: " + facultyID);
 
         for (String Year : SchoolYear) {
             if (Year.substring(0,4).equals(DatabaseHandler.getAcademicYearOfFaculty(facultyID))){
@@ -274,8 +298,8 @@ public class UploadDocWindow {
         //End of placeholder section
 
         //This gets and converts the faculty ID from the database into a String
-        String facultyIDString = String.valueOf(DatabaseHandler.getFacultyIDByLastName(lastName));
-
+        String facultyIDString = Integer.toString(facultyID);
+        System.out.println("FacultyIDString: " + facultyIDString);
         //This saves the file path of the faculty from the file explorer into a String ignore this since it's not used/relevant to the JXTreeTable it may be redundant since it's not used
         String filepath = documentfaculty.getPath(facultyIDString, lastName);
 
@@ -344,17 +368,118 @@ public class UploadDocWindow {
         UploadDocFrame.setVisible(true);
 		UploadDocFrame.setVisible(true);
 
+        treeTable.addTreeSelectionListener(new TreeSelectionListener() {
+            public void valueChanged(TreeSelectionEvent e) {
+                TreePath[] paths = e.getPaths();
+        
+                if (paths.length > 0) {
+                    TreePath newestPath = paths[0]; // Assuming the first path is the newest
+                    selectedPath = treeTable.treePathLastComponentToString(newestPath);
+                    System.out.println("Selected Path: " + selectedPath);
+                }
+            }
+        });
+        
+        AddFileButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Create a file chooser
+                JFileChooser fileChooser = new JFileChooser();
+        
+                // Create a file filter for text files (customize based on your needs)
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF files", "pdf");
+                fileChooser.setFileFilter(filter);
+        
+                // Show the file chooser dialog
+                int result = fileChooser.showOpenDialog(null);
+        
+                // Check if a file was selected
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    // Get the selected file
+                    java.io.File selectedFile = fileChooser.getSelectedFile();
+
+                    // Construct the target path by combining the selected directory and file name
+                    Path targetPath = Path.of(selectedPath, selectedFile.getName());
+
+                    try {
+                        // Copy the file to the target directory
+
+                        Files.copy(selectedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+                        System.out.println("File copied to: " + targetPath);
+                        //ONCE THE FILE HAS BEEN ADDED WE NEED IT TO BE FLAGGED INTO THE DATABASE WITH THE CURRENT DATE AND UPLOADED STATUS = TRUE
+
+
+                    } catch (FileAlreadyExistsException faee) {
+                        System.out.println("File already exists in the target directory: " + targetPath);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+        
+                    // Print the path of the selected file (you can handle it as needed)
+                    System.out.println("Selected File: " + selectedFile.getAbsolutePath() + " Copied to: " + selectedPath);
+                } else {
+                    System.out.println("No file selected");
+                }
+            }
+        });
+
+        DeleteFileButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Check if the selectedPath is not empty
+                if (!selectedPath.isEmpty()) {
+                    // Construct the Path object for the selected directory
+                    Path directoryPath = Path.of(selectedPath);
+        
+                    // Debugging: Print selectedPath before deletion
+                    System.out.println("Deleting files in directory: " + selectedPath);
+        
+                    try {
+                        // Walk through the directory and delete all files
+                        Files.walkFileTree(directoryPath, EnumSet.noneOf(FileVisitOption.class), Integer.MAX_VALUE, new SimpleFileVisitor())
+                                .forEach(file -> {
+                                    try {
+                                        // Debugging: Print each file before deletion
+                                        System.out.println("Deleting file: " + file);
+                                        Files.delete(file);
+                                        System.out.println("Deleted file: " + file);
+                                    } catch (IOException ioException) {
+                                        ioException.printStackTrace();
+                                    }
+                                });
+        
+                        System.out.println("All files in directory deleted: " + selectedPath);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                } else {
+                    System.out.println("No directory selected");
+                }
+            }
+        });
+
+        
+
     }
 
+
+    //This method is responsible for populating the JXTreeTable by adding the directories into an Array list
     private static void scanDirectory(File directory, List<String[]> content, String parentPath, int depth) {
         String name = directory.getName();
         String[] entry;
     
         // Check if there are no more subdirectories within the current directory before adding the entry
         File[] innerSubDirectories = directory.listFiles(File::isDirectory);
-        if (innerSubDirectories == null || innerSubDirectories.length == 0 && !name.equals("load")) {
+        if (innerSubDirectories == null || innerSubDirectories.length == 0 && depth == 3) {
             entry = new String[]{name, "not Submitted", "20/12/2023", Integer.toString(depth), "File Folder", directory.getPath()};
-            System.out.println("Entry: " + Arrays.toString(entry));
+            //System.out.println("Entry: " + Arrays.toString(entry));
+            content.add(entry);
+            return; // Stop further recursion if this is the innermost subdirectory
+        }
+        if (innerSubDirectories == null || innerSubDirectories.length == 0 && depth == 2 && 
+        (parentPath.equals("grade sheet") || parentPath.equals("syllabus") || 
+        parentPath.equals("tables of specification") || parentPath.equals("load"))) 
+        {
+            entry = new String[]{name, "not Submitted", "20/12/2023", Integer.toString(depth), "File Folder", directory.getPath()};
+            //System.out.println("Entry: " + Arrays.toString(entry));
             content.add(entry);
             return; // Stop further recursion if this is the innermost subdirectory
         }
@@ -365,7 +490,7 @@ public class UploadDocWindow {
             } else {
                 entry = new String[]{name, " "," ", Integer.toString(depth), " ", parentPath, directory.getPath()};
             }
-            System.out.println("Entry: " + Arrays.toString(entry));
+            //System.out.println("Entry: " + Arrays.toString(entry));
             content.add(entry);
     
             File[] subDirectories = directory.listFiles(File::isDirectory);
@@ -387,11 +512,89 @@ public class UploadDocWindow {
             //         content.add(entry);
             //     }
             // }
+    
+    
 
+     // Define a simple FileVisitor to handle file deletion
+    private static class SimpleFileVisitor implements java.nio.file.FileVisitor<Path> {
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            try {
+                Files.delete(file);
+                System.out.println("Deleted file: " + file);
+            } catch (IOException e) {
+                System.err.println("Error deleting file " + file + ": " + e.getMessage());
+            }
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+            // Handle the case where the visit of a file fails
+            System.err.println("Failed to visit: " + file.getFileName() + ", Reason: " + exc.getMessage());
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            // Handle the case after visiting a directory
+            return FileVisitResult.CONTINUE;
+        }
+    }
+
+
+
+//     public class CustomTreeSelectionListener implements TreeSelectionListener {
+
+//     private SwingController pdfController; // Change to your specific ICEpdf controller type
+
+//     public CustomTreeSelectionListener(SwingController pdfController) {
+//         this.pdfController = pdfController;
+//     }
+
+//     @Override
+//     public void valueChanged(TreeSelectionEvent e) {
+//         TreePath path = e.getNewLeadSelectionPath();
+//         if (path != null) {
+//             DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+//             Object userObject = node.getUserObject();
+
+//             if (userObject instanceof File) {
+//                 File selectedFile = (File) userObject;
+//                 if (selectedFile.isDirectory()) {
+//                     // Directory is selected, get PDF files
+//                     File[] pdfFiles = getPDFFiles(selectedFile);
+
+//                     if (pdfFiles.length > 0) {
+//                         // Open the first PDF file
+//                         openPDF(pdfFiles[0]);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+
+//     private File[] getPDFFiles(File directory) {
+//         // Filter files to include only PDF files
+//         return directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));
+//     }
+
+//     private void openPDF(File pdfFile) {
+//         // Use your ICEpdf controller to open the PDF file
+//         if (pdfController != null) {
+//             pdfController.openDocument(pdfFile.getAbsolutePath());
+//         }
+//     }
+// }
 
     public static void main(String[] args) {
         FlatMacLightLaf.registerCustomDefaultsSource("Properties");
         FlatMacLightLaf.setup();
-        new UploadDocWindow(4);
+        new UploadDocWindow(17);
     }
 }
