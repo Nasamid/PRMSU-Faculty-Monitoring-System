@@ -65,7 +65,7 @@ public class addSubjectDialog extends JDialog
 		
 		codeTF = new JTextField();
 		codeTF.setBorder(new TitledBorder(new LineBorder(new Color(255, 128, 41), 3, true), "Course Code:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Arial", Font.BOLD, 15), new Color(0, 0, 0)));
-		//codeTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
+		codeTF.setFont(new Font("Arial", Font.PLAIN, 15));
 		codeTF.setBackground(SystemColor.text);
 		codeTF.setBounds(50, 60, 400, 55);
 		contentPanel.add(codeTF);

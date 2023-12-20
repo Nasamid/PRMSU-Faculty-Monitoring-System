@@ -16,6 +16,8 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -392,91 +394,102 @@ public class listFaculty extends JPanel
 	
 	// Method to load faculty data from the database and populate the UI
 	public void loadFacultyData() {
-		List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
-		//System.out.println(facultyDataList);
-		for (FacultyData facultyData : facultyDataList) {
-			faculty faculty = new faculty();
 
-			// Retrieve department details
-			int departmentID = facultyData.getDepartmentID();
-			String departmentName = DatabaseHandler.getDepartmentName(departmentID);
-		
-			// Retrieve academic year details
-			int yearID = facultyData.getYearID();
-			String academicYear = DatabaseHandler.getAcademicYear(yearID);
-		
-			// Retrieve semester details
-			int semesterID = facultyData.getSemesterID();
-			String semesterName = DatabaseHandler.getSemesterName(semesterID);
+		// Run this method very seconds and revalidate all the components inside the body panel
+		Timer timer = new Timer();
+		final TimerTask task = new TimerTask() {
+			@Override
+			public void run(){
+				
+				Body.removeAll();
+				List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
+				//System.out.println(facultyDataList);
+				for (FacultyData facultyData : facultyDataList) {
+					faculty faculty = new faculty();
 
-			JButton addPreparation = faculty.addBtn;
-				addPreparation.addActionListener(new ActionListener() 
-				{
-					public void actionPerformed(ActionEvent e) 
-					{
-						addPreparation preparation = new addPreparation();
-						preparation.facultyName.setText(faculty.facultyNameLbl.getText());
-						preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
-						preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
-						preparation.frame.setVisible(true);
-						preparation.fetchAndDisplaySubjects();
-					}
-				});
+					// Retrieve department details
+					int departmentID = facultyData.getDepartmentID();
+					String departmentName = DatabaseHandler.getDepartmentName(departmentID);
 				
+					// Retrieve academic year details
+					int yearID = facultyData.getYearID();
+					String academicYear = DatabaseHandler.getAcademicYear(yearID);
 				
-				JButton uploadDocument = faculty.uploadBtn;
-				uploadDocument.addActionListener(new ActionListener() 
-				{
-					public void actionPerformed(ActionEvent e) 
-					{
-						System.out.println("Upload Button Pressed");
-						UploadDocWindow updoc = new UploadDocWindow(DatabaseHandler.getFacultyID(faculty.facultyNameLbl.getText()));
-					}
-				});
-				
-				JButton deleteFaculty = faculty.deleteBtn;
-				deleteFaculty.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
-						
-						if (confirm == JOptionPane.YES_OPTION) {
-							// Assuming you have a method in DatabaseHandler to delete faculty by ID
-							int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
-							boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+					// Retrieve semester details
+					int semesterID = facultyData.getSemesterID();
+					String semesterName = DatabaseHandler.getSemesterName(semesterID);
 
-							if (deleted) {
-								Body.remove(faculty);
-								revalidate();
-								repaint();
-							} else {
-								JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+					JButton addPreparation = faculty.addBtn;
+						addPreparation.addActionListener(new ActionListener() 
+						{
+							public void actionPerformed(ActionEvent e) 
+							{
+								addPreparation preparation = new addPreparation();
+								preparation.facultyName.setText(faculty.facultyNameLbl.getText());
+								preparation.acadYearCB.setSelectedItem(faculty.academicYearLbl.getText());
+								preparation.semesterCB.setSelectedItem(faculty.semesterLbl.getText());
+								preparation.frame.setVisible(true);
+								preparation.fetchAndDisplaySubjects();
 							}
-							
-						}
+						});
+						
+						
+						JButton uploadDocument = faculty.uploadBtn;
+						uploadDocument.addActionListener(new ActionListener() 
+						{
+							public void actionPerformed(ActionEvent e) 
+							{
+								System.out.println("Upload Button Pressed");
+								UploadDocWindow updoc = new UploadDocWindow(DatabaseHandler.getFacultyID(faculty.facultyNameLbl.getText()));
+							}
+						});
+						
+						JButton deleteFaculty = faculty.deleteBtn;
+						deleteFaculty.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete this faculty?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+								
+								if (confirm == JOptionPane.YES_OPTION) {
+									// Assuming you have a method in DatabaseHandler to delete faculty by ID
+									int facultyID = FacultyData.getFacultyID(); // Assuming you have this method in your FacultyData class
+									boolean deleted = DatabaseHandler.deleteFacultyByID(facultyID);
+
+									if (deleted) {
+										Body.remove(faculty);
+										revalidate();
+										repaint();
+									} else {
+										JOptionPane.showMessageDialog(frame, "Failed to delete faculty from the database.", "Deletion Failed", JOptionPane.ERROR_MESSAGE);
+									}
+									
+								}
+							}
+						});
+			
+					faculty.facultyNameLbl.setText(facultyData.getFacultyName());
+					faculty.departmentLbl.setText(departmentName);
+					faculty.semesterLbl.setText(semesterName);
+					faculty.academicYearLbl.setText(academicYear);
+
+					facultyNames.add(facultyData.getFacultyName());
+					Body.add(faculty);
+					currentRow++;
+
+					if (Body.getComponentCount() >= 12) {
+						// Increase the preferred height of the rowPanel
+						Dimension preferredSize = Body.getPreferredSize();
+						preferredSize.height += 80;
+						Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
+						Body.setPreferredSize(preferredSize);
+						Body.revalidate();
 					}
-				});
-	
-			faculty.facultyNameLbl.setText(facultyData.getFacultyName());
-			faculty.departmentLbl.setText(departmentName);
-			faculty.semesterLbl.setText(semesterName);
-			faculty.academicYearLbl.setText(academicYear);
-
-			facultyNames.add(facultyData.getFacultyName());
-			Body.add(faculty);
-			currentRow++;
-
-			if (Body.getComponentCount() >= 12) {
-				// Increase the preferred height of the rowPanel
-				Dimension preferredSize = Body.getPreferredSize();
-				preferredSize.height += 80;
-				Body.setLayout(new GridLayout(Body.getComponentCount(), 1));
-				Body.setPreferredSize(preferredSize);
+					Body.revalidate();
+				}
 				Body.revalidate();
+				Body.repaint();
 			}
-			Body.revalidate();
-		}
-		Body.revalidate();
-		Body.repaint();
+		};
+		timer.scheduleAtFixedRate(task, 0, 1000); // 1000 miliseconds or 1 second
 	}
 // Method to SORT the Department of the Faculty in Descending order
 public void SortDepartmentFacultyData(String CB_SORT) {

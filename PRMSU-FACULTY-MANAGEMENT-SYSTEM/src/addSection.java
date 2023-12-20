@@ -6,8 +6,13 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.Image;
 import java.io.IOException;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.imageio.ImageIO;
 
 import javax.swing.JButton;
@@ -19,6 +24,8 @@ import javax.swing.JSeparator;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
+import org.w3c.dom.events.MouseEvent;
+
 public class addSection extends JDialog 
 {
 	
@@ -29,7 +36,9 @@ public class addSection extends JDialog
 
 	public addSection() 
 	{
+		prep.fetchAndDisplaySubjects();
 		getContentPane().setBackground(SystemColor.text);
+		setResizable(false);
 		
 		// Set the dimensions and location of the JFrame to center it
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -51,6 +60,23 @@ public class addSection extends JDialog
         setBounds(x, y, frameWidth, frameHeight);
 		setTitle("Add Subject");
 		getContentPane().setLayout(null);
+
+		{
+			JPanel HeaderPane = new JPanel();
+			HeaderPane.setLayout(null);
+			HeaderPane.setBorder(null);
+			HeaderPane.setBackground(new Color(255, 128, 41));
+			HeaderPane.setBounds(0, 0, 600, 50);
+			getContentPane().add(HeaderPane);
+			{
+				JLabel addLbl = new JLabel("Add Section");
+				addLbl.setHorizontalAlignment(SwingConstants.CENTER);
+				addLbl.setFont(new Font("Arial", Font.BOLD, 25));
+				addLbl.setBackground(SystemColor.textHighlight);
+				addLbl.setBounds(0, 15, 600, 20);
+				HeaderPane.add(addLbl);
+			}
+		}
 		
 		{
 			JPanel buttonPane = new JPanel();
@@ -86,22 +112,6 @@ public class addSection extends JDialog
 			}
 		}
 		{
-			JPanel HeaderPane = new JPanel();
-			HeaderPane.setLayout(null);
-			HeaderPane.setBorder(null);
-			HeaderPane.setBackground(new Color(255, 128, 41));
-			HeaderPane.setBounds(0, 0, 600, 50);
-			getContentPane().add(HeaderPane);
-			{
-				JLabel addLbl = new JLabel("Add Section");
-				addLbl.setHorizontalAlignment(SwingConstants.CENTER);
-				addLbl.setFont(new Font("Arial", Font.BOLD, 25));
-				addLbl.setBackground(SystemColor.textHighlight);
-				addLbl.setBounds(0, 15, 600, 20);
-				HeaderPane.add(addLbl);
-			}
-		}
-		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
@@ -110,13 +120,14 @@ public class addSection extends JDialog
 		getContentPane().add(scrollPane);
 
 		GridLayout Layout = new GridLayout(10, 1);
-        Layout.setVgap(-1);
+    Layout.setVgap(0);
 		
 		Body = new JPanel();
-		scrollPane.setViewportView(Body);
 		Body.setBorder(null);
 		Body.setBackground(SystemColor.text);
 		Body.setLayout(Layout);
-		
+		scrollPane.setViewportView(Body);
+		}
 	}
+
 }

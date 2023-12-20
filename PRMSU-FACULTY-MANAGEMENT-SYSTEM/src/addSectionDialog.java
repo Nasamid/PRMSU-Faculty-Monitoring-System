@@ -50,6 +50,9 @@ public class addSectionDialog extends JDialog
 
 	public addSectionDialog() 
 	{
+		addPreparation addPreparation = new addPreparation();
+		addPreparation.fetchAndDisplaySubjects();
+		
 		setResizable(false);
         // Set the dimensions and location of the JFrame to center it
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -82,7 +85,7 @@ public class addSectionDialog extends JDialog
 		sectionTF = new JTextField();
 		sectionTF.setBorder(new TitledBorder(new LineBorder(new Color(255, 128, 41), 3, true), "Course Description:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Arial", Font.BOLD, 15), new Color(0, 0, 0)));
 		//sectionTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
-		sectionTF.setFont(new Font("Arial", Font.PLAIN, 10));
+		sectionTF.setFont(new Font("Arial", Font.PLAIN, 15));
 		sectionTF.setBounds(50, 60, 400, 55);
 		contentPanel.add(sectionTF);
 		sectionTF.setColumns(10);
