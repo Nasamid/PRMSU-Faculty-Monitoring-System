@@ -1,13 +1,9 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import UploadDocTreeNodes.*;
-import uk.ac.manchester.cs.bhig.jtreetable.JTreeTable;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +11,6 @@ import java.nio.file.Paths;
 
 import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
-import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
@@ -27,7 +21,7 @@ public class UploadDocWindow {
     JButton AddFileButton, DeleteFileButton;
     JComboBox<String> CFacultyName, CSchoolYear, CSemester;
     
-    public UploadDocWindow(int facultyID){
+    UploadDocWindow(int facultyID){
 
         JFrame UploadDocFrame = new JFrame("Upload Documents");
 
@@ -59,7 +53,12 @@ public class UploadDocWindow {
         JPanel viewerComponentPanel = factory.buildViewerPanel();
         viewerComponentPanel.setBounds(5,-100,440, 720);
 
-        controller.getDocumentViewController().setAnnotationCallback(new org.icepdf.ri.common.MyAnnotationCallback(controller.getDocumentViewController()));
+        JScrollPane scrollPane = new JScrollPane(viewerComponentPanel);
+        scrollPane.setPreferredSize(new Dimension(450, 575));
+        
+        controller.getDocumentViewController().setAnnotationCallback(
+                new org.icepdf.ri.common.MyAnnotationCallback(
+                        controller.getDocumentViewController()));
 
         TreeTablePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         TreeTablePanel.setBounds(5,100,540, 575);
@@ -87,6 +86,9 @@ public class UploadDocWindow {
         float zoomLevel = 0.6f;
         controller.setZoom(zoomLevel);
 
+        JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
+        horizontalScrollBar.setValue((horizontalScrollBar.getMaximum() / 2) + 30 );
+
         AddFileButton = new JButton();
         Image AddFileIcon;
                 try {
@@ -101,6 +103,7 @@ public class UploadDocWindow {
         AddFileButton.setContentAreaFilled(false);
         AddFileButton.setBorderPainted(false);
         AddFileButton.setBorder(null);
+
         AddFileText.setText("Add File");
         AddFileText.setBounds(552, 340, 250,10);
         AddFileText.setForeground(new Color(75,174,79));
@@ -137,8 +140,13 @@ public class UploadDocWindow {
         
         FacultyName.setBounds(25,yaxis, topcompwidth, 25);
         FacultyName.setText(DatabaseHandler.getFullNameOfFaculty(facultyID));
-        FacultyName.setForeground(Color.white );
-        FacultyName.setFont(new Font("Arial", Font.BOLD, 15));
+        FacultyName.setForeground(Color.black);
+        FacultyName.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        FacultyName.setBackground(Color.white);
+        FacultyName.setOpaque(true);
+        FacultyName.setFont(new Font("Arial", Font.PLAIN, 12));
+        FacultyName.setHorizontalAlignment(SwingConstants.CENTER);
+
         
         String lastName = DatabaseHandler.getLastNameByFacultyID(facultyID);
 
@@ -176,7 +184,7 @@ public class UploadDocWindow {
 
         }
 
-
+        Department.setText("Computer Engineering");
         Department.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         Department.setBackground(Color.white);
         Department.setOpaque(true);
@@ -207,30 +215,9 @@ public class UploadDocWindow {
         CSemester.setBounds((topcompwidth*4+10)+30,yaxis, topcompwidth, 25);
         //End of Combobox Section
 
-        String facultyIDString = String.valueOf(DatabaseHandler.getFacultyIDByLastName(lastName));
-
-        String filepath = documentfaculty.getPath(facultyIDString, lastName);
-
-        String path = Paths.get("PRMSU-FACULTY-MANAGEMENT-SYSTEM", "src", "Documents", "faculty", facultyIDString + "-" + lastName).toString();
-        System.out.println("file path is: "+path);
-        File facultyFolder = new File(path);  // Update with the actual path
-        
-        DefaultMutableTreeNode rootNode = createTreeNodes(facultyFolder);
-        String[] columnNames = {" ", "Status", "Date Submitted"}; // Adjust as needed
-
-        CustomTreeTableModel treeTableModel = new CustomTreeTableModel(rootNode, columnNames);
-        JXTreeTable treeTable = new JXTreeTable(treeTableModel);
-        treeTable.setColumnControlVisible(true);
-
-        JScrollPane scrollPane = new JScrollPane(treeTable);
-        
-        JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
-        horizontalScrollBar.setValue((horizontalScrollBar.getMaximum() / 2) + 30 );
-        
-
 		List<String[]> content = new ArrayList<>();
 
-        // //This Section is just temporary placeholder for what the table will contain
+        //This Section is just temporary placeholder for what the table will contain
         // content.add(new String[] { "Load" });
         // content.add(new String[] { "Teaching Load", "Uploaded", "04/11/2023" });
 
@@ -284,21 +271,46 @@ public class UploadDocWindow {
 		// content.add(new String[] { "Software Design", "Uploaded", "04/11/2023" });
         // content.add(new String[] { "Computer Aided Drafting", "Not Uploaded", "04/11/2023" });
         // content.add(new String[] { "Programming Logic and Design", "Not Uploaded", "04/11/2023" });
-        // //End of placeholder section
+        //End of placeholder section
 
-		//TreeTable treeTable = new TreeTable(content);
+        //This gets and converts the faculty ID from the database into a String
+        String facultyIDString = String.valueOf(DatabaseHandler.getFacultyIDByLastName(lastName));
+
+        //This saves the file path of the faculty from the file explorer into a String ignore this since it's not used/relevant to the JXTreeTable it may be redundant since it's not used
+        String filepath = documentfaculty.getPath(facultyIDString, lastName);
+
+        //This gets the file path of the faculty from the file explorer based on the facultyIDString and the lastName
+        String path = Paths.get("PRMSU-FACULTY-MANAGEMENT-SYSTEM", "src", "Documents", "faculty", facultyIDString + "-" + lastName).toString();
+        System.out.println("file path is: "+path);
+
+        //This saves the file path in to a File value
+        File facultyFolder = new File(path);  // Update with the actual path
+
+        scanDirectory(facultyFolder, content, "", 0);
+
+        // // Print the contents of the ArrayList
+        // for (String[] entry : content) {
+        //     for (String element : entry) {
+        //         System.out.print(element + " ");
+        //     }
+        //     System.out.println();
+        // }
+
+
+		TreeTable treeTable = new TreeTable(content);
 		UploadDocFrame.setLayout(new BorderLayout());
 
-        TreeTablePanel.add(new JScrollPane(treeTable), BorderLayout.CENTER);
+        TreeTablePanel.add(new JScrollPane(treeTable.getTreeTable()), BorderLayout.CENTER);
 		//UploadDocFrame.add(new JScrollPane(treeTable.getTreeTable()), BorderLayout.CENTER);
         
         TopPanel.add(Department);
         TopPanel.add(FacultyName);
+        TopPanel.add(CFacultyName);
         TopPanel.add(CSchoolYear);
         TopPanel.add(CSemester);
 
-        //PreviewPanel.add(scrollPane, BorderLayout.CENTER);
-        PreviewPanel.add(DocPreviewText);
+        PreviewPanel.add(scrollPane, BorderLayout.CENTER);
+        //PreviewPanel.add(DocPreviewText);
 
         UploadDocFrame.add(AddFileButton);
         UploadDocFrame.add(AddFileText);
@@ -332,59 +344,54 @@ public class UploadDocWindow {
         UploadDocFrame.setVisible(true);
 		UploadDocFrame.setVisible(true);
 
-
     }
 
-
-    private DefaultMutableTreeNode createTreeNodes(File folder) {
-        //System.out.println("Creating tree nodes for: " + folder.getAbsolutePath());
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root");
-        File[] files = folder.listFiles();
-
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    // Add folder as parent node
-                    DefaultMutableTreeNode parentNode = new DefaultMutableTreeNode(file.getName());
-                    rootNode.add(parentNode);
-
-                    // Read subfolders and files
-                    readSubfoldersAndFiles(file, parentNode);
-                }
-            }
+    private static void scanDirectory(File directory, List<String[]> content, String parentPath, int depth) {
+        String name = directory.getName();
+        String[] entry;
+    
+        // Check if there are no more subdirectories within the current directory before adding the entry
+        File[] innerSubDirectories = directory.listFiles(File::isDirectory);
+        if (innerSubDirectories == null || innerSubDirectories.length == 0 && !name.equals("load")) {
+            entry = new String[]{name, "not Submitted", "20/12/2023", Integer.toString(depth), "File Folder", directory.getPath()};
+            System.out.println("Entry: " + Arrays.toString(entry));
+            content.add(entry);
+            return; // Stop further recursion if this is the innermost subdirectory
         }
-
-        return rootNode;
-    }
-
-
-    private void readSubfoldersAndFiles(File folder, DefaultMutableTreeNode parentNode) {
-        //System.out.println("Reading subfolders and files for: " + folder.getAbsolutePath());
-        File[] files = folder.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    // Add subfolder as child node
-                    DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(file.getName());
-                    parentNode.add(childNode);
-
-                    // Read subfolders and files recursively
-                    readSubfoldersAndFiles(file, childNode);
-                } else {
-                    // Add file information as child node
-                    String fileName = file.getName();
-                    String[] fileInfo = {fileName, null, null};  // Change this according to your structure
-                    DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(fileInfo);
-                    parentNode.add(childNode);
+    
+        if (directory.isDirectory()) {
+            if (!parentPath.isEmpty()) {
+                entry = new String[]{name, " ", " ", Integer.toString(depth), directory.getPath()};
+            } else {
+                entry = new String[]{name, " "," ", Integer.toString(depth), " ", parentPath, directory.getPath()};
+            }
+            System.out.println("Entry: " + Arrays.toString(entry));
+            content.add(entry);
+    
+            File[] subDirectories = directory.listFiles(File::isDirectory);
+    
+            // Check if subDirectories is neither null nor empty
+            if (subDirectories != null && subDirectories.length > 0) {
+                for (File subDir : subDirectories) {
+                    scanDirectory(subDir, content, name, depth + 1);
                 }
             }
         }
     }
+    
+    
+    // File[] files = directory.listFiles(file -> file.isFile() && file.getName().endsWith(".pdf"));
+            // if (files != null) {
+            //     for (File file : files) {
+            //         entry = new String[]{file.getName(), "not Submitted", "20/12/2023", file.getPath()};
+            //         content.add(entry);
+            //     }
+            // }
 
 
     public static void main(String[] args) {
         FlatMacLightLaf.registerCustomDefaultsSource("Properties");
         FlatMacLightLaf.setup();
-        UploadDocWindow updoc = new UploadDocWindow(2);
+        new UploadDocWindow(4);
     }
 }

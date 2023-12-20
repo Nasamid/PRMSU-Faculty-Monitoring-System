@@ -5,11 +5,11 @@ import java.util.Arrays;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-public class CustomTreeTableModel extends AbstractTreeTableModel {
+public class UNUSEDTreeTableModel extends AbstractTreeTableModel {
 
     private final String[] columnNames;
 
-    public CustomTreeTableModel(DefaultMutableTreeNode rootNode, String[] columnNames) {
+    public UNUSEDTreeTableModel(DefaultMutableTreeNode rootNode, String[] columnNames) {
         super(rootNode);
         this.columnNames = columnNames;
     }
@@ -56,8 +56,8 @@ public class CustomTreeTableModel extends AbstractTreeTableModel {
                     if (column >= 0 && column < rowData.length) {
                         return rowData[column];
                     }
-                } else  if (userObject != null && userObject instanceof FileNode) {
-                    FileNode fileNode = (FileNode) userObject;
+                } else  if (userObject != null && userObject instanceof UNUSEDFileNode) {
+                    UNUSEDFileNode fileNode = (UNUSEDFileNode) userObject;
         
                     switch (column) {
                         case 0:

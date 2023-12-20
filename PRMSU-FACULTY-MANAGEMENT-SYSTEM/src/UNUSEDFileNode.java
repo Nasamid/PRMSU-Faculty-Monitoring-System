@@ -1,9 +1,9 @@
-public class FileNode {
+public class UNUSEDFileNode {
     private String fileName;
     private String status;
     private String dateSubmitted;
 
-    public FileNode(String fileName, String status, String dateSubmitted) {
+    public UNUSEDFileNode(String fileName, String status, String dateSubmitted) {
         this.fileName = fileName;
         this.status = status;
         this.dateSubmitted = dateSubmitted;

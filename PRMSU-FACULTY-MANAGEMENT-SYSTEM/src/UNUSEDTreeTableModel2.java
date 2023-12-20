@@ -5,11 +5,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
 import java.util.Arrays;
 
-public class CustomTreeTableModel2 extends AbstractTreeTableModel {
+public class UNUSEDTreeTableModel2 extends AbstractTreeTableModel {
 
     private final String[] columnNames = {"Name", "Status", "Date Modified"};
 
-    public CustomTreeTableModel2(File facultyFolder) {
+    public UNUSEDTreeTableModel2(File facultyFolder) {
         super(new DefaultMutableTreeNode(facultyFolder));
     }
 

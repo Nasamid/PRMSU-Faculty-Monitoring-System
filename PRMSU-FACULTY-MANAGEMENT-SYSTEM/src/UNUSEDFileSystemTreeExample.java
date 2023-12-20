@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.io.File;
 import java.nio.file.Paths;
 
-public class FileSystemTreeExample {
+public class UNUSEDFileSystemTreeExample {
     public static void main(String[] args) {
 
             JFrame frame = new JFrame("File System Tree Example");
@@ -29,7 +29,7 @@ public class FileSystemTreeExample {
         File testPath = new File("C:\\Users\\Administrator\\Desktop");
 
             // Create a JXTreeTable with FileSystemModel
-            JXTreeTable treeTable = new JXTreeTable(new CustomTreeTableModel2(testPath));
+            JXTreeTable treeTable = new JXTreeTable(new UNUSEDTreeTableModel2(testPath));
 
             // Add the JXTreeTable to the frame
             frame.getContentPane().add(new JScrollPane(treeTable));

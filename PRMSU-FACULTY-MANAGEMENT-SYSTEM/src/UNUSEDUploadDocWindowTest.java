@@ -20,14 +20,14 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
-public class UploadDocWindowTest {
+public class UNUSEDUploadDocWindowTest {
 
     JPanel TreeTablePanel, PreviewPanel, TopPanel;
     JLabel Department, DocPreviewText, AddFileText, DeleteFileText;
     JButton AddFileButton, DeleteFileButton;
     JComboBox<String> CFacultyName, CSchoolYear, CSemester;
     
-    public UploadDocWindowTest(int facultyID){
+    public UNUSEDUploadDocWindowTest(int facultyID){
 
         //These are just some instantiations of GUI objects
         JFrame UploadDocFrame = new JFrame("Upload Documents");
@@ -76,7 +76,7 @@ public class UploadDocWindowTest {
         String[] columnNames = {" ", "Status", "Date Submitted"};
 
         //This instantiates the custom tree table model
-        CustomTreeTableModel treeTableModel = new CustomTreeTableModel(rootNode, columnNames);
+        UNUSEDTreeTableModel treeTableModel = new UNUSEDTreeTableModel(rootNode, columnNames);
 
         //This inserts the custom model into the JXTreeTable and instantiates the JXTreetable
         JXTreeTable treeTable = new JXTreeTable(treeTableModel);
@@ -120,8 +120,8 @@ public class UploadDocWindowTest {
     }
 
 
-    private List<FileNode> createFileNodes(File folder) {
-        List<FileNode> fileNodes = new ArrayList<>();
+    private List<UNUSEDFileNode> createFileNodes(File folder) {
+        List<UNUSEDFileNode> fileNodes = new ArrayList<>();
         File[] files = folder.listFiles();
 
         if (files != null) {
@@ -135,7 +135,7 @@ public class UploadDocWindowTest {
                     String status = "Status";  // Placeholder for status
                     String dateSubmitted = "Date Submitted";  // Placeholder for date submitted
 
-                    FileNode fileNode = new FileNode(fileName, status, dateSubmitted);
+                    UNUSEDFileNode fileNode = new UNUSEDFileNode(fileName, status, dateSubmitted);
                     fileNodes.add(fileNode);
                 }
             }
@@ -148,10 +148,10 @@ public class UploadDocWindowTest {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root");
         System.out.println("Creating tree nodes for: " + folder.getAbsolutePath());
         // Create FileNode instances for each file in the faculty folder
-        List<FileNode> fileNodes = createFileNodes(folder);
+        List<UNUSEDFileNode> fileNodes = createFileNodes(folder);
 
         // Add FileNode instances to the tree
-        for (FileNode fileNode : fileNodes) {
+        for (UNUSEDFileNode fileNode : fileNodes) {
             
             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(fileNode);
             rootNode.add(childNode);
@@ -213,7 +213,7 @@ public class UploadDocWindowTest {
         SwingUtilities.invokeLater(() -> {
             FlatMacLightLaf.registerCustomDefaultsSource("Properties");
             FlatMacLightLaf.setup();
-            new UploadDocWindowTest(1);
+            new UNUSEDUploadDocWindowTest(1);
         });
     }
 }
