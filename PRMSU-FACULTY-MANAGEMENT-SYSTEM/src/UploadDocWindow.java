@@ -28,6 +28,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
+import org.icepdf.ri.common.views.DocumentViewModel;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
@@ -373,13 +374,26 @@ public class UploadDocWindow {
                 TreePath[] paths = e.getPaths();
         
                 if (paths.length > 0) {
-                    TreePath newestPath = paths[0]; // Assuming the first path is the newest
+                    TreePath newestPath = paths[0];
                     selectedPath = treeTable.treePathLastComponentToString(newestPath);
                     System.out.println("Selected Path: " + selectedPath);
+        
+                    // Look for the first PDF file in the selected directory
+                    File pdfFile = findFirstPdfInDirectory(selectedPath);
+        
+                    if (pdfFile != null && pdfFile.exists()) {
+                        // Pass the existing controller to update the viewer
+                        openPdf(pdfFile, controller);
+                    } else {
+                        // Use default PDF file if no PDF found in the selected directory
+                        File defaultPdfFile = new File("PRMSU-FACULTY-MANAGEMENT-SYSTEM" + File.separator + "src" + File.separator + "Documents" + File.separator + "PDFVIEWER.pdf");
+                        
+                        // Pass the existing controller to update the viewer
+                        openPdf(defaultPdfFile, controller);
+                    }
                 }
             }
         });
-        
         AddFileButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Create a file chooser
@@ -547,50 +561,42 @@ public class UploadDocWindow {
         }
     }
 
+    // Method to find the first PDF file in the specified directory
+    private File findFirstPdfInDirectory(String directoryPath) {
+        File directory = new File(directoryPath);
 
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));
 
-//     public class CustomTreeSelectionListener implements TreeSelectionListener {
+            if (files != null && files.length > 0) {
+                // Return the first PDF file found in the directory
+                return files[0];
+            }
+        }
 
-//     private SwingController pdfController; // Change to your specific ICEpdf controller type
+        return null;
+    }
 
-//     public CustomTreeSelectionListener(SwingController pdfController) {
-//         this.pdfController = pdfController;
-//     }
+    // Method to open the specified PDF file using IcePDF
+    private void openPdf(File pdfFile, SwingController controller) {
+        // Close the existing document (if any)
+        controller.closeDocument();
 
-//     @Override
-//     public void valueChanged(TreeSelectionEvent e) {
-//         TreePath path = e.getNewLeadSelectionPath();
-//         if (path != null) {
-//             DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-//             Object userObject = node.getUserObject();
+        // Set up the new document
+        String pdfFilePath = pdfFile.getAbsolutePath();
+        controller.openDocument(pdfFilePath);
 
-//             if (userObject instanceof File) {
-//                 File selectedFile = (File) userObject;
-//                 if (selectedFile.isDirectory()) {
-//                     // Directory is selected, get PDF files
-//                     File[] pdfFiles = getPDFFiles(selectedFile);
+        // Perform any additional setup if needed
+        float zoomLevel = 0.6f;
+        controller.setZoom(zoomLevel);
 
-//                     if (pdfFiles.length > 0) {
-//                         // Open the first PDF file
-//                         openPDF(pdfFiles[0]);
-//                     }
-//                 }
-//             }
-//         }
-//     }
+        // Repaint the viewer
+        controller.getDocumentViewController().getViewContainer().revalidate();
+        controller.getDocumentViewController().getViewContainer().repaint();
 
-//     private File[] getPDFFiles(File directory) {
-//         // Filter files to include only PDF files
-//         return directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));
-//     }
-
-//     private void openPDF(File pdfFile) {
-//         // Use your ICEpdf controller to open the PDF file
-//         if (pdfController != null) {
-//             pdfController.openDocument(pdfFile.getAbsolutePath());
-//         }
-//     }
-// }
+        // Add the rest of your code for setting up the viewer as needed
+        // ...
+    }
 
     public static void main(String[] args) {
         FlatMacLightLaf.registerCustomDefaultsSource("Properties");
