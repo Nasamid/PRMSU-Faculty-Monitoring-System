@@ -96,7 +96,6 @@ public class report{
         String[] columnNames2 = {"Name","Department","File","Semester","Academic Year","Status"};
         // Data
         Object[][] data2 = {
-            {null,null,null,null,null,null},
         };
         
         //table model
@@ -125,6 +124,7 @@ public class report{
         table2.setRowHeight(45);
         table2.setFont(new Font("ARIAL", Font.PLAIN, 13));
         table2.getTableHeader().setReorderingAllowed(false);
+        table2.getTableHeader().setResizingAllowed(false);
         //scroll pane
         scrollPane2 = new JScrollPane(table2);
         table2.setPreferredScrollableViewportSize(new Dimension(975,600));
@@ -143,8 +143,8 @@ public class report{
         
         //button
         button2 = new JButton("Export");
-        button2.setBackground(complimentColor);
-        button2.setForeground(Color.WHITE);
+        // button2.setBackground(complimentColor);
+        button2.setForeground(Color.BLACK);
         button2.setBounds(880, 660, 100, 30);
         button2.addActionListener(exportToExcel);
         
