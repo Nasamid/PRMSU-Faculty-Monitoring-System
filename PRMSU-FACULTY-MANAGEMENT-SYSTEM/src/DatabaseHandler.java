@@ -378,14 +378,17 @@ public class DatabaseHandler {
     // Add this method to your DatabaseHandler class
     public static boolean deleteFacultyByID(int facultyID) {
         String query = "DELETE FROM faculty WHERE facultyID = ?";
+        String query2 = "DELETE FROM fID_lastName WHERE facultyID = ?";
         
         try (Connection connection = connect();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query); 
+            PreparedStatement preparedStatement2 = connection.prepareStatement(query2)) {
             preparedStatement.setInt(1, facultyID);
+            preparedStatement2.setInt(1, facultyID);
             
-            int rowsDeleted = preparedStatement.executeUpdate();
+            int rowsDeleted = preparedStatement.executeUpdate() + preparedStatement2.executeUpdate();
             
-            return rowsDeleted > 0;
+            return rowsDeleted > 1;
         } catch (SQLException e) {
             e.printStackTrace(); // Handle the exception appropriately
             return false;
