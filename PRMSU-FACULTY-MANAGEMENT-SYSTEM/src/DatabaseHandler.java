@@ -1,3 +1,8 @@
+import java.io.File;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -125,6 +130,73 @@ public class DatabaseHandler {
         }
 
         return departmentID;
+    }
+
+    public static boolean insertClassRecordToDatabase(Connection connection, int facultyID, String path) throws SQLException {
+        String insertQuery = "INSERT INTO class_record (facultyID, path, date, status) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            // Set parameters for the SQL query
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setString(2, path);
+            
+            // Set the current date in MM/DD/YYYY format
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            String currentDate = dateFormat.format(new Date());
+            preparedStatement.setString(3, currentDate);
+
+            // Set the status (1 for true, 0 for false)
+            preparedStatement.setInt(4, 1);
+
+            // Execute the update
+            preparedStatement.executeUpdate();
+            System.out.println("Class record added to the database.");
+
+            return true;
+        }
+    }
+
+    public static boolean insertfilesPopulator(Connection connection, int facultyID, String path) throws SQLException {
+        String insertQuery = "INSERT INTO filesPopulator (facultyID, path, date, status) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            // Set parameters for the SQL query
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setString(2, path);
+            
+            // Set the current date in MM/DD/YYYY format
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            String currentDate = dateFormat.format(new Date());
+            preparedStatement.setString(3, currentDate);
+
+            // Set the status (1 for true, 0 for false)
+            preparedStatement.setInt(4, 1);
+
+            // Execute the update
+            preparedStatement.executeUpdate();
+            System.out.println("Class record added to the database.");
+
+            return true;
+        }
+    }
+
+    // Get date submitted from the database in 
+    public static String getfilesDate(File directory) {
+        String query = "SELECT date FROM filesPopulator WHERE path = ?";
+        String directoryString = directory.toString();
+        String date = "";
+
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, directoryString);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                date = resultSet.getString("date");
+            }
+        } catch (SQLException e) {
+            //e.printStackTrace();
+        }
+
+        return date;
     }
 
     // Get year ID from the database based on academic year
