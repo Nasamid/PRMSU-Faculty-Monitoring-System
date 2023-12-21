@@ -202,13 +202,6 @@ public class HomeWindow
 
             //Action listeners of buttons
 
-            HelpButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    openPdfFile("path ng pdf");
-                }
-            });
-
             HomeButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) 
                 {
@@ -258,12 +251,11 @@ public class HomeWindow
                     }
             });
 
-            HelpButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) 
-                {
-                        //Maybe have this button open up the user manual
-                        //once we've ever get to making it
-                    }
+             HelpButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    openPdfFile("PRMSU-FACULTY-MANAGEMENT-SYSTEM/src/Images/FACULTY-MONITORING-SYSTEM-usermanual.pdf");
+                }
             });
 
             LogoutButton.addActionListener(new ActionListener() {
