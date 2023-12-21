@@ -1017,8 +1017,8 @@ public class DatabaseHandler {
 
     public static int getFacultyIDByLastName(String lastName) {
         int facultyID = -1;
-    
-        String query = "SELECT facultyID FROM fID_lastName WHERE lastName = ?";
+        
+        String query = "SELECT facultyID FROM fID_lastName WHERE lastName = ?;";
     
         try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {

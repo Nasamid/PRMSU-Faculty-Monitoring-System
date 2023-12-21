@@ -112,7 +112,6 @@ public class addSectionDialog extends JDialog
 				addDialogBtn = new JButton("Add");
 				addDialogBtn.setBackground(SystemColor.text);
 				addDialogBtn.setForeground(Color.black);
-				//addDialogBtn.setBorder(new LineBorder(SystemColor.textText, 1, true));
 				addDialogBtn.setFont(new Font("Arial", Font.BOLD, 15));
 				addDialogBtn.setBounds(140, 10, 100, 30);
 				addDialogBtn.setActionCommand("OK");
