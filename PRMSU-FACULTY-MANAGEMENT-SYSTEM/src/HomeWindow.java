@@ -202,6 +202,13 @@ public class HomeWindow
 
             //Action listeners of buttons
 
+            HelpButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    openPdfFile("path ng pdf");
+                }
+            });
+
             HomeButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) 
                 {
@@ -335,6 +342,25 @@ public class HomeWindow
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, width, height);
                 
+            }
+        }
+
+        private static void openPdfFile(String filePath) {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                File file = new File(filePath);
+    
+                if (file.exists()) {
+                    try {
+                        desktop.open(file);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    System.out.println("File not found: " + filePath);
+                }
+            } else {
+                System.out.println("Desktop not supported. Cannot open PDF.");
             }
         }
 }

@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
@@ -6,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
+import java.awt.Desktop.Action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -19,8 +21,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -31,8 +36,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class listFaculty extends JPanel 
 {
@@ -43,7 +51,9 @@ public class listFaculty extends JPanel
 	JButton addFacultyBtn;
 	List<String> facultyNames = new ArrayList<>();
 	List<Integer> facultyIndex = new ArrayList<>();
-	String CB_SORT,SRCH_NAME;
+	String CB_SORT,SRCH_NAME, name;
+	
+	
 	
 	public listFaculty() {
 	
@@ -149,6 +159,8 @@ public class listFaculty extends JPanel
 								Body.setPreferredSize(preferredSize);
 								Body.revalidate();
 							}
+							
+							loadFacultyData();
 				
 							addFaculty.dispose();
 							Body.revalidate();
@@ -238,6 +250,7 @@ public class listFaculty extends JPanel
 			public void mousePressed (MouseEvent e)
 			{
 				searchEngine.setText("");
+				loadFacultyData();
 			}
 		});
 
@@ -331,24 +344,31 @@ public class listFaculty extends JPanel
 		JPanel addPanel = new JPanel();
 		addPanel.setBounds(0, 0, 300, 150);
 		addPanel.setLayout(null);
-	
-		searchBtn.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-				String CB_SORT = SortByCB.getSelectedItem().toString();
 
-				String searchname = searchEngine.getText();
+		// Returns faculty by search
+		searchEngine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				name = searchEngine.getText();
+				int index = findIndexContainingSubstring(facultyNames, name);
 
-				Body.removeAll();
-				Body.revalidate();
-				Body.repaint();
+				if(searchEngine.getText().isEmpty()){
+					loadFacultyData();
+					
+				}else{
+					int numberOfComponents = Body.getComponentCount();
+					
+					for(int i = 0; i < numberOfComponents; i++){
 
-				
-				//loadSearchFacultyData(searchname, CB_AY, CB_DEP, CB_SEM);
-				scrollPane.revalidate();
-				scrollPane.repaint();					
+						if (i == index) {
 
+								Body.getComponent(i).setVisible(true);
+								Body.getComponent(index).getParent().setComponentZOrder(Body.getComponent(index), 0);
+
+						} else {
+								Body.getComponent(i).setVisible(false);
+						}
+					}
+				}
 			}
 		});
 
@@ -395,15 +415,11 @@ public class listFaculty extends JPanel
 	// Method to load faculty data from the database and populate the UI
 	public void loadFacultyData() {
 
-		// Run this method very seconds and revalidate all the components inside the body panel
-		Timer timer = new Timer();
-		final TimerTask task = new TimerTask() {
-			@Override
-			public void run(){
-				
+				facultyNames.clear();
 				Body.removeAll();
+
 				List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
-				//System.out.println(facultyDataList);
+//				System.out.println(facultyDataList);
 				for (FacultyData facultyData : facultyDataList) {
 					faculty faculty = new faculty();
 
@@ -470,10 +486,11 @@ public class listFaculty extends JPanel
 					faculty.departmentLbl.setText(departmentName);
 					faculty.semesterLbl.setText(semesterName);
 					faculty.academicYearLbl.setText(academicYear);
+					
 
 					facultyNames.add(facultyData.getFacultyName());
+					System.out.println(facultyNames);
 					Body.add(faculty);
-					currentRow++;
 
 					if (Body.getComponentCount() >= 12) {
 						// Increase the preferred height of the rowPanel
@@ -487,10 +504,8 @@ public class listFaculty extends JPanel
 				}
 				Body.revalidate();
 				Body.repaint();
-			}
-		};
-		timer.scheduleAtFixedRate(task, 0, 1000); // 1000 miliseconds or 1 second
 	}
+	
 // Method to SORT the Department of the Faculty in Descending order
 public void SortDepartmentFacultyData(String CB_SORT) {
 	List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
@@ -936,7 +951,7 @@ public void SortDepartmentFacultyData(String CB_SORT) {
 // Method to load new faculty data from the database and populate the UI based on the search parameters
 public void SortSemesterFacultyData(String CB_SORT) {
 	List<FacultyData> facultyDataList = DatabaseHandler.getFacultyDataList();
-	//System.out.println(facultyDataList);
+//	System.out.println(facultyDataList);
 	for (FacultyData facultyData : facultyDataList) {
 
 		if((facultyData.getSemesterName().equalsIgnoreCase("First Semester"))){
@@ -1311,6 +1326,17 @@ public void SortYearFacultyData(String CB_SORT) {
 			
 		}
 	}
+
+	// Method to find the index of the first element containing the specified substring
+	private static int findIndexContainingSubstring(List<String> list, String substring) {
+		for (int i = 0; i < list.size(); i++) {
+				String element = list.get(i);
+				if (element.toLowerCase().contains(substring.toLowerCase())) {
+						return i; // Return the index if found
+				}
+		}
+		return -1; // Return -1 if not found
+}
 		
 }
 
