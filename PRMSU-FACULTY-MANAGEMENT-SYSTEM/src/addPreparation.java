@@ -126,19 +126,16 @@ String code, description;
 		addSubjectBtn.setFont(new Font("Arial", Font.BOLD, 20));
 		addSubjectBtn.setFocusable(false);
 
+		// Action to add new subject
 		addSubjectBtn.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("add prep");
 			subject sub = new subject();
-			System.out.println(" add subject big button");
 			addSubjectDialog add = new addSubjectDialog();
-			System.out.println("Creates new subj dialog");
 
 			add.show();
 		
 			add.addBtn.addActionListener(new ActionListener() { // creates ne row of subj
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("add sub");
 					code = add.codeTF.getText();
 					description = add.decriptionTF.getText();
 					String subjectDisplay = code + " - " + description;
@@ -179,8 +176,8 @@ String code, description;
 									addSection.show();
 									DatabaseHandler dbH = new DatabaseHandler();
 									int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
-									System.out.println(subjectData.getSubjectName());
 									int facultyID = DatabaseHandler.getFacultyID(facultyName.getText());
+
 									// Fetch sections associated with the current faculty and subject
 									sections sec = new sections();
 									String section = addSectionDialog.sectionTF.getText();
@@ -432,6 +429,7 @@ String code, description;
 										addSection.setResizable(false);
 										addSection.show();
 
+										// Runs this method every second
 										Timer timer = new Timer();
 										final TimerTask task = new TimerTask() {
 											@Override
@@ -439,7 +437,7 @@ String code, description;
 
 												DatabaseHandler dbH = new DatabaseHandler();
 												int subjectID =  DatabaseHandler.getSubjectID(subjectData.getSubjectName());
-												System.out.println(subjectData.getSubjectName());
+
 												// Fetch sections associated with the current faculty and subject
 												List<String> sections = dbH.getSectionsByFacultyAndSubject(facultyID, subjectID);
 
@@ -449,8 +447,6 @@ String code, description;
 												for (String sectionb : sections) {
 													sections secb = new sections();
 													secb.sectionLbl.setText(sectionb);
-
-													System.out.println(sectionb);
 
 													// Add the section to the Body panel
 													addSection.Body.add(secb);
@@ -480,6 +476,7 @@ String code, description;
 											public void actionPerformed(ActionEvent e) 
 											{
 												addSectionDialog addSectionDialog = new addSectionDialog();
+												addSectionDialog.sectionTF.setBorder(new TitledBorder(new LineBorder(new Color(255, 128, 41), 3, true), "Section:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Arial", Font.BOLD, 15), new Color(0, 0, 0)));
 												addSectionDialog.show();
 												
 												addSectionDialog.addDialogBtn.addActionListener(new ActionListener() 
@@ -563,7 +560,6 @@ String code, description;
 								add.addBtn.setText("Edit");
 								add.setTitle("Edit Subject");
 								add.codeTF.setText(codeAndSubject[0]);
-								System.out.println("code TF AFTER");
 								add.decriptionTF.setText(codeAndSubject[1]);
 								
 								add.show();
@@ -573,8 +569,6 @@ String code, description;
 								{
 									@Override
 										public void actionPerformed(ActionEvent e) {
-											// TODO Auto-generated method stub
-											System.out.println("Gumagana ako");
 
 											int existingSubjectID = DatabaseHandler.getSubjectID(subject);
 											String newCode = add.codeTF.getText();
@@ -615,7 +609,6 @@ String code, description;
 							@Override
 							public void mousePressed(MouseEvent e) 
 							{
-								System.out.println("Delete pressed");
 
 								// Get the subjectID associated with the subject label
 								int subjectID = DatabaseHandler.getSubjectID(sub.subjectLbl.getText());

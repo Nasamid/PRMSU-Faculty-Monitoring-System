@@ -601,6 +601,6 @@ public class UploadDocWindow {
     public static void main(String[] args) {
         FlatMacLightLaf.registerCustomDefaultsSource("Properties");
         FlatMacLightLaf.setup();
-        new UploadDocWindow(17);
+        new UploadDocWindow(18);
     }
 }

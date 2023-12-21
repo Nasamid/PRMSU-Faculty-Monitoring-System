@@ -136,15 +136,13 @@ public class FacultyData {
         return facultyID;
     }
     
-    public static String getLastNameByFacultyID(int facultyID) {
+    public static String getLastNameByFacultyID() {
         String lastName = null;
 
-        String query = "SELECT facultyID FROM fID_lastName WHERE facultyID = ?";
+        String query = "SELECT lastName FROM fID_lastName";
 
         try (Connection connection = DatabaseHandler.connect();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setInt(1, facultyID);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
