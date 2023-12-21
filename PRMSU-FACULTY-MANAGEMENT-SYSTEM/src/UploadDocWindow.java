@@ -25,10 +25,14 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
 import org.icepdf.ri.common.views.DocumentViewModel;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
@@ -394,6 +398,7 @@ public class UploadDocWindow {
                 }
             }
         });
+
         AddFileButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Create a file chooser
@@ -413,12 +418,28 @@ public class UploadDocWindow {
 
                     // Construct the target path by combining the selected directory and file name
                     Path targetPath = Path.of(selectedPath, selectedFile.getName());
+                    
 
                     try {
                         // Copy the file to the target directory
-
                         Files.copy(selectedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
                         System.out.println("File copied to: " + targetPath);
+                        boolean uploaded_cr = false;
+
+                        Connection connection = DatabaseHandler.connect();
+                        try {
+                            uploaded_cr = DatabaseHandler.insertClassRecordToDatabase(connection, facultyID, targetPath.toString());
+                            uploaded_cr = DatabaseHandler.insertfilesPopulator(connection, facultyID, selectedPath);
+                        //NEED TO IMPLEMENT REFRESH FUNCTION AFTER ADDING
+                        
+                        } catch (SQLException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+
+
+
+
                         //ONCE THE FILE HAS BEEN ADDED WE NEED IT TO BE FLAGGED INTO THE DATABASE WITH THE CURRENT DATE AND UPLOADED STATUS = TRUE
 
 
@@ -446,20 +467,83 @@ public class UploadDocWindow {
                     // Debugging: Print selectedPath before deletion
                     System.out.println("Deleting files in directory: " + selectedPath);
         
-                    try {
-                        // Walk through the directory and delete all files
-                        Files.walkFileTree(directoryPath, EnumSet.noneOf(FileVisitOption.class), Integer.MAX_VALUE, new SimpleFileVisitor())
-                                .forEach(file -> {
-                                    try {
-                                        // Debugging: Print each file before deletion
-                                        System.out.println("Deleting file: " + file);
-                                        Files.delete(file);
-                                        System.out.println("Deleted file: " + file);
-                                    } catch (IOException ioException) {
-                                        ioException.printStackTrace();
-                                    }
-                                });
+                    List<Path> filesToDelete = new ArrayList<>();
         
+                    try {
+                        // Walk through the directory and collect files to delete
+                        Files.walkFileTree(directoryPath, EnumSet.noneOf(FileVisitOption.class), Integer.MAX_VALUE, new SimpleFileVisitor<>() {
+                            @Override
+                            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                                // Use default PDF file if no PDF found in the selected directory
+                                File defaultPdfFile = new File("PRMSU-FACULTY-MANAGEMENT-SYSTEM" + File.separator + "src" + File.separator + "Documents" + File.separator + "PDFVIEWER.pdf");
+        
+                                // Pass the existing controller to update the viewer
+                                openPdf(defaultPdfFile, controller);
+        
+                                // Debugging: Print each file before deletion
+                                System.out.println("Deleting file: " + file);
+                                filesToDelete.add(file);
+                                return FileVisitResult.CONTINUE;
+                            }
+                        });
+        
+                        // Delete collected files
+                        for (Path fileToDelete : filesToDelete) {
+                            Files.delete(fileToDelete);
+                            System.out.println("Deleted file: " + fileToDelete);
+                        }
+        
+                        System.out.println("All files in directory deleted: " + selectedPath);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                } else {
+                    System.out.println("No directory selected");
+                }
+            }
+        });
+
+
+        DeleteFileButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Check if the selectedPath is not empty
+                if (!selectedPath.isEmpty()) {
+                    // Construct the Path object for the selected directory
+                    Path directoryPath = Path.of(selectedPath);
+        
+                    // Debugging: Print selectedPath before deletion
+                    System.out.println("Deleting files in directory: " + selectedPath);
+        
+                    List<Path> filesToDelete = new ArrayList<>();
+        
+                    try {
+                        Files.walkFileTree(directoryPath, EnumSet.noneOf(FileVisitOption.class), Integer.MAX_VALUE, new SimpleFileVisitor<Path>() {
+                            @Override
+                            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                                // Use default PDF file if no PDF found in the selected directory
+                                File defaultPdfFile = new File("PRMSU-FACULTY-MANAGEMENT-SYSTEM" + File.separator + "src" + File.separator + "Documents" + File.separator + "PDFVIEWER.pdf");
+                    
+                                // Pass the existing controller to update the viewer
+                                openPdf(defaultPdfFile, controller);
+                    
+                                // Debugging: Print each file before deletion
+                                System.out.println("Deleting file: " + file);
+                                filesToDelete.add(file);
+                    
+                                return FileVisitResult.CONTINUE;
+                            }
+                        });
+                    
+                        // Delete collected files
+                        for (Path fileToDelete : filesToDelete) {
+                            try {
+                                Files.delete(fileToDelete);
+                                System.out.println("Deleted file: " + fileToDelete);
+                            } catch (IOException deleteException) {
+                                System.err.println("Error deleting file " + fileToDelete + ": " + deleteException.getMessage());
+                            }
+                        }
+                    
                         System.out.println("All files in directory deleted: " + selectedPath);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
@@ -476,14 +560,29 @@ public class UploadDocWindow {
 
 
     //This method is responsible for populating the JXTreeTable by adding the directories into an Array list
-    private static void scanDirectory(File directory, List<String[]> content, String parentPath, int depth) {
+    private void scanDirectory(File directory, List<String[]> content, String parentPath, int depth) {
         String name = directory.getName();
+        String status;
         String[] entry;
+        String date;
+        
+        Boolean ExistPDF = doesPdfExistInDirectory(directory);
+        
+        System.out.println("Current directory: " + directory);
+        System.out.println("ExistPDF = " + ExistPDF);
+
+        if (ExistPDF){
+            status = "Submitted";
+            date = DatabaseHandler.getfilesDate(directory);
+        }else{
+            status = "Not Submitted";
+            date = "N/A";
+        }
     
         // Check if there are no more subdirectories within the current directory before adding the entry
         File[] innerSubDirectories = directory.listFiles(File::isDirectory);
         if (innerSubDirectories == null || innerSubDirectories.length == 0 && depth == 3) {
-            entry = new String[]{name, "not Submitted", "20/12/2023", Integer.toString(depth), "File Folder", directory.getPath()};
+            entry = new String[]{name, status, date, Integer.toString(depth), "File Folder", directory.getPath()};
             //System.out.println("Entry: " + Arrays.toString(entry));
             content.add(entry);
             return; // Stop further recursion if this is the innermost subdirectory
@@ -492,7 +591,7 @@ public class UploadDocWindow {
         (parentPath.equals("grade sheet") || parentPath.equals("syllabus") || 
         parentPath.equals("tables of specification") || parentPath.equals("load"))) 
         {
-            entry = new String[]{name, "not Submitted", "20/12/2023", Integer.toString(depth), "File Folder", directory.getPath()};
+            entry = new String[]{name, status, date, Integer.toString(depth), "File Folder", directory.getPath()};
             //System.out.println("Entry: " + Arrays.toString(entry));
             content.add(entry);
             return; // Stop further recursion if this is the innermost subdirectory
@@ -529,37 +628,37 @@ public class UploadDocWindow {
     
     
 
-     // Define a simple FileVisitor to handle file deletion
-    private static class SimpleFileVisitor implements java.nio.file.FileVisitor<Path> {
-        @Override
-        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-            try {
-                Files.delete(file);
-                System.out.println("Deleted file: " + file);
-            } catch (IOException e) {
-                System.err.println("Error deleting file " + file + ": " + e.getMessage());
-            }
-            return FileVisitResult.CONTINUE;
-        }
+    //  // Define a simple FileVisitor to handle file deletion
+    // private static class SimpleFileVisitor implements java.nio.file.FileVisitor<Path> {
+    //     @Override
+    //     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    //         try {
+    //             Files.delete(file);
+    //             System.out.println("Deleted file: " + file);
+    //         } catch (IOException e) {
+    //             System.err.println("Error deleting file " + file + ": " + e.getMessage());
+    //         }
+    //         return FileVisitResult.CONTINUE;
+    //     }
 
-        @Override
-        public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-            // Handle the case where the visit of a file fails
-            System.err.println("Failed to visit: " + file.getFileName() + ", Reason: " + exc.getMessage());
-            return FileVisitResult.CONTINUE;
-        }
+    //     @Override
+    //     public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+    //         // Handle the case where the visit of a file fails
+    //         System.err.println("Failed to visit: " + file.getFileName() + ", Reason: " + exc.getMessage());
+    //         return FileVisitResult.CONTINUE;
+    //     }
 
-        @Override
-        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-            return FileVisitResult.CONTINUE;
-        }
+    //     @Override
+    //     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+    //         return FileVisitResult.CONTINUE;
+    //     }
 
-        @Override
-        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-            // Handle the case after visiting a directory
-            return FileVisitResult.CONTINUE;
-        }
-    }
+    //     @Override
+    //     public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+    //         // Handle the case after visiting a directory
+    //         return FileVisitResult.CONTINUE;
+    //     }
+    // }
 
     // Method to find the first PDF file in the specified directory
     private File findFirstPdfInDirectory(String directoryPath) {
@@ -575,6 +674,19 @@ public class UploadDocWindow {
         }
 
         return null;
+    }
+
+    // Method to check if a PDF file exists in the specified directory
+    // Returns true if a PDF file is found, false otherwise
+    private boolean doesPdfExistInDirectory(File directory) {
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));
+
+            return files != null && files.length > 0;
+        }
+
+        // If the directory doesn't exist or is not a directory, return false
+        return false;
     }
 
     // Method to open the specified PDF file using IcePDF
