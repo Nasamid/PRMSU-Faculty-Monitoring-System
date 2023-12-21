@@ -1,38 +1,27 @@
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import javax.swing.border.Border;
-import javax.imageio.ImageIO;
-import javax.print.attribute.standard.MediaSize.NA;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import java.nio.file.Paths;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import com.formdev.flatlaf.FlatClientProperties;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import UploadDocTreeNodes.*;
-import java.awt.*;
-import java.io.IOException;
 public class report{
         JPanel panel;
         DefaultTableModel model2;
@@ -92,7 +81,7 @@ public class report{
         panel.setLayout(null);
         //Color variable
         Color complimentColor = new Color(255, 128, 41);
-		
+
         String[] columnNames2 = {"Name","Department","File","Semester","Academic Year","Status"};
         // Data
         Object[][] data2 = {

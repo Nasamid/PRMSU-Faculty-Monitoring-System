@@ -425,20 +425,54 @@ public class UploadDocWindow {
                         Files.copy(selectedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
                         System.out.println("File copied to: " + targetPath);
                         boolean uploaded_cr = false;
+                        boolean uploaded_load = false;
+                        boolean  uploaded_exam = false;
+                        boolean uploaded_grade = false;
+                        boolean uploaded_analysis = false;
+                        boolean uploaded_syllabus = false;
+                        boolean uploaded_specs = false;
 
                         Connection connection = DatabaseHandler.connect();
                         try {
-                            uploaded_cr = DatabaseHandler.insertClassRecordToDatabase(connection, facultyID, targetPath.toString());
-                            uploaded_cr = DatabaseHandler.insertfilesPopulator(connection, facultyID, selectedPath);
+                            System.out.println(targetPath.toString());
+                            if(targetPath.toString().contains("class")){
+                                uploaded_cr = DatabaseHandler.insertClassRecordToDatabase(connection, facultyID, targetPath.toString());
+                                uploaded_cr = DatabaseHandler.insertfilesPopulator(connection, facultyID, selectedPath);
+                            }
+                            else if(targetPath.toString().contains("load")){
+                                uploaded_load = DatabaseHandler.insertLoadToDatabase(connection, facultyID, targetPath.toString());
+                                uploaded_load = DatabaseHandler.insertfilesPopulator(connection, facultyID, selectedPath);
+                            }
+                            else if(targetPath.toString().contains("exam")){
+                                uploaded_exam = DatabaseHandler.insertExamToDatabase(connection, facultyID, targetPath.toString());
+                                uploaded_exam = DatabaseHandler.insertfilesPopulator(connection, facultyID, selectedPath);
+                            }
+                            else if(targetPath.toString().contains("grade")){
+                                uploaded_grade = DatabaseHandler.insertGradeSheetToDatabase(connection, facultyID, targetPath.toString());
+                                uploaded_grade = DatabaseHandler.insertfilesPopulator(connection, facultyID, selectedPath);
+                            }
+                            else if(targetPath.toString().contains("analysis")){
+                                uploaded_analysis = DatabaseHandler.insertItemAnalysisToDatabase(connection, facultyID, targetPath.toString());
+                                uploaded_analysis = DatabaseHandler.insertfilesPopulator(connection, facultyID, selectedPath);
+                            }
+                            else if(targetPath.toString().contains("syllabus")){
+                                uploaded_syllabus = DatabaseHandler.insertSyllabusToDatabase(connection, facultyID, targetPath.toString());
+                                uploaded_syllabus = DatabaseHandler.insertfilesPopulator(connection, facultyID, selectedPath);
+                            }
+                            else if(targetPath.toString().contains("specification")){
+                                uploaded_specs = DatabaseHandler.insertSpecsToDatabase(connection, facultyID, targetPath.toString());
+                                uploaded_specs = DatabaseHandler.insertfilesPopulator(connection, facultyID, selectedPath);
+                            }
+                            else{
+                                System.out.println("File not uploaded");
+                            }
+                            
                         //NEED TO IMPLEMENT REFRESH FUNCTION AFTER ADDING
                         
                         } catch (SQLException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }
-
-
-
 
                         //ONCE THE FILE HAS BEEN ADDED WE NEED IT TO BE FLAGGED INTO THE DATABASE WITH THE CURRENT DATE AND UPLOADED STATUS = TRUE
 
