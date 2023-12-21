@@ -109,28 +109,28 @@ public class AddFaculty extends JDialog
 		contentPanel.add(semesterLbl);
 		
 		firstNameTF = new JTextField();
-		firstNameTF.setFont(new Font("Arial", Font.BOLD, 15));
+		firstNameTF.setFont(new Font("Arial", Font.PLAIN, 15));
 		//firstNameTF.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		firstNameTF.setBounds(175, 70, 350, 30);
 		contentPanel.add(firstNameTF);
 		firstNameTF.setColumns(10);
 		
 		lastNameTF = new JTextField();
-		lastNameTF.setFont(new Font("Arial", Font.BOLD, 15));
+		lastNameTF.setFont(new Font("Arial", Font.PLAIN, 15));
 		//lastNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		lastNameTF.setColumns(10);
 		lastNameTF.setBounds(175, 120, 350, 30);
 		contentPanel.add(lastNameTF);
 		
 		middleNameTF = new JTextField();
-		middleNameTF.setFont(new Font("Arial", Font.BOLD, 15));
+		middleNameTF.setFont(new Font("Arial", Font.PLAIN, 15));
 		//middleNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		middleNameTF.setColumns(10);
 		middleNameTF.setBounds(175, 170, 350, 30);
 		contentPanel.add(middleNameTF);
 		
 		extNameTF = new JTextField();
-		extNameTF.setFont(new Font("Arial", Font.BOLD, 15));
+		extNameTF.setFont(new Font("Arial", Font.PLAIN, 15));
 		//extNameTF.setBorder(new LineBorder(SystemColor.textText, 1, true));
 		extNameTF.setColumns(10);
 		extNameTF.setBounds(175, 220, 350, 30);
