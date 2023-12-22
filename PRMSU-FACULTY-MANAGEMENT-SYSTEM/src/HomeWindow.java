@@ -259,11 +259,10 @@ public class HomeWindow
             });
 
             HelpButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) 
-                {
-                        //Maybe have this button open up the user manual
-                        //once we've ever get to making it
-                    }
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    openPdfFile("PRMSU-FACULTY-MANAGEMENT-SYSTEM/src/Documents/FACULTY-MONITORING-SYSTEM-usermanual.pdf");
+                }
             });
 
             LogoutButton.addActionListener(new ActionListener() {
