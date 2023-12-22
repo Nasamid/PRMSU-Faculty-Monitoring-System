@@ -8,8 +8,10 @@ public class FacultyData {
     private String departmentName;
     private String academicYear;
     private String semesterName;
+    private int facultyID;
 
     public FacultyData(int facultyID, String facultyName, String departmentName, String academicYear, String semesterName) {
+        this.facultyID = facultyID;
         this.facultyName = facultyName;
         this.departmentName = departmentName;
         this.academicYear = academicYear;
@@ -98,26 +100,7 @@ public class FacultyData {
         return semesterID;
     }
 
-    public static int getFacultyID() {
-       int facultyID = -1;
-
-        String query = "SELECT facultyID FROM faculty";
-        
-        try (Connection connection = DatabaseHandler.connect();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                facultyID = resultSet.getInt("facultyID");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return facultyID;
-    }
-
-    public static int getOriginFacultyID() {
+    public int getOriginFacultyID() {
        int facultyID = -1;
 
         String query = "SELECT facultyID FROM faculty WHERE facultyID = ?";
@@ -136,7 +119,7 @@ public class FacultyData {
         return facultyID;
     }
     
-    public static String getLastNameByFacultyID() {
+    public String getLastNameByFacultyID() {
         String lastName = null;
 
         String query = "SELECT lastName FROM fID_lastName";
@@ -154,5 +137,27 @@ public class FacultyData {
         }
 
         return lastName;
+    }
+
+        public static int getFacultyID() {
+       int facultyID = -1;
+
+        String query = "SELECT facultyID FROM faculty WHERE name = ?";
+        
+        try (Connection connection = DatabaseHandler.connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)){
+                preparedStatement.setInt(1, facultyID);
+                System.out.println("Connected to  dtabase,,, fetching dta");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                facultyID = resultSet.getInt("facultyID");
+                System.out.println(facultyID);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return facultyID;
     }
 }

@@ -579,6 +579,7 @@ public static boolean insertSpecsToDatabase(Connection connection, int facultyID
                 FacultyData facultyData = new FacultyData(facultyID, facultyName, departmentName, academicYear, semesterName);
                 facultyList.add(facultyData);
             }
+            System.out.println(facultyList);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -1027,6 +1028,7 @@ public static boolean insertSpecsToDatabase(Connection connection, int facultyID
 
         return sectionsList;
     }
+
 
     public static void associateSectionWithFacultySubject(int facultyID, int subjectID, int sectionID) {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:main.db")) {
